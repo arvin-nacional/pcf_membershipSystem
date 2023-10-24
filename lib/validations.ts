@@ -13,8 +13,8 @@ export const MemberSchema = z.object({
   highestEducation: z.string(),
   // preferredLanguage: z.string().min(1),
   // birthday: z.string(),
-  // gender: z.string(),
-  // memberType: z.string(),
+  gender: z.string(),
+  memberType: z.string(),
   // status: z.string(),
   // memberPhoto: z.string(),
 });

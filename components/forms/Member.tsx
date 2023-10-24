@@ -49,8 +49,8 @@ const Member = () => {
       highestEducation: "",
       // preferredLanguage: "",
       // birthday: "",
-      // gender: "",
-      // memberType: "",
+      gender: "",
+      memberType: "",
       // status: "",
       // memberPhoto: "",
     },
@@ -77,8 +77,8 @@ const Member = () => {
         highestEducation: values.highestEducation,
         // preferredLanguage: values.preferredLanguage,
         // birthday: values.birthday,
-        // gender: values.gender,
-        // memberType: values.memberType,
+        gender: values.gender,
+        memberType: values.memberType,
         // status: values.status,
         // memberPhoto: values.memberPhoto,
         path: pathname,
@@ -406,7 +406,7 @@ const Member = () => {
             </FormItem>
           )}
         /> */}
-        {/* <FormField
+        <FormField
           control={form.control}
           name="gender"
           render={({ field }) => (
@@ -431,8 +431,8 @@ const Member = () => {
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
-        /> */}
-        {/* <FormField
+        />
+        <FormField
           control={form.control}
           name="memberType"
           render={({ field }) => (
@@ -459,7 +459,7 @@ const Member = () => {
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
-        /> */}
+        />
         <Button
           type="submit"
           className="primary-gradient w-fit !text-light-900"

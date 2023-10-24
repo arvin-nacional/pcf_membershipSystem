@@ -11,8 +11,8 @@ export interface CreateMemberParams {
   highestEducation: string;
   // preferredLanguage: string;
   // birthday: string;
-  // gender: string;
-  // memberType: string;
+  gender: string;
+  memberType: string;
   // status: string;
   // memberPhoto: string;
   path: string;
