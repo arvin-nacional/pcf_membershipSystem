@@ -12,7 +12,7 @@ export interface IMember extends Document {
   emergencyContactNumber: string;
   highestEducation: Schema.Types.ObjectId;
   // preferredLanguage: string;
-  // birthday: string;
+  birthday: string;
   gender: Schema.Types.ObjectId;
   memberType: Schema.Types.ObjectId;
   // status: string;
@@ -35,7 +35,7 @@ const MemberSchema = new Schema({
     ref: "Education",
   },
   // preferredLanguage: { type: String, required: true },
-  // birthday: { type: String, required: true },
+  birthday: { type: String, required: true },
   gender: { type: Schema.Types.ObjectId, ref: "Gender" },
   memberType: { type: Schema.Types.ObjectId, ref: "MemberType" },
   // status: { type: String, required: true },

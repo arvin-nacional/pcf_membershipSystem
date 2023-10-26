@@ -10,7 +10,7 @@ export interface CreateMemberParams {
   emergencyContactNumber: string;
   highestEducation: string;
   // preferredLanguage: string;
-  // birthday: string;
+  birthday: string;
   gender: string;
   memberType: string;
   // status: string;

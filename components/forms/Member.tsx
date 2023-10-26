@@ -48,7 +48,7 @@ const Member = () => {
       emergencyContactNumber: "",
       highestEducation: "",
       // preferredLanguage: "",
-      // birthday: "",
+      birthday: "",
       gender: "",
       memberType: "",
       // status: "",
@@ -76,7 +76,7 @@ const Member = () => {
         emergencyContactNumber: values.emergencyContactNumber,
         highestEducation: values.highestEducation,
         // preferredLanguage: values.preferredLanguage,
-        // birthday: values.birthday,
+        birthday: values.birthday,
         gender: values.gender,
         memberType: values.memberType,
         // status: values.status,
@@ -128,6 +128,27 @@ const Member = () => {
             <FormItem className="flex w-full flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 First Name <span className="text-primary-500">*</span>
+              </FormLabel>
+              <FormControl className="mt-3.5">
+                <Input
+                  {...field}
+                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                />
+              </FormControl>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Enter your first name
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="birthday"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Birthday MM/DD/YYYY <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
@@ -313,27 +334,7 @@ const Member = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="contactNumber"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Contact Number <span className="text-primary-500">*</span>
-              </FormLabel>
-              <FormControl className="mt-3.5">
-                <Input
-                  {...field}
-                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
-                />
-              </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Enter your contact number
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="highestEducation"
@@ -350,26 +351,28 @@ const Member = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="collegeGraduate">
+                  <SelectItem value="Doctorate Degree">
+                    Doctorate Degree
+                  </SelectItem>
+                  <SelectItem value="Masters Degree">Masters Degree</SelectItem>
+                  <SelectItem value="College Graduate">
                     College Graduate
                   </SelectItem>
-                  <SelectItem value="collegeUndergraduate">
+                  <SelectItem value="College Undergrad">
                     College Undergrad
                   </SelectItem>
-                  <SelectItem value="highSchoolGraduate">
+                  <SelectItem value="High School Graduate">
                     High School Graduate
                   </SelectItem>
-                  <SelectItem value="highSchoolUndergraduate">
+                  <SelectItem value="High School Undergraduate">
                     High School Undergraduate
                   </SelectItem>
-                  <SelectItem value="elementaryGraduate">
+                  <SelectItem value="Elementary Graduate">
                     Elementary Graduate
                   </SelectItem>
-                  <SelectItem value="elementaryUndergraduate">
+                  <SelectItem value="Elementary Undergraduate">
                     Elementary Undergraduate
                   </SelectItem>
-
-                  <SelectItem value="mastersDegree">Masters Degree</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -447,10 +450,16 @@ const Member = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="member">Member</SelectItem>
-                  <SelectItem value="churchStaff">Church Staff</SelectItem>
-                  <SelectItem value="leader">Leader</SelectItem>
-                  <SelectItem value="bsl">Board of Servant Leader</SelectItem>
+                  <SelectItem value="Member">Member</SelectItem>
+                  <SelectItem value="Church Staff">Church Staff</SelectItem>
+                  <SelectItem value="Leader">Leader</SelectItem>
+                  <SelectItem value="Ministry Head">Ministry Head</SelectItem>
+                  <SelectItem value="Board of Servant Leader">
+                    Board of Servant Leader
+                  </SelectItem>
+                  <SelectItem value="Pastoral Staff">Pastoral Staff</SelectItem>
+                  <SelectItem value="Pastor">Pastor</SelectItem>
+                  <SelectItem value="Senior Pastor">Senior Pastor</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
