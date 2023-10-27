@@ -28,6 +28,8 @@ export const MemberSchema = z.object({
   primaryMinistry: z.string(),
   status: z.string().min(1),
   spiritualGifts: z.array(z.string()),
+  secondaryMinistries: z.array(z.string()),
+  trainings: z.array(z.string()),
 
   // status: z.string(),
   // memberPhoto: z.string(),

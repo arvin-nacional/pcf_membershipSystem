@@ -27,7 +27,7 @@ import { Button } from "../ui/button";
 import { useRouter, usePathname } from "next/navigation";
 import { MemberSchema } from "@/lib/validations";
 import { createMember } from "@/lib/actions/member.action";
-import { spiritualGifts } from "@/constants";
+import { ministries, spiritualGifts, trainings } from "@/constants";
 
 const type: any = "create";
 
@@ -58,7 +58,9 @@ const Member = () => {
       lifeGearSeries: "",
       followUpSeries: "",
       spiritualGifts: [],
+      secondaryMinistries: [],
       status: "",
+      trainings: [],
       // memberPhoto: "",
     },
   });
@@ -92,7 +94,8 @@ const Member = () => {
         lifeGearSeries: values.lifeGearSeries,
         status: values.status,
         spiritualGifts: values.spiritualGifts,
-
+        secondaryMinistries: values.secondaryMinistries,
+        trainings: values.trainings,
         // status: values.status,
         // memberPhoto: values.memberPhoto,
         path: pathname,
@@ -594,18 +597,11 @@ const Member = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="Praise and Worship">
-                    Praise and Worship
-                  </SelectItem>
-                  <SelectItem value="Creatives">Creatives</SelectItem>
-                  <SelectItem value="Youth">Youth</SelectItem>
-                  <SelectItem value="Prayer">Prayer</SelectItem>
-                  <SelectItem value="Ushering">Ushering</SelectItem>
-                  <SelectItem value="Kids">Kids</SelectItem>
-                  <SelectItem value="North Cemetery">North Cemetery</SelectItem>
-                  <SelectItem value="Mission">Mission</SelectItem>
-                  <SelectItem value="Prison">Prison</SelectItem>
-                  <SelectItem value="School">School</SelectItem>
+                  {ministries.map((ministry) => (
+                    <SelectItem value={ministry.value} key={ministry.value}>
+                      {ministry.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -615,6 +611,27 @@ const Member = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="secondaryMinistries"
+          render={({ field: { ...field } }) => (
+            <FormItem>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Secondary Ministry
+              </FormLabel>
+              <MultiSelect
+                selected={field.value}
+                options={ministries}
+                {...field}
+                className="background-light900_dark300"
+              />
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select your secondary ministry
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+
         {/* <FormField
           control={form.control}
           name="spiritualGifts"
@@ -657,7 +674,7 @@ const Member = () => {
           control={form.control}
           name="spiritualGifts"
           render={({ field: { ...field } }) => (
-            <FormItem className="mb-5 ">
+            <FormItem>
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Spiritual Gifts
               </FormLabel>
@@ -669,6 +686,26 @@ const Member = () => {
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select your spiritual gifts
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="trainings"
+          render={({ field: { ...field } }) => (
+            <FormItem>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Trainings
+              </FormLabel>
+              <MultiSelect
+                selected={field.value}
+                options={trainings}
+                {...field}
+                className="background-light900_dark300"
+              />
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select trainings attended
               </FormDescription>
             </FormItem>
           )}

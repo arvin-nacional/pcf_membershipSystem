@@ -6,6 +6,15 @@ export interface SidebarLink {
   label: string;
 }
 
+export interface Ministries {
+  value: string;
+  label: string;
+}
+export interface Trainings {
+  value: string;
+  label: string;
+}
+
 export interface SpiritualGifts {
   value: string;
   label: string;

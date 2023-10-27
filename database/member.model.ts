@@ -23,6 +23,8 @@ export interface IMember extends Document {
   followUpSeries: Schema.Types.ObjectId;
   status: Schema.Types.ObjectId;
   spiritualGifts: Schema.Types.ObjectId[];
+  secondaryMinistries: Schema.Types.ObjectId[];
+  trainings: Schema.Types.ObjectId[];
 }
 
 const MemberSchema = new Schema({
@@ -44,7 +46,7 @@ const MemberSchema = new Schema({
   birthday: { type: String, required: true },
   gender: { type: Schema.Types.ObjectId, ref: "Gender" },
   memberType: { type: Schema.Types.ObjectId, ref: "MemberType" },
-  primaryMinistry: { type: Schema.Types.ObjectId, ref: "PrimaryMinistry" },
+  primaryMinistry: { type: Schema.Types.ObjectId, ref: "Ministry" },
   lifeGearSeries: { type: Schema.Types.ObjectId, ref: "LifeGearSeries" },
   followUpSeries: { type: Schema.Types.ObjectId, ref: "FollowUpSeries" },
   status: { type: Schema.Types.ObjectId, ref: "Status" },
@@ -55,6 +57,18 @@ const MemberSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "SpiritualGift",
+    },
+  ],
+  secondaryMinistries: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Ministry",
+    },
+  ],
+  trainings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Training",
     },
   ],
 });

@@ -22,4 +22,6 @@ export interface CreateMemberParams {
   primaryMinistry: string;
   status: string;
   spiritualGifts: string[];
+  secondaryMinistries: string[];
+  trainings: string[];
 }

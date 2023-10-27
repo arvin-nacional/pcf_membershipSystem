@@ -14,6 +14,7 @@ import LifeGearSeries from "@/database/lifeGearSeries.model";
 import FollowUpSeries from "@/database/followUpSeries.model";
 import Status from "@/database/status.model";
 import SpiritualGift from "@/database/spiritualGift.model";
+import Training from "@/database/training";
 
 export async function createMember(params: CreateMemberParams) {
   try {
@@ -40,6 +41,8 @@ export async function createMember(params: CreateMemberParams) {
       followUpSeries,
       status,
       spiritualGifts,
+      secondaryMinistries,
+      trainings,
       // memberPhoto,
       path,
     } = params;
@@ -138,7 +141,7 @@ export async function createMember(params: CreateMemberParams) {
     );
 
     const spiritualGiftsArr = [];
-
+    // create SpiritualGift or get them if they already exist
     for (const spiritualGift of spiritualGifts) {
       const existingSpiritualGift = await SpiritualGift.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${spiritualGift}$`, "i") } },
@@ -151,6 +154,34 @@ export async function createMember(params: CreateMemberParams) {
       spiritualGiftsArr.push(existingSpiritualGift._id);
     }
 
+    const secondaryMinistriesArr = [];
+    // create Ministry or get them if they already exist
+    for (const ministry of secondaryMinistries) {
+      const existingMinistry = await Ministry.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${ministry}$`, "i") } },
+        {
+          $setOnInsert: { name: ministry },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+      secondaryMinistriesArr.push(existingMinistry._id);
+    }
+
+    const trainingsArr = [];
+    // create Training or get them if they already exist
+    for (const training of trainings) {
+      const existingTraining = await Training.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${training}$`, "i") } },
+        {
+          $setOnInsert: { name: training },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+      trainingsArr.push(existingTraining._id);
+    }
+
     await Member.findByIdAndUpdate(member._id, {
       highestEducation: existingEducation._id,
       gender: existingGender._id,
@@ -160,7 +191,11 @@ export async function createMember(params: CreateMemberParams) {
       primaryMinistry: existingMinistry._id,
       lifeGearSeries: existingLifeGearSeries._id,
       status: existingStatus._id,
-      $push: { spiritualGifts: { $each: spiritualGiftsArr } },
+      $push: {
+        spiritualGifts: { $each: spiritualGiftsArr },
+        secondaryMinistries: { $each: secondaryMinistriesArr },
+        trainings: { $each: trainingsArr },
+      },
     });
 
     revalidatePath(path);
