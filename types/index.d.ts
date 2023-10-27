@@ -6,6 +6,11 @@ export interface SidebarLink {
   label: string;
 }
 
+export interface SpiritualGifts {
+  value: string;
+  label: string;
+}
+
 export interface Job {
   id?: string;
   employer_name?: string;

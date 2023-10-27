@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { MultiSelect } from "@/components/ui/multi-select";
+
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,6 +27,7 @@ import { Button } from "../ui/button";
 import { useRouter, usePathname } from "next/navigation";
 import { MemberSchema } from "@/lib/validations";
 import { createMember } from "@/lib/actions/member.action";
+import { spiritualGifts } from "@/constants";
 
 const type: any = "create";
 
@@ -47,11 +50,15 @@ const Member = () => {
       emergencyContactPerson: "",
       emergencyContactNumber: "",
       highestEducation: "",
-      // preferredLanguage: "",
+      preferredLanguage: "",
       birthday: "",
       gender: "",
       memberType: "",
-      // status: "",
+      primaryMinistry: "",
+      lifeGearSeries: "",
+      followUpSeries: "",
+      spiritualGifts: [],
+      status: "",
       // memberPhoto: "",
     },
   });
@@ -75,14 +82,22 @@ const Member = () => {
         emergencyContactPerson: values.emergencyContactPerson,
         emergencyContactNumber: values.emergencyContactNumber,
         highestEducation: values.highestEducation,
-        // preferredLanguage: values.preferredLanguage,
+        preferredLanguage: values.preferredLanguage,
         birthday: values.birthday,
         gender: values.gender,
         memberType: values.memberType,
+        waterBaptism: values.waterBaptism,
+        primaryMinistry: values.primaryMinistry,
+        followUpSeries: values.followUpSeries,
+        lifeGearSeries: values.lifeGearSeries,
+        status: values.status,
+        spiritualGifts: values.spiritualGifts,
+
         // status: values.status,
         // memberPhoto: values.memberPhoto,
         path: pathname,
       });
+
       console.log(member);
 
       router.push("/");
@@ -382,7 +397,7 @@ const Member = () => {
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
           name="preferredLanguage"
           render={({ field }) => (
@@ -397,9 +412,11 @@ const Member = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="tagalog">Tagalog</SelectItem>
-                  <SelectItem value="english">English</SelectItem>
-                  <SelectItem value="taglish">TagLish</SelectItem>
+                  <SelectItem value="Tagalog">Tagalog</SelectItem>
+                  <SelectItem value="English">English</SelectItem>
+                  <SelectItem value="Tagalog-English">
+                    Tagalog-English
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -408,7 +425,7 @@ const Member = () => {
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
-        /> */}
+        />
         <FormField
           control={form.control}
           name="gender"
@@ -464,6 +481,214 @@ const Member = () => {
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select Member Type
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="followUpSeries"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Follow Up Series <span className="text-primary-500">*</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Follow Up Session 1">
+                    Follow Up Session 1
+                  </SelectItem>
+                  <SelectItem value="Follow Up Session 2">
+                    Follow Up Session 2
+                  </SelectItem>
+                  <SelectItem value="Follow Up Session 3">
+                    Follow Up Session 3
+                  </SelectItem>
+                  <SelectItem value="Follow Up Session 4">
+                    Follow Up Session 4
+                  </SelectItem>
+                  <SelectItem value="Follow Up Session 5">
+                    Follow Up Session 5
+                  </SelectItem>
+                  <SelectItem value="Follow Up Session 6">
+                    Follow Up Session 6
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select last follow up series taken
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lifeGearSeries"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Life Gear Series <span className="text-primary-500">*</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Life Gear 101">Life Gear 101</SelectItem>
+                  <SelectItem value="Life Gear 201">Life Gear 201</SelectItem>
+                  <SelectItem value="Life Gear 301">Life Gear 301</SelectItem>
+                  <SelectItem value="Life Gear 401">Life Gear 401</SelectItem>
+                  <SelectItem value="Life Gear 501">Life Gear 501</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select last life gear series taken
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="waterBaptism"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Water Baptism MM/DD/YYYY{" "}
+                <span className="text-primary-500">*</span>
+              </FormLabel>
+              <FormControl className="mt-3.5">
+                <Input
+                  {...field}
+                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                />
+              </FormControl>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Enter your water baptism date
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="primaryMinistry"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Primary Ministry <span className="text-primary-500">*</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Praise and Worship">
+                    Praise and Worship
+                  </SelectItem>
+                  <SelectItem value="Creatives">Creatives</SelectItem>
+                  <SelectItem value="Youth">Youth</SelectItem>
+                  <SelectItem value="Prayer">Prayer</SelectItem>
+                  <SelectItem value="Ushering">Ushering</SelectItem>
+                  <SelectItem value="Kids">Kids</SelectItem>
+                  <SelectItem value="North Cemetery">North Cemetery</SelectItem>
+                  <SelectItem value="Mission">Mission</SelectItem>
+                  <SelectItem value="Prison">Prison</SelectItem>
+                  <SelectItem value="School">School</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select your primary ministry
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        {/* <FormField
+          control={form.control}
+          name="spiritualGifts"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Spiritual Gifts <span className="text-primary-500">*</span>
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                // defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+
+                <SelectContent className="cursor-pointer bg-light-900">
+                  {spiritualGifts.map((spiritualGift) => (
+                    <SelectItem
+                      value={spiritualGift.value}
+                      key={spiritualGift.value}
+                    >
+                      {spiritualGift.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select your spiritual gifts
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        /> */}
+
+        <FormField
+          control={form.control}
+          name="spiritualGifts"
+          render={({ field: { ...field } }) => (
+            <FormItem className="mb-5">
+              <FormLabel>Spiritual Gifts</FormLabel>
+              <MultiSelect
+                selected={field.value}
+                options={spiritualGifts}
+                {...field}
+              />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Status <span className="text-primary-500">*</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select member status
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>

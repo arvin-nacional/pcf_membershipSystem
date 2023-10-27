@@ -1,4 +1,4 @@
-import { SidebarLink } from "@/types";
+import { SidebarLink, SpiritualGifts } from "@/types";
 
 export const themes = [
   { value: "light", label: "Light", icon: "/assets/icons/sun.svg" },
@@ -71,3 +71,26 @@ export const BADGE_CRITERIA = {
     GOLD: 100000,
   },
 };
+
+export const spiritualGifts: SpiritualGifts[] = [
+  { value: "prophecy", label: "Prophecy" },
+  { value: "speakingInTongues", label: "Speaking in Tongues" },
+  { value: "interpretationOfTongues", label: "Interpretation of Tongues" },
+  { value: "wordOfWisdom", label: "Word of Wisdom" },
+  { value: "wordOfKnowledge", label: "Word of Knowledge" },
+  { value: "faith", label: "Faith" },
+  { value: "healing", label: "Healing" },
+  { value: "miracles", label: "Miracles" },
+  { value: "discerningOfSpirits", label: "Discerning of Spirits" },
+  { value: "helps", label: "Helps" },
+  { value: "administration", label: "Administration" },
+  { value: "leadership", label: "Leadership" },
+  { value: "teaching", label: "Teaching" },
+  { value: "exhortation", label: "Exhortation" },
+  { value: "giving", label: "Giving" },
+  { value: "mercy", label: "Mercy" },
+  { value: "evangelism", label: "Evangelism" },
+  { value: "pastoring", label: "Pastoring" },
+  { value: "hospitality", label: "Hospitality" },
+  { value: "celibacy", label: "Celibacy" },
+];
