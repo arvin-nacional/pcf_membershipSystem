@@ -2,9 +2,8 @@
 
 import Member from "@/database/member.model";
 import { connectToDatabase } from "../mongoose";
-
 import { revalidatePath } from "next/cache";
-import { CreateMemberParams } from "./shared.types";
+import { CreateMemberParams, GetAllMembersParams } from "./shared.types";
 import Education from "@/database/highestEducation.model";
 import Gender from "@/database/gender.model";
 import MemberType from "@/database/memberType.model";
@@ -15,6 +14,8 @@ import FollowUpSeries from "@/database/followUpSeries.model";
 import Status from "@/database/status.model";
 import SpiritualGift from "@/database/spiritualGift.model";
 import Training from "@/database/training";
+import SmallGroup from "@/database/smallGroup.model";
+// import SmallGroup from "@/database/smallGroup.model";
 
 export async function createMember(params: CreateMemberParams) {
   try {
@@ -43,6 +44,8 @@ export async function createMember(params: CreateMemberParams) {
       spiritualGifts,
       secondaryMinistries,
       trainings,
+      disciplerId,
+      // disciplerId,
       // memberPhoto,
       path,
     } = params;
@@ -140,6 +143,24 @@ export async function createMember(params: CreateMemberParams) {
       { upsert: true, new: true }
     );
 
+    // get Discipler
+    const discipler = await Member.findById(disciplerId);
+
+    // create a Small group or get them if they already exist
+    await SmallGroup.findOneAndUpdate(
+      {
+        discipler: discipler._id,
+      },
+      {
+        $setOnInsert: { discipler: discipler._id },
+        $push: { disciples: member._id },
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+
     const spiritualGiftsArr = [];
     // create SpiritualGift or get them if they already exist
     for (const spiritualGift of spiritualGifts) {
@@ -191,6 +212,7 @@ export async function createMember(params: CreateMemberParams) {
       primaryMinistry: existingMinistry._id,
       lifeGearSeries: existingLifeGearSeries._id,
       status: existingStatus._id,
+      discipler: discipler._id,
       $push: {
         spiritualGifts: { $each: spiritualGiftsArr },
         secondaryMinistries: { $each: secondaryMinistriesArr },
@@ -202,5 +224,40 @@ export async function createMember(params: CreateMemberParams) {
     return member;
   } catch (error) {
     console.log(error);
+  }
+}
+
+export async function getAllMembers(params: GetAllMembersParams) {
+  try {
+    connectToDatabase();
+
+    const members = await Member.find({}).sort({ createdAt: -1 });
+
+    return { members };
+  } catch (error) {
+    console.log(error);
+    throw Error;
+  }
+}
+
+export async function getAllMemberNames() {
+  try {
+    connectToDatabase();
+
+    const members = await Member.find(
+      {},
+      { _id: 1, firstName: 1, lastName: 1 }
+    ).sort({ createdAt: -1 });
+
+    const memberNames = members.map((member) => ({
+      _id: member._id.toHexString(),
+      name: `${member.firstName} ${member.lastName}`,
+      value: `${member.firstName} ${member.lastName}`,
+    }));
+
+    return memberNames;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }

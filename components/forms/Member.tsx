@@ -17,8 +17,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { MultiSelect } from "@/components/ui/multi-select";
-
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -28,13 +41,20 @@ import { useRouter, usePathname } from "next/navigation";
 import { MemberSchema } from "@/lib/validations";
 import { createMember } from "@/lib/actions/member.action";
 import { ministries, spiritualGifts, trainings } from "@/constants";
+import { MemberNames } from "@/types";
 
 const type: any = "create";
 
-const Member = () => {
+interface Props {
+  memberNames: MemberNames[];
+}
+
+const Member = ({ memberNames }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  console.log(memberNames);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
@@ -61,19 +81,17 @@ const Member = () => {
       secondaryMinistries: [],
       status: "",
       trainings: [],
+      // disciplerId: "",
+      disciplerId: "",
       // memberPhoto: "",
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof MemberSchema>) {
-    console.log("test");
     setIsSubmitting(true);
     try {
-      console.log("test");
-      setIsSubmitting(true);
-
-      const member = await createMember({
+      await createMember({
         lastName: values.lastName,
         firstName: values.firstName,
         // middleName: values.middleName,
@@ -96,12 +114,12 @@ const Member = () => {
         spiritualGifts: values.spiritualGifts,
         secondaryMinistries: values.secondaryMinistries,
         trainings: values.trainings,
+        // disciplerId: values.disciplerId,
+        disciplerId: values.disciplerId,
         // status: values.status,
         // memberPhoto: values.memberPhoto,
         path: pathname,
       });
-
-      console.log(member);
 
       router.push("/");
     } catch (error) {
@@ -631,45 +649,6 @@ const Member = () => {
             </FormItem>
           )}
         />
-
-        {/* <FormField
-          control={form.control}
-          name="spiritualGifts"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col ">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Spiritual Gifts <span className="text-primary-500">*</span>
-              </FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                // defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
-                    <SelectValue />
-                  </SelectTrigger>
-                </FormControl>
-
-                <SelectContent className="cursor-pointer bg-light-900">
-                  {spiritualGifts.map((spiritualGift) => (
-                    <SelectItem
-                      value={spiritualGift.value}
-                      key={spiritualGift.value}
-                    >
-                      {spiritualGift.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your spiritual gifts
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        /> */}
-
         <FormField
           control={form.control}
           name="spiritualGifts"
@@ -707,6 +686,73 @@ const Member = () => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select trainings attended
               </FormDescription>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="disciplerId"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Discipler
+              </FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border justify-between ",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        memberNames.find(
+                          (memberName) => memberName._id === field.value
+                        )?.value
+                      ) : (
+                        <span> </span>
+                      )}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="background-light900_dark300 text-dark400_light800 w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search member..." />
+                    <CommandEmpty>No member found.</CommandEmpty>
+                    <CommandGroup>
+                      {memberNames.map((member) => (
+                        <CommandItem
+                          value={member._id}
+                          key={member._id}
+                          onSelect={() => {
+                            form.setValue("disciplerId", member._id);
+                            console.log(member._id);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              member.value === field.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {member.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select the name of your discipler
+              </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

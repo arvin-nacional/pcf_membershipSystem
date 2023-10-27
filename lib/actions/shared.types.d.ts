@@ -1,3 +1,6 @@
+// import { IMember } from "@/database/member.model";
+// import { Schema } from "mongoose";
+
 export interface CreateMemberParams {
   lastName: string;
   firstName: string;
@@ -24,4 +27,18 @@ export interface CreateMemberParams {
   spiritualGifts: string[];
   secondaryMinistries: string[];
   trainings: string[];
+  disciplerId: string;
+}
+
+export interface GetAllMembersParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
+export interface GetAllMemberNamesParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
 }

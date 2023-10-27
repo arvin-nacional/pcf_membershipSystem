@@ -6,6 +6,12 @@ export interface SidebarLink {
   label: string;
 }
 
+export interface MemberNames {
+  _id: string;
+  name: string;
+  value: string;
+}
+
 export interface Ministries {
   value: string;
   label: string;

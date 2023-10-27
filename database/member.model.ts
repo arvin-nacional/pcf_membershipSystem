@@ -25,6 +25,7 @@ export interface IMember extends Document {
   spiritualGifts: Schema.Types.ObjectId[];
   secondaryMinistries: Schema.Types.ObjectId[];
   trainings: Schema.Types.ObjectId[];
+  discipler: Schema.Types.ObjectId;
 }
 
 const MemberSchema = new Schema({
@@ -49,6 +50,7 @@ const MemberSchema = new Schema({
   primaryMinistry: { type: Schema.Types.ObjectId, ref: "Ministry" },
   lifeGearSeries: { type: Schema.Types.ObjectId, ref: "LifeGearSeries" },
   followUpSeries: { type: Schema.Types.ObjectId, ref: "FollowUpSeries" },
+  discipler: { type: Schema.Types.ObjectId, ref: "Member" },
   status: { type: Schema.Types.ObjectId, ref: "Status" },
   // status: { type: String, required: true },
   // memberPhoto: { type: String, required: true },
