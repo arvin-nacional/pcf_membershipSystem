@@ -49,22 +49,25 @@ function MultiSelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={`w-full justify-between ${
+          className={`no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] w-full border ${
             selected.length > 1 ? "h-full" : "h-10"
           }`}
           onClick={() => setOpen(!open)}
         >
-          <div className="flex flex-wrap gap-1">
+          <div
+            className="flex w-full flex-wrap gap-1
+          "
+          >
             {selected.map((item) => (
               <Badge
                 variant="secondary"
                 key={item}
-                className="mb-1 mr-1"
+                className="mb-1 mr-1 "
                 onClick={() => handleUnselect(item)}
               >
                 {item}
                 <button
-                  className="ring-offset-background focus:ring-ring ml-1 rounded-full outline-none focus:ring-2 focus:ring-offset-2"
+                  className="ring-offset-background focus:ring-ring ml-1  rounded-full outline-none focus:ring-2 focus:ring-offset-2"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleUnselect(item);
@@ -85,9 +88,14 @@ function MultiSelect({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        <Command className={className}>
-          <CommandInput placeholder="Search ..." />
-          <CommandEmpty>No item found.</CommandEmpty>
+        <Command className={`${className} `}>
+          <CommandInput
+            placeholder="Search ..."
+            className="text-dark300_light700"
+          />
+          <CommandEmpty className="text-dark300_light700">
+            No item found.
+          </CommandEmpty>
           <CommandGroup className="max-h-64 overflow-auto">
             {options.map((option) => (
               <CommandItem
@@ -100,6 +108,7 @@ function MultiSelect({
                   );
                   setOpen(true);
                 }}
+                className="text-dark300_light700 paragraph-regular "
               >
                 <Check
                   className={cn(

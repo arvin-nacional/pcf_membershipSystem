@@ -657,13 +657,19 @@ const Member = () => {
           control={form.control}
           name="spiritualGifts"
           render={({ field: { ...field } }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Spiritual Gifts</FormLabel>
+            <FormItem className="mb-5 ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Spiritual Gifts
+              </FormLabel>
               <MultiSelect
                 selected={field.value}
                 options={spiritualGifts}
                 {...field}
+                className="background-light900_dark300"
               />
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select your spiritual gifts
+              </FormDescription>
             </FormItem>
           )}
         />

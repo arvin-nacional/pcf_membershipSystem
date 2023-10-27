@@ -13,6 +13,7 @@ import Ministry from "@/database/ministry.model";
 import LifeGearSeries from "@/database/lifeGearSeries.model";
 import FollowUpSeries from "@/database/followUpSeries.model";
 import Status from "@/database/status.model";
+import SpiritualGift from "@/database/spiritualGift.model";
 
 export async function createMember(params: CreateMemberParams) {
   try {
@@ -38,6 +39,7 @@ export async function createMember(params: CreateMemberParams) {
       lifeGearSeries,
       followUpSeries,
       status,
+      spiritualGifts,
       // memberPhoto,
       path,
     } = params;
@@ -135,6 +137,20 @@ export async function createMember(params: CreateMemberParams) {
       { upsert: true, new: true }
     );
 
+    const spiritualGiftsArr = [];
+
+    for (const spiritualGift of spiritualGifts) {
+      const existingSpiritualGift = await SpiritualGift.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${spiritualGift}$`, "i") } },
+        {
+          $setOnInsert: { name: spiritualGift },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+      spiritualGiftsArr.push(existingSpiritualGift._id);
+    }
+
     await Member.findByIdAndUpdate(member._id, {
       highestEducation: existingEducation._id,
       gender: existingGender._id,
@@ -144,6 +160,7 @@ export async function createMember(params: CreateMemberParams) {
       primaryMinistry: existingMinistry._id,
       lifeGearSeries: existingLifeGearSeries._id,
       status: existingStatus._id,
+      $push: { spiritualGifts: { $each: spiritualGiftsArr } },
     });
 
     revalidatePath(path);
