@@ -11,7 +11,6 @@ const SmallGroupSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: "Member",
       required: true,
-      unique: true,
     },
   ],
   discipler: { type: Schema.Types.ObjectId, ref: "Member", required: true },

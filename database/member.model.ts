@@ -26,6 +26,7 @@ export interface IMember extends Document {
   secondaryMinistries: Schema.Types.ObjectId[];
   trainings: Schema.Types.ObjectId[];
   discipler: Schema.Types.ObjectId;
+  disciples: Schema.Types.ObjectId[];
 }
 
 const MemberSchema = new Schema({
@@ -71,6 +72,12 @@ const MemberSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Training",
+    },
+  ],
+  disciples: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Member",
     },
   ],
 });

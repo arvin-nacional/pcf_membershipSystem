@@ -28,6 +28,7 @@ export interface CreateMemberParams {
   secondaryMinistries: string[];
   trainings: string[];
   disciplerId: string;
+  disciples: string[];
 }
 
 export interface GetAllMembersParams {

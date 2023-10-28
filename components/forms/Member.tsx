@@ -42,9 +42,11 @@ import { MemberSchema } from "@/lib/validations";
 import { createMember } from "@/lib/actions/member.action";
 import { ministries, spiritualGifts, trainings } from "@/constants";
 import { MemberNames } from "@/types";
+import { DiscipleSelect } from "../ui/disciple-select";
 
 const type: any = "create";
 
+// get member names for the disciples and discipler formfield
 interface Props {
   memberNames: MemberNames[];
 }
@@ -81,6 +83,7 @@ const Member = ({ memberNames }: Props) => {
       secondaryMinistries: [],
       status: "",
       trainings: [],
+      disciples: [],
       // disciplerId: "",
       disciplerId: "",
       // memberPhoto: "",
@@ -91,6 +94,12 @@ const Member = ({ memberNames }: Props) => {
   async function onSubmit(values: z.infer<typeof MemberSchema>) {
     setIsSubmitting(true);
     try {
+      // change the names of disciples to their ids
+      const selectedDisciples = values.disciples
+        .map((name) => memberNames.find((member) => member.name === name)?._id)
+        .filter((id) => id !== undefined) as string[];
+
+      // creating
       await createMember({
         lastName: values.lastName,
         firstName: values.firstName,
@@ -116,6 +125,7 @@ const Member = ({ memberNames }: Props) => {
         trainings: values.trainings,
         // disciplerId: values.disciplerId,
         disciplerId: values.disciplerId,
+        disciples: selectedDisciples,
         // status: values.status,
         // memberPhoto: values.memberPhoto,
         path: pathname,
@@ -750,9 +760,30 @@ const Member = ({ memberNames }: Props) => {
                 </PopoverContent>
               </Popover>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select the name of your discipler
+                Select the name of your discipler or leader
               </FormDescription>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="disciples"
+          render={({ field: { ...field } }) => (
+            <FormItem>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Disciples
+              </FormLabel>
+              <DiscipleSelect
+                selected={field.value}
+                members={memberNames}
+                {...field}
+                className="background-light900_dark300"
+              />
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select members in your discipleship group
+              </FormDescription>
             </FormItem>
           )}
         />

@@ -15,6 +15,7 @@ import Status from "@/database/status.model";
 import SpiritualGift from "@/database/spiritualGift.model";
 import Training from "@/database/training";
 import SmallGroup from "@/database/smallGroup.model";
+
 // import SmallGroup from "@/database/smallGroup.model";
 
 export async function createMember(params: CreateMemberParams) {
@@ -45,6 +46,7 @@ export async function createMember(params: CreateMemberParams) {
       secondaryMinistries,
       trainings,
       disciplerId,
+      disciples,
       // disciplerId,
       // memberPhoto,
       path,
@@ -143,8 +145,13 @@ export async function createMember(params: CreateMemberParams) {
       { upsert: true, new: true }
     );
 
-    // get Discipler
-    const discipler = await Member.findById(disciplerId);
+    // update the discipler's disciples
+    const discipler = await Member.findOneAndUpdate(
+      { _id: disciplerId },
+      {
+        $push: { disciples: member._id },
+      }
+    );
 
     // create a Small group or get them if they already exist
     await SmallGroup.findOneAndUpdate(
@@ -160,6 +167,28 @@ export async function createMember(params: CreateMemberParams) {
         new: true,
       }
     );
+
+    const disciplesArr = [];
+
+    for (const discipleId of disciples) {
+      // get the disciple Obj
+      const disciple = await Member.findById(discipleId);
+      // check if member._id is in the smallGroup leaders
+
+      const smallGroup = await SmallGroup.findOne({ discipler: member._id });
+      if (smallGroup) {
+        // SmallGroup with the discipler already exists, update it.
+        smallGroup.disciples.push(disciple._id);
+        await smallGroup.save();
+      } else {
+        // SmallGroup with the discipler does not exist, create a new one.
+        await SmallGroup.create({
+          discipler: member._id,
+          disciples: [disciple._id],
+        });
+      }
+      disciplesArr.push(disciple._id);
+    }
 
     const spiritualGiftsArr = [];
     // create SpiritualGift or get them if they already exist
@@ -217,6 +246,7 @@ export async function createMember(params: CreateMemberParams) {
         spiritualGifts: { $each: spiritualGiftsArr },
         secondaryMinistries: { $each: secondaryMinistriesArr },
         trainings: { $each: trainingsArr },
+        disciples: { $each: disciplesArr },
       },
     });
 
