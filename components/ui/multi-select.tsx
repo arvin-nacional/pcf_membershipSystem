@@ -43,8 +43,9 @@ function MultiSelect({
   }
 
   const handleUnselect = (item: string) => {
-    // @ts-ignore
-    onChange(selected.filter((i) => i !== item));
+    if (selected) {
+      onChange(selected.filter((i: string) => i !== item));
+    }
   };
 
   return (
@@ -103,19 +104,21 @@ function MultiSelect({
               <CommandItem
                 key={option.value}
                 onSelect={() => {
-                  onChange(
-                    selected.includes(option.value)
-                      ? selected.filter((item) => item !== option.value)
-                      : [...selected, option.value]
-                  );
-                  setOpen(true);
+                  if (selected) {
+                    onChange(
+                      selected.includes(option.value)
+                        ? selected.filter((item) => item !== option.value)
+                        : [...selected, option.value]
+                    );
+                    setOpen(true);
+                  }
                 }}
                 className="text-dark300_light700 paragraph-regular "
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    selected.includes(option.value)
+                    selected?.includes(option.value)
                       ? "opacity-100"
                       : "opacity-0"
                   )}
