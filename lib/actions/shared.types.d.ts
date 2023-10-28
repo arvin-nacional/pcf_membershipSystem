@@ -22,13 +22,13 @@ export interface CreateMemberParams {
   preferredLanguage: string;
   followUpSeries: string;
   lifeGearSeries: string;
-  primaryMinistry: string;
+  primaryMinistry: string | undefined;
   status: string;
-  spiritualGifts: string[];
-  secondaryMinistries: string[];
-  trainings: string[];
-  disciplerId: string;
-  disciples: string[];
+  spiritualGifts: string[] | undefined;
+  secondaryMinistries: string[] | undefined;
+  trainings: string[] | undefined;
+  disciplerId: string | undefined;
+  disciples: string[] | undefined;
 }
 
 export interface GetAllMembersParams {

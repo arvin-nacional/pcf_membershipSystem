@@ -24,7 +24,7 @@ export type OptionType = {
 
 interface MultiSelectProps {
   options: OptionType[];
-  selected: string[];
+  selected: string[] | undefined;
   onChange: React.Dispatch<React.SetStateAction<string[]>>;
   className?: string;
 }
@@ -38,7 +38,12 @@ function MultiSelect({
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
+  if (selected === undefined) {
+    selected = []; // Initialize as an empty array
+  }
+
   const handleUnselect = (item: string) => {
+    // @ts-ignore
     onChange(selected.filter((i) => i !== item));
   };
 
@@ -54,10 +59,7 @@ function MultiSelect({
           }`}
           onClick={() => setOpen(!open)}
         >
-          <div
-            className="flex w-full flex-wrap gap-1
-          "
-          >
+          <div className="flex w-full flex-wrap gap-1">
             {selected.map((item) => (
               <Badge
                 variant="secondary"

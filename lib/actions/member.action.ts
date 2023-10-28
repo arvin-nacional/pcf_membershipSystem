@@ -145,54 +145,63 @@ export async function createMember(params: CreateMemberParams) {
       { upsert: true, new: true }
     );
 
-    // update the discipler's disciples
-    const discipler = await Member.findOneAndUpdate(
-      { _id: disciplerId },
-      {
-        $push: { disciples: member._id },
-      }
-    );
+    // check if disciplerId is defined
+    if (disciplerId) {
+      const discipler = await Member.findOneAndUpdate(
+        { _id: disciplerId },
+        {
+          $push: { disciples: member._id },
+        }
+      );
 
-    // create a Small group or get them if they already exist
-    await SmallGroup.findOneAndUpdate(
-      {
-        discipler: discipler._id,
-      },
-      {
-        $setOnInsert: { discipler: discipler._id },
-        $push: { disciples: member._id },
-      },
-      {
-        upsert: true,
-        new: true,
-      }
-    );
+      await Member.findOneAndUpdate(
+        { _id: member._id },
+        {
+          discipler: discipler._id,
+        },
+        { upsert: true, new: true }
+      );
 
-    const disciplesArr = [];
+      // create or modify small group
+      await SmallGroup.findOneAndUpdate(
+        {
+          discipler: discipler._id,
+        },
+        {
+          $setOnInsert: { discipler: discipler._id },
+          $push: { disciples: member._id },
+        },
+        {
+          upsert: true,
+          new: true,
+        }
+      );
+    }
 
-    for (const discipleId of disciples) {
+    const disciplesArr = disciples || [];
+    const disciplesIds = [];
+
+    for (const discipleId of disciplesArr) {
       // get the disciple Obj
       const disciple = await Member.findById(discipleId);
-      // check if member._id is in the smallGroup leaders
+      disciplesIds.push(disciple._id);
 
       const smallGroup = await SmallGroup.findOne({ discipler: member._id });
       if (smallGroup) {
-        // SmallGroup with the discipler already exists, update it.
         smallGroup.disciples.push(disciple._id);
         await smallGroup.save();
       } else {
-        // SmallGroup with the discipler does not exist, create a new one.
         await SmallGroup.create({
           discipler: member._id,
           disciples: [disciple._id],
         });
       }
-      disciplesArr.push(disciple._id);
     }
 
-    const spiritualGiftsArr = [];
-    // create SpiritualGift or get them if they already exist
-    for (const spiritualGift of spiritualGifts) {
+    const spiritualGiftsArr = spiritualGifts || [];
+    const spiritualGiftsIds = [];
+
+    for (const spiritualGift of spiritualGiftsArr) {
       const existingSpiritualGift = await SpiritualGift.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${spiritualGift}$`, "i") } },
         {
@@ -201,12 +210,12 @@ export async function createMember(params: CreateMemberParams) {
         },
         { upsert: true, new: true }
       );
-      spiritualGiftsArr.push(existingSpiritualGift._id);
+      spiritualGiftsIds.push(existingSpiritualGift._id);
     }
 
-    const secondaryMinistriesArr = [];
-    // create Ministry or get them if they already exist
-    for (const ministry of secondaryMinistries) {
+    const secondaryMinistriesArr = secondaryMinistries || [];
+    const secondaryMinistriesIds = [];
+    for (const ministry of secondaryMinistriesArr) {
       const existingMinistry = await Ministry.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${ministry}$`, "i") } },
         {
@@ -215,12 +224,12 @@ export async function createMember(params: CreateMemberParams) {
         },
         { upsert: true, new: true }
       );
-      secondaryMinistriesArr.push(existingMinistry._id);
+      secondaryMinistriesIds.push(existingMinistry._id);
     }
 
-    const trainingsArr = [];
-    // create Training or get them if they already exist
-    for (const training of trainings) {
+    const trainingsArr = trainings || [];
+    const trainingsIds = [];
+    for (const training of trainingsArr) {
       const existingTraining = await Training.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${training}$`, "i") } },
         {
@@ -229,7 +238,7 @@ export async function createMember(params: CreateMemberParams) {
         },
         { upsert: true, new: true }
       );
-      trainingsArr.push(existingTraining._id);
+      trainingsIds.push(existingTraining._id);
     }
 
     await Member.findByIdAndUpdate(member._id, {
@@ -241,12 +250,11 @@ export async function createMember(params: CreateMemberParams) {
       primaryMinistry: existingMinistry._id,
       lifeGearSeries: existingLifeGearSeries._id,
       status: existingStatus._id,
-      discipler: discipler._id,
       $push: {
-        spiritualGifts: { $each: spiritualGiftsArr },
-        secondaryMinistries: { $each: secondaryMinistriesArr },
-        trainings: { $each: trainingsArr },
-        disciples: { $each: disciplesArr },
+        spiritualGifts: { $each: spiritualGiftsIds },
+        secondaryMinistries: { $each: secondaryMinistriesIds },
+        trainings: { $each: trainingsIds },
+        disciples: { $each: disciplesIds },
       },
     });
 

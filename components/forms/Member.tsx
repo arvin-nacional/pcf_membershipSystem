@@ -79,13 +79,13 @@ const Member = ({ memberNames }: Props) => {
       primaryMinistry: "",
       lifeGearSeries: "",
       followUpSeries: "",
-      spiritualGifts: [],
-      secondaryMinistries: [],
+      spiritualGifts: undefined,
+      secondaryMinistries: undefined,
       status: "",
-      trainings: [],
-      disciples: [],
+      trainings: undefined,
+      disciples: undefined,
       // disciplerId: "",
-      disciplerId: "",
+      disciplerId: undefined,
       // memberPhoto: "",
     },
   });
@@ -96,8 +96,12 @@ const Member = ({ memberNames }: Props) => {
     try {
       // change the names of disciples to their ids
       const selectedDisciples = values.disciples
-        .map((name) => memberNames.find((member) => member.name === name)?._id)
-        .filter((id) => id !== undefined) as string[];
+        ? (values.disciples
+            .map(
+              (name) => memberNames.find((member) => member.name === name)?._id
+            )
+            .filter((id) => id !== undefined) as string[])
+        : undefined;
 
       // creating
       await createMember({
