@@ -51,7 +51,6 @@ export async function createMember(params: CreateMemberParams) {
       // memberPhoto,
       path,
     } = params;
-    console.log(params);
 
     const member = await Member.create({
       // create all params without refs

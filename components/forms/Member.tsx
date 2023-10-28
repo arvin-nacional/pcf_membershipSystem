@@ -56,8 +56,6 @@ const Member = ({ memberNames }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(memberNames);
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
     resolver: zodResolver(MemberSchema),
