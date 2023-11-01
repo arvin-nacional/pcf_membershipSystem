@@ -103,11 +103,13 @@ function MultiSelect({
               <CommandItem
                 key={option.value}
                 onSelect={() => {
-                  onChange(
-                    selected.includes(option.value)
-                      ? selected.filter((item) => item !== option.value)
-                      : [...selected, option.value]
-                  );
+                  if (selected) {
+                    onChange(
+                      selected.includes(option.value)
+                        ? selected.filter((item) => item !== option.value)
+                        : [...selected, option.value]
+                    );
+                  }
                   setOpen(true);
                 }}
                 className="text-dark300_light700 paragraph-regular "
@@ -115,7 +117,7 @@ function MultiSelect({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    selected.includes(option.value)
+                    selected && selected.includes(option.value)
                       ? "opacity-100"
                       : "opacity-0"
                   )}
