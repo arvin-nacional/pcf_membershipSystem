@@ -110,15 +110,15 @@ function MultiSelect({
                         ? selected.filter((item) => item !== option.value)
                         : [...selected, option.value]
                     );
-                    setOpen(true);
                   }
+                  setOpen(true);
                 }}
                 className="text-dark300_light700 paragraph-regular "
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    selected?.includes(option.value)
+                    selected && selected.includes(option.value)
                       ? "opacity-100"
                       : "opacity-0"
                   )}
