@@ -96,7 +96,7 @@ const Member = ({ memberNames }: Props) => {
       const selectedDisciples = values.disciples
         ? (values.disciples
             .map(
-              (name) => memberNames.find((member) => member.name === name)?._id
+              (name) => memberNames?.find((member) => member.name === name)?._id
             )
             .filter((id) => id !== undefined) as string[])
         : undefined;
@@ -722,7 +722,7 @@ const Member = ({ memberNames }: Props) => {
                       )}
                     >
                       {field.value ? (
-                        memberNames.find(
+                        memberNames?.find(
                           (memberName) => memberName._id === field.value
                         )?.value
                       ) : (
@@ -737,7 +737,7 @@ const Member = ({ memberNames }: Props) => {
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
                     <CommandGroup>
-                      {memberNames.map((member) => (
+                      {memberNames?.map((member) => (
                         <CommandItem
                           value={member._id}
                           key={member._id}
