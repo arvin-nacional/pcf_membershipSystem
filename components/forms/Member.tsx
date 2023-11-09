@@ -50,6 +50,22 @@ interface Props {
   type?: string;
   memberDetails?: string;
 }
+interface Ministry {
+  _id: string;
+  name: string;
+  leaders: string[];
+  members: string[];
+}
+interface SpiritualGift {
+  _id: string;
+  name: string;
+  members: string[];
+}
+interface Training {
+  _id: string;
+  name: string;
+  members: string[];
+}
 
 const Member = ({ memberNames, type, memberDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,7 +76,18 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
     ? JSON.parse(memberDetails || "")
     : null;
 
-  console.log(parsedMemberDetails);
+  // change the array of Ministries OBJ to array of ministry names
+  const secondaryMinistriesArr: string[] =
+    parsedMemberDetails?.secondaryMinistries?.map((obj: Ministry) => obj.name);
+
+  // change the array of Spiritual Gifts OBJ to array of spiritualgift names
+  const spiritualGiftsArr: string[] = parsedMemberDetails?.spiritualGifts?.map(
+    (obj: SpiritualGift) => obj.name
+  );
+  // change the array of trainings OBJ to array of training names
+  const trainingsArr: string[] = parsedMemberDetails?.trainings?.map(
+    (obj: Training) => obj.name
+  );
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
@@ -83,14 +110,13 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
       primaryMinistry: parsedMemberDetails?.primaryMinistry?.name || "",
       lifeGearSeries: parsedMemberDetails?.lifeGearSeries?.name || "",
       followUpSeries: parsedMemberDetails?.followUpSeries?.name || "",
-      spiritualGifts: parsedMemberDetails?.spiritualGifts?.name || undefined,
-      secondaryMinistries:
-        parsedMemberDetails?.secondaryMinistries?.name || undefined,
+      spiritualGifts: spiritualGiftsArr || undefined,
+      secondaryMinistries: secondaryMinistriesArr || undefined,
       status: parsedMemberDetails?.status?.name || "",
-      trainings: undefined,
+      trainings: trainingsArr || undefined,
       disciples: undefined,
       // disciplerId: "",
-      disciplerId: parsedMemberDetails?.spiritualGifts?.name || undefined,
+      disciplerId: parsedMemberDetails?.discipler?.name || undefined,
       waterBaptism: parsedMemberDetails?.waterBaptism || "",
       // memberPhoto: "",
     },
