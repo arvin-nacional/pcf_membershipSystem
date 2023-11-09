@@ -108,7 +108,6 @@ export const ministries: Ministries[] = [
   { value: "Mission", label: "Mission" },
   { value: "Prison", label: "Prison" },
   { value: "School", label: "School" },
-  { value: "None", label: "None" },
 ];
 
 export const trainings: Trainings[] = [

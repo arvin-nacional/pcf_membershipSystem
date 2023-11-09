@@ -629,6 +629,9 @@ const Member = ({ memberNames }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="None" key="None">
+                    None
+                  </SelectItem>
                   {ministries.map((ministry) => (
                     <SelectItem value={ministry.value} key={ministry.value}>
                       {ministry.label}
@@ -637,7 +640,7 @@ const Member = ({ memberNames }: Props) => {
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your primary ministry
+                Select your primary ministry.
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -658,7 +661,7 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your secondary ministry
+                Select your secondary ministry. Leave blank if none.
               </FormDescription>
             </FormItem>
           )}
@@ -678,7 +681,7 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your spiritual gifts
+                Select your spiritual gifts. Leave blank if unknown.
               </FormDescription>
             </FormItem>
           )}
@@ -698,7 +701,7 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select trainings attended
+                Select trainings attended. Leave blank if none
               </FormDescription>
             </FormItem>
           )}
@@ -739,6 +742,22 @@ const Member = ({ memberNames }: Props) => {
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
                     <CommandGroup>
+                      <CommandItem
+                        value="none" // Use a value that represents "No Discipler"
+                        onSelect={() => {
+                          form.setValue("disciplerId", undefined); // Set the value to "none" when selected
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            field.value === undefined
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                        No Discipler
+                      </CommandItem>
                       {memberNames.map((member) => (
                         <CommandItem
                           value={member._id}
@@ -786,7 +805,7 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select members in your discipleship group
+                Select members in your discipleship group. Leave blank if none
               </FormDescription>
             </FormItem>
           )}

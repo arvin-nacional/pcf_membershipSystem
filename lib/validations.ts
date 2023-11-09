@@ -29,7 +29,7 @@ export const MemberSchema = z.object({
   waterBaptism: z.string(),
   followUpSeries: z.string(),
   lifeGearSeries: z.string(),
-  primaryMinistry: z.union([z.string(), z.undefined()]),
+  primaryMinistry: z.string().min(1),
   status: z.string().min(1),
   spiritualGifts: z.union([z.array(z.string()), z.undefined()]),
   secondaryMinistries: z.union([z.array(z.string()), z.undefined()]),

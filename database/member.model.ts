@@ -18,7 +18,7 @@ export interface IMember extends Document {
   // status: string;
   // memberPhoto: string;
   waterBaptism: string;
-  primaryMinistry: Schema.Types.ObjectId;
+  primaryMinistry: Schema.Types.ObjectId | undefined;
   lifeGearSeries: Schema.Types.ObjectId;
   followUpSeries: Schema.Types.ObjectId;
   status: Schema.Types.ObjectId;
