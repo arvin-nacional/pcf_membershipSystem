@@ -269,7 +269,60 @@ export async function getAllMembers(params: GetAllMembersParams) {
   try {
     connectToDatabase();
 
-    const members = await Member.find({}).sort({ createdAt: -1 });
+    const members = await Member.find({})
+      .populate({
+        path: "highestEducation",
+        model: Education,
+      })
+      .populate({
+        path: "gender",
+        model: Gender,
+      })
+      .populate({
+        path: "memberType",
+        model: MemberType,
+      })
+      .populate({
+        path: "primaryMinistry",
+        model: Ministry,
+      })
+      .populate({
+        path: "secondaryMinistries",
+        model: Ministry,
+      })
+      .populate({
+        path: "lifeGearSeries",
+        model: LifeGearSeries,
+      })
+      .populate({
+        path: "followUpSeries",
+        model: FollowUpSeries,
+      })
+      .populate({
+        path: "status",
+        model: Status,
+      })
+      .populate({
+        path: "spiritualGifts",
+        model: SpiritualGift,
+      })
+      .populate({
+        path: "trainings",
+        model: Training,
+      })
+      .populate({
+        path: "discipler",
+        model: Member,
+      })
+      .populate({
+        path: "disciples",
+        model: Member,
+      })
+      .populate({
+        path: "preferredLanguage",
+        model: PreferredLanguage,
+      })
+      .sort({ createdAt: -1 });
 
     return { members };
   } catch (error) {

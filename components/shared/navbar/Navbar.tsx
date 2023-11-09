@@ -13,7 +13,7 @@ const Navbar = () => {
           src="/assets/images/pcf_logo.png"
           width={40}
           height={40}
-          alt="DevFlow"
+          alt="PCF Logo"
         />
 
         <p className=" h2-bold  font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">

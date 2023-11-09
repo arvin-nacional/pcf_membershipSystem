@@ -5,6 +5,11 @@ export const themes = [
   { value: "dark", label: "Dark", icon: "/assets/icons/moon.svg" },
   { value: "system", label: "System", icon: "/assets/icons/computer.svg" },
 ];
+export const memberButtons = [
+  { value: "edit", label: "Edit", icon: "/assets/icons/edit-btn.svg" },
+  { value: "view", label: "View", icon: "/assets/icons/view-btn.svg" },
+  { value: "delete", label: "Delete", icon: "/assets/icons/delete-btn.svg" },
+];
 
 export const sidebarLinks: SidebarLink[] = [
   {
