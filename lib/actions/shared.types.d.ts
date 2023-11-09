@@ -43,3 +43,7 @@ export interface GetAllMemberNamesParams {
   filter?: string;
   searchQuery?: string;
 }
+
+export interface GetMemberByIdParams {
+  memberId: string;
+}

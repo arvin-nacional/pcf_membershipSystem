@@ -47,9 +47,10 @@ const MemberButton = ({ memberId }: Props) => {
             <MenubarItem
               key={item.value}
               onClick={() => {
-                item.value === "edit" && router.push(`/members/${memberId}`);
+                item.value === "edit" &&
+                  router.push(`/members/edit/${memberId}`);
                 item.value === "view" && router.push(`/members/${memberId}`);
-                item.value === "edit" && router.push(`/members/${memberId}`);
+                item.value === "delete" && router.push(`/members/${memberId}`);
               }}
               className="text-dark100_light900 flex cursor-pointer items-center gap-4 px-2.5 py-2 dark:focus:bg-dark-400"
             >

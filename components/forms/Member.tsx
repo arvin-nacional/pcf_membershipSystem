@@ -44,48 +44,54 @@ import { ministries, spiritualGifts, trainings } from "@/constants";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
 
-const type: any = "create";
-
 // get member names for the disciples and discipler formfield
 interface Props {
   memberNames: MemberNames[];
+  type?: string;
+  memberDetails?: string;
 }
 
-const Member = ({ memberNames }: Props) => {
+const Member = ({ memberNames, type, memberDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(memberNames);
+  const parsedMemberDetails = memberDetails
+    ? JSON.parse(memberDetails || "")
+    : null;
+
+  console.log(parsedMemberDetails);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
     resolver: zodResolver(MemberSchema),
     defaultValues: {
-      lastName: "",
-      firstName: "",
+      lastName: parsedMemberDetails?.lastName || "",
+      firstName: parsedMemberDetails?.firstName || "",
       // middleName: "",
       // suffix: "",
-      emailAddress: "",
-      contactNumber: "",
-      homeAddress: "",
-      emergencyContactPerson: "",
-      emergencyContactNumber: "",
-      highestEducation: "",
-      preferredLanguage: "",
-      birthday: "",
-      gender: "",
-      memberType: "",
-      primaryMinistry: "",
-      lifeGearSeries: "",
-      followUpSeries: "",
-      spiritualGifts: undefined,
-      secondaryMinistries: undefined,
-      status: "",
+      emailAddress: parsedMemberDetails?.emailAddress || "",
+      contactNumber: parsedMemberDetails?.contactNumber || "",
+      homeAddress: parsedMemberDetails?.homeAddress || "",
+      emergencyContactPerson: parsedMemberDetails?.emergencyContactPerson || "",
+      emergencyContactNumber: parsedMemberDetails?.emergencyContactNumber || "",
+      highestEducation: parsedMemberDetails?.highestEducation?.name || "",
+      preferredLanguage: parsedMemberDetails?.preferredLanguage?.name || "",
+      birthday: parsedMemberDetails?.birthday || "",
+      gender: parsedMemberDetails?.gender?.name || "",
+      memberType: parsedMemberDetails?.memberType?.name || "",
+      primaryMinistry: parsedMemberDetails?.primaryMinistry?.name || "",
+      lifeGearSeries: parsedMemberDetails?.lifeGearSeries?.name || "",
+      followUpSeries: parsedMemberDetails?.followUpSeries?.name || "",
+      spiritualGifts: parsedMemberDetails?.spiritualGifts?.name || undefined,
+      secondaryMinistries:
+        parsedMemberDetails?.secondaryMinistries?.name || undefined,
+      status: parsedMemberDetails?.status?.name || "",
       trainings: undefined,
       disciples: undefined,
       // disciplerId: "",
-      disciplerId: undefined,
+      disciplerId: parsedMemberDetails?.spiritualGifts?.name || undefined,
+      waterBaptism: parsedMemberDetails?.waterBaptism || "",
       // memberPhoto: "",
     },
   });
@@ -848,7 +854,7 @@ const Member = ({ memberNames }: Props) => {
           {isSubmitting ? (
             <>{type === "edit" ? "Editing..." : "Adding"}</>
           ) : (
-            <>{type === "edit" ? "Edit Question" : "Add a Member"}</>
+            <>{type === "edit" ? "Edit Member" : "Add a Member"}</>
           )}
         </Button>
       </form>

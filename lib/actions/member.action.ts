@@ -3,7 +3,11 @@
 import Member from "@/database/member.model";
 import { connectToDatabase } from "../mongoose";
 import { revalidatePath } from "next/cache";
-import { CreateMemberParams, GetAllMembersParams } from "./shared.types";
+import {
+  CreateMemberParams,
+  GetAllMembersParams,
+  GetMemberByIdParams,
+} from "./shared.types";
 import Education from "@/database/highestEducation.model";
 import Gender from "@/database/gender.model";
 import MemberType from "@/database/memberType.model";
@@ -347,6 +351,71 @@ export async function getAllMemberNames() {
     }));
 
     return memberNames;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getMemberById(params: GetMemberByIdParams) {
+  try {
+    connectToDatabase();
+    const { memberId } = params;
+    const member = await Member.findById(memberId)
+      .populate({
+        path: "highestEducation",
+        model: Education,
+      })
+      .populate({
+        path: "gender",
+        model: Gender,
+      })
+      .populate({
+        path: "memberType",
+        model: MemberType,
+      })
+      .populate({
+        path: "primaryMinistry",
+        model: Ministry,
+      })
+      .populate({
+        path: "secondaryMinistries",
+        model: Ministry,
+      })
+      .populate({
+        path: "lifeGearSeries",
+        model: LifeGearSeries,
+      })
+      .populate({
+        path: "followUpSeries",
+        model: FollowUpSeries,
+      })
+      .populate({
+        path: "status",
+        model: Status,
+      })
+      .populate({
+        path: "spiritualGifts",
+        model: SpiritualGift,
+      })
+      .populate({
+        path: "trainings",
+        model: Training,
+      })
+      .populate({
+        path: "discipler",
+        model: Member,
+      })
+      .populate({
+        path: "disciples",
+        model: Member,
+      })
+      .populate({
+        path: "preferredLanguage",
+        model: PreferredLanguage,
+      });
+
+    return member;
   } catch (error) {
     console.log(error);
     throw error;
