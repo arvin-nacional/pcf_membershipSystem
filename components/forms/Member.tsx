@@ -423,6 +423,9 @@ const Member = ({ memberNames }: Props) => {
                   <SelectItem value="Elementary Undergraduate">
                     Elementary Undergraduate
                   </SelectItem>
+                  <SelectItem value="Elementary Student">
+                    Elementary Student
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
