@@ -116,7 +116,7 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
       trainings: trainingsArr || undefined,
       disciples: undefined,
       // disciplerId: "",
-      disciplerId: parsedMemberDetails?.discipler?.name || undefined,
+      disciplerId: parsedMemberDetails?.discipler?._id || undefined,
       waterBaptism: parsedMemberDetails?.waterBaptism || "",
       // memberPhoto: "",
     },
