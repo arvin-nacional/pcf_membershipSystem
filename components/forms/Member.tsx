@@ -88,6 +88,12 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
   const trainingsArr: string[] = parsedMemberDetails?.trainings?.map(
     (obj: Training) => obj.name
   );
+  // change the array of member OBJ to array of member names
+  const disciplesArr: string[] = parsedMemberDetails?.disciples?.map(
+    (obj: any) => `${obj.firstName} ${obj.lastName}`
+  );
+
+  console.log(disciplesArr);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
@@ -114,7 +120,7 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
       secondaryMinistries: secondaryMinistriesArr || undefined,
       status: parsedMemberDetails?.status?.name || "",
       trainings: trainingsArr || undefined,
-      disciples: undefined,
+      disciples: disciplesArr || undefined,
       // disciplerId: "",
       disciplerId: parsedMemberDetails?.discipler?._id || undefined,
       waterBaptism: parsedMemberDetails?.waterBaptism || "",

@@ -26,6 +26,8 @@ export interface SpiritualGifts {
   label: string;
 }
 
+export interface Disciples {}
+
 export interface Job {
   id?: string;
   employer_name?: string;

@@ -305,6 +305,7 @@ export async function getAllMembers(params: GetAllMembersParams) {
       .populate({
         path: "status",
         model: Status,
+        select: "name",
       })
       .populate({
         path: "spiritualGifts",
