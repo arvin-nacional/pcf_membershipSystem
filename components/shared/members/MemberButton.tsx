@@ -21,7 +21,7 @@ const MemberButton = ({ memberId }: Props) => {
   const router = useRouter();
   const { mode } = useTheme();
   return (
-    <Menubar className="relative  border-none bg-transparent shadow-none">
+    <Menubar className="relative border-none bg-transparent shadow-none">
       <MenubarMenu>
         <MenubarTrigger className="cursor-pointer focus:bg-light-900 data-[state=open]:bg-light-900 dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200">
           {mode === "light" ? (

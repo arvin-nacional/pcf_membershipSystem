@@ -5,6 +5,7 @@ import { connectToDatabase } from "../mongoose";
 import { revalidatePath } from "next/cache";
 import {
   CreateMemberParams,
+  EditMemberParams,
   GetAllMembersParams,
   GetMemberByIdParams,
 } from "./shared.types";
@@ -112,7 +113,7 @@ export async function createMember(params: CreateMemberParams) {
       },
       { upsert: true, new: true }
     );
-    // create Preferredlanguage or get them if they already exist
+    // create followUpseries or get them if they already exist
     const existingFollowUpSeries = await FollowUpSeries.findOneAndUpdate(
       { name: { $regex: new RegExp(`^${followUpSeries}$`, "i") } },
       {
@@ -121,7 +122,7 @@ export async function createMember(params: CreateMemberParams) {
       },
       { upsert: true, new: true }
     );
-    // create Preferredlanguage or get them if they already exist
+    // create lifeGearSeries or get them if they already exist
     const existingLifeGearSeries = await LifeGearSeries.findOneAndUpdate(
       { name: { $regex: new RegExp(`^${lifeGearSeries}$`, "i") } },
       {
@@ -417,6 +418,385 @@ export async function getMemberById(params: GetMemberByIdParams) {
       });
 
     return member;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function editMember(params: EditMemberParams) {
+  try {
+    connectToDatabase();
+    const {
+      firstName,
+      // middleName,
+      lastName,
+      // suffix,
+      gender,
+      birthday,
+      contactNumber,
+      emailAddress,
+      homeAddress,
+      emergencyContactNumber,
+      emergencyContactPerson,
+      highestEducation,
+      preferredLanguage,
+      memberType,
+      waterBaptism,
+      primaryMinistry,
+      lifeGearSeries,
+      followUpSeries,
+      status,
+      spiritualGifts,
+      secondaryMinistries,
+      trainings,
+      disciplerId,
+      disciples,
+      // disciplerId,
+      // memberPhoto,
+      path,
+      memberId,
+    } = params;
+
+    const member = await Member.findById(memberId)
+      .populate({
+        path: "highestEducation",
+        model: Education,
+        select: "name",
+      })
+      .populate({
+        path: "highestEducation",
+        model: Education,
+        select: "name",
+      })
+      .populate({
+        path: "gender",
+        model: Gender,
+        select: "name",
+      })
+      .populate({
+        path: "memberType",
+        model: MemberType,
+        select: "name",
+      })
+      .populate({
+        path: "primaryMinistry",
+        model: Ministry,
+      })
+      .populate({
+        path: "secondaryMinistries",
+        model: Ministry,
+      })
+      .populate({
+        path: "lifeGearSeries",
+        model: LifeGearSeries,
+        select: "name",
+      })
+      .populate({
+        path: "followUpSeries",
+        model: FollowUpSeries,
+        select: "name",
+      })
+      .populate({
+        path: "status",
+        model: Status,
+        select: "name",
+      })
+      .populate({
+        path: "spiritualGifts",
+        model: SpiritualGift,
+      })
+      .populate({
+        path: "trainings",
+        model: Training,
+      })
+      .populate({
+        path: "discipler",
+        model: Member,
+      })
+      .populate({
+        path: "disciples",
+        model: Member,
+      })
+      .populate({
+        path: "preferredLanguage",
+        model: PreferredLanguage,
+        select: "name",
+      });
+
+    if (!member) {
+      throw new Error("Member not found");
+    }
+
+    member.firstName = firstName;
+    // middleName,
+    member.lastName = lastName;
+    // suffix,
+    member.birthday = birthday;
+    member.contactNumber = contactNumber;
+    member.emailAddress = emailAddress;
+    member.homeAddress = homeAddress;
+    member.emergencyContactNumber = emergencyContactNumber;
+    member.emergencyContactPerson = emergencyContactPerson;
+    member.waterBaptism = waterBaptism;
+    console.log(member);
+
+    // Check if the Education field is being updated
+    if (member.highestEducation.name !== highestEducation) {
+      // Remove the member from the previous highest education's list of members
+      await Education.findByIdAndUpdate(member.highestEducation, {
+        $pull: { members: memberId },
+      });
+
+      // create education or update them if they already exist
+      const existingEducation = await Education.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${highestEducation}$`, "i") } },
+        {
+          $setOnInsert: { name: highestEducation },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the Education field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        highestEducation: existingEducation._id,
+      });
+    }
+
+    // Check if the Gender field is being updated
+    if (member.gender.name !== gender) {
+      // Remove the member from the previous highest education's list of members
+      await Gender.findByIdAndUpdate(member.gender, {
+        $pull: { members: memberId },
+      });
+
+      // create gender or update them if they already exist
+      const existingGender = await Gender.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${gender}$`, "i") } },
+        {
+          $setOnInsert: { name: gender },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the Gender field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        gender: existingGender._id,
+      });
+    }
+
+    // Check if the Gender field is being updated
+    if (member.gender.name !== gender) {
+      // Remove the member from the previous highest education's list of members
+      await Gender.findByIdAndUpdate(member.gender, {
+        $pull: { members: memberId },
+      });
+
+      // create gender or update them if they already exist
+      const existingGender = await Gender.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${gender}$`, "i") } },
+        {
+          $setOnInsert: { name: gender },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the Gender field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        gender: existingGender._id,
+      });
+    }
+
+    // Check if the Preferred Language field is being updated
+    if (member.preferredLanguage.name !== gender) {
+      // Remove the member from the previous highest education's list of members
+      await PreferredLanguage.findByIdAndUpdate(member.preferredLanguage, {
+        $pull: { members: memberId },
+      });
+
+      // create language or update them if they already exist
+      const existingLanguage = await PreferredLanguage.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${preferredLanguage}$`, "i") } },
+        {
+          $setOnInsert: { name: preferredLanguage },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the language field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        preferredLanguage: existingLanguage._id,
+      });
+    }
+
+    // Check if the membertype field is being updated
+    if (member.memberType.name !== memberType) {
+      // Remove the member from the previous highest education's list of members
+      await MemberType.findByIdAndUpdate(member.memberType, {
+        $pull: { members: memberId },
+      });
+
+      // create language or update them if they already exist
+      const existingMemberType = await MemberType.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${memberType}$`, "i") } },
+        {
+          $setOnInsert: { name: memberType },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the language field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        memberType: existingMemberType._id,
+      });
+    }
+
+    // Check if the primaryMinistry field is being updated
+    if (member.primaryMinistry.name !== primaryMinistry) {
+      // Remove the member from the previous highest education's list of members
+      await Ministry.findByIdAndUpdate(member.primaryMinistry, {
+        $pull: { members: memberId },
+      });
+
+      // create ministry or update them if they already exist
+      const existingDocumentId = await Ministry.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${primaryMinistry}$`, "i") } },
+        {
+          $setOnInsert: { name: primaryMinistry },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the language field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        memberType: existingDocumentId._id,
+      });
+    }
+
+    // Check if the lifegearseries field is being updated
+    if (member.lifeGearSeries.name !== lifeGearSeries) {
+      // Remove the member from the previous highest education's list of members
+      await LifeGearSeries.findByIdAndUpdate(member.lifeGearSeries, {
+        $pull: { members: memberId },
+      });
+
+      // create ministry or update them if they already exist
+      const existingDocumentId = await LifeGearSeries.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${lifeGearSeries}$`, "i") } },
+        {
+          $setOnInsert: { name: lifeGearSeries },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the language field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        lifeGearSeries: existingDocumentId._id,
+      });
+    }
+
+    // Check if the followUpSeries field is being updated
+    if (member.followUpSeries.name !== followUpSeries) {
+      // Remove the member from the previous highest education's list of members
+      await FollowUpSeries.findByIdAndUpdate(member.followUpSeries, {
+        $pull: { members: memberId },
+      });
+
+      // create ministry or update them if they already exist
+      const existingDocumentId = await FollowUpSeries.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${followUpSeries}$`, "i") } },
+        {
+          $setOnInsert: { name: followUpSeries },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the language field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        followUpSeries: existingDocumentId._id,
+      });
+    }
+
+    // Check if the status field is being updated
+    if (member.status.name !== status) {
+      // Remove the member from the previous highest education's list of members
+      await Status.findByIdAndUpdate(member.status, {
+        $pull: { members: memberId },
+      });
+
+      // create ministry or update them if they already exist
+      const existingDocumentId = await Status.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${status}$`, "i") } },
+        {
+          $setOnInsert: { name: status },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the language field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        status: existingDocumentId._id,
+      });
+    }
+
+    // Check if the discipler field is being updated
+    if (member.discipler?._id.toString() !== disciplerId) {
+      console.log("diff id");
+
+      if (member.discipler) {
+        // Remove the member from the previous small group's list of members
+        await SmallGroup.findOneAndUpdate(
+          { discipler: member.discipler._id.toString() },
+          {
+            $pull: { disciples: member._id },
+          }
+        );
+
+        // Remove the member from the previous leader's list of disciples
+        await Member.findByIdAndUpdate(member.discipler._id.toString(), {
+          $pull: { disciples: member._id },
+        });
+      }
+
+      if (disciplerId !== undefined) {
+        // Add the member to the new small group's list of members
+        await SmallGroup.findOneAndUpdate(
+          { discipler: disciplerId },
+          {
+            $push: { disciples: member._id },
+          }
+        );
+        // Add the member from to the new leader's list of disciples
+        const newDiscipler = await Member.findByIdAndUpdate(disciplerId, {
+          $push: { disciples: member._id },
+        });
+
+        // Update the discipler field for the member
+        await Member.findByIdAndUpdate(memberId, {
+          discipler: newDiscipler._id,
+        });
+      } else if (member.discipler) {
+        // If disciplerId is undefined and member.discipler has a value, remove discipler field
+        await Member.findByIdAndUpdate(memberId, {
+          $unset: { discipler: 1 },
+        });
+      }
+    }
+
+    await member.save();
+
+    console.log(params);
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     throw error;

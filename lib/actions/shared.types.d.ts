@@ -1,5 +1,5 @@
-// import { IMember } from "@/database/member.model";
-// import { Schema } from "mongoose";
+import { IMember } from "@/database/member.model";
+import { Document, Model } from "mongoose";
 
 export interface CreateMemberParams {
   lastName: string;
@@ -29,6 +29,44 @@ export interface CreateMemberParams {
   trainings: string[] | undefined;
   disciplerId: string | undefined;
   disciples: string[] | undefined;
+}
+
+export interface UpdateFieldParams {
+  fieldName: keyof IMember;
+  fieldValue: string;
+  memberId: string | undefined;
+  member: IMember;
+  model: Model<Document>;
+}
+export interface EditMemberParams {
+  lastName: string;
+  firstName: string;
+  // middleName: string;
+  // suffix?: string;
+  emailAddress: string;
+  contactNumber: string;
+  homeAddress: string;
+  emergencyContactPerson: string;
+  emergencyContactNumber: string;
+  highestEducation: string;
+  birthday: string;
+  gender: string;
+  memberType: string;
+  // status: string;
+  // memberPhoto: string;
+  path: string;
+  waterBaptism: string;
+  preferredLanguage: string;
+  followUpSeries: string;
+  lifeGearSeries: string;
+  primaryMinistry: string | undefined;
+  status: string;
+  spiritualGifts: string[] | undefined;
+  secondaryMinistries: string[] | undefined;
+  trainings: string[] | undefined;
+  disciplerId: string | undefined;
+  disciples: string[] | undefined;
+  memberId: string | undefined;
 }
 
 export interface GetAllMembersParams {

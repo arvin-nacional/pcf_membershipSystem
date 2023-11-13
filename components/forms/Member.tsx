@@ -39,7 +39,7 @@ import * as z from "zod";
 import { Button } from "../ui/button";
 import { useRouter, usePathname } from "next/navigation";
 import { MemberSchema } from "@/lib/validations";
-import { createMember } from "@/lib/actions/member.action";
+import { createMember, editMember } from "@/lib/actions/member.action";
 import { ministries, spiritualGifts, trainings } from "@/constants";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
@@ -49,6 +49,7 @@ interface Props {
   memberNames: MemberNames[];
   type?: string;
   memberDetails?: string;
+  memberId?: string;
 }
 interface Ministry {
   _id: string;
@@ -67,7 +68,7 @@ interface Training {
   members: string[];
 }
 
-const Member = ({ memberNames, type, memberDetails }: Props) => {
+const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -92,8 +93,6 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
   const disciplesArr: string[] = parsedMemberDetails?.disciples?.map(
     (obj: any) => `${obj.firstName} ${obj.lastName}`
   );
-
-  console.log(disciplesArr);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
@@ -122,7 +121,7 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
       trainings: trainingsArr || undefined,
       disciples: disciplesArr || undefined,
       // disciplerId: "",
-      disciplerId: parsedMemberDetails?.discipler?._id || undefined,
+      disciplerId: parsedMemberDetails?.discipler?._id || "none",
       waterBaptism: parsedMemberDetails?.waterBaptism || "",
       // memberPhoto: "",
     },
@@ -141,37 +140,75 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
             .filter((id) => id !== undefined) as string[])
         : undefined;
 
-      // creating
-      await createMember({
-        lastName: values.lastName,
-        firstName: values.firstName,
-        // middleName: values.middleName,
-        // suffix: values.suffix,
-        emailAddress: values.emailAddress,
-        contactNumber: values.contactNumber,
-        homeAddress: values.homeAddress,
-        emergencyContactPerson: values.emergencyContactPerson,
-        emergencyContactNumber: values.emergencyContactNumber,
-        highestEducation: values.highestEducation,
-        preferredLanguage: values.preferredLanguage,
-        birthday: values.birthday,
-        gender: values.gender,
-        memberType: values.memberType,
-        waterBaptism: values.waterBaptism,
-        primaryMinistry: values.primaryMinistry,
-        followUpSeries: values.followUpSeries,
-        lifeGearSeries: values.lifeGearSeries,
-        status: values.status,
-        spiritualGifts: values.spiritualGifts,
-        secondaryMinistries: values.secondaryMinistries,
-        trainings: values.trainings,
-        // disciplerId: values.disciplerId,
-        disciplerId: values.disciplerId,
-        disciples: selectedDisciples,
-        // status: values.status,
-        // memberPhoto: values.memberPhoto,
-        path: pathname,
-      });
+      // Set disciplerId to undefined if "none" is selected
+      const disciplerId =
+        values.disciplerId === "none" ? undefined : values.disciplerId;
+
+      if (type === "edit") {
+        await editMember({
+          lastName: values.lastName,
+          firstName: values.firstName,
+          // middleName: values.middleName,
+          // suffix: values.suffix,
+          emailAddress: values.emailAddress,
+          contactNumber: values.contactNumber,
+          homeAddress: values.homeAddress,
+          emergencyContactPerson: values.emergencyContactPerson,
+          emergencyContactNumber: values.emergencyContactNumber,
+          highestEducation: values.highestEducation,
+          preferredLanguage: values.preferredLanguage,
+          birthday: values.birthday,
+          gender: values.gender,
+          memberType: values.memberType,
+          waterBaptism: values.waterBaptism,
+          primaryMinistry: values.primaryMinistry,
+          followUpSeries: values.followUpSeries,
+          lifeGearSeries: values.lifeGearSeries,
+          status: values.status,
+          spiritualGifts: values.spiritualGifts,
+          secondaryMinistries: values.secondaryMinistries,
+          trainings: values.trainings,
+          // disciplerId: values.disciplerId,
+          disciplerId,
+          disciples: selectedDisciples,
+          // status: values.status,
+          // memberPhoto: values.memberPhoto,
+          path: pathname,
+          memberId,
+        });
+      } else {
+        // creating
+        await createMember({
+          lastName: values.lastName,
+          firstName: values.firstName,
+          // middleName: values.middleName,
+          // suffix: values.suffix,
+          emailAddress: values.emailAddress,
+          contactNumber: values.contactNumber,
+          homeAddress: values.homeAddress,
+          emergencyContactPerson: values.emergencyContactPerson,
+          emergencyContactNumber: values.emergencyContactNumber,
+          highestEducation: values.highestEducation,
+          preferredLanguage: values.preferredLanguage,
+          birthday: values.birthday,
+          gender: values.gender,
+          memberType: values.memberType,
+          waterBaptism: values.waterBaptism,
+          primaryMinistry: values.primaryMinistry,
+          followUpSeries: values.followUpSeries,
+          lifeGearSeries: values.lifeGearSeries,
+          status: values.status,
+          spiritualGifts: values.spiritualGifts,
+          secondaryMinistries: values.secondaryMinistries,
+          trainings: values.trainings,
+          // disciplerId: values.disciplerId,
+          disciplerId,
+          disciples: selectedDisciples,
+          // status: values.status,
+          // memberPhoto: values.memberPhoto,
+          path: pathname,
+        });
+      }
 
       router.push("/");
     } catch (error) {
@@ -767,12 +804,12 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                      {field.value ? (
+                      {field.value !== undefined && field.value !== "none" ? (
                         memberNames.find(
                           (memberName) => memberName._id === field.value
                         )?.value
                       ) : (
-                        <span> </span>
+                        <span>No Discipler</span>
                       )}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -782,11 +819,11 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
                   <Command>
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="max-h-40 overflow-y-auto">
                       <CommandItem
                         value="none" // Use a value that represents "No Discipler"
                         onSelect={() => {
-                          form.setValue("disciplerId", undefined); // Set the value to "none" when selected
+                          form.setValue("disciplerId", "none"); // Set the value to "none" when selected
                         }}
                       >
                         <Check
@@ -801,17 +838,17 @@ const Member = ({ memberNames, type, memberDetails }: Props) => {
                       </CommandItem>
                       {memberNames.map((member) => (
                         <CommandItem
-                          value={member._id}
+                          value={member.name}
                           key={member._id}
                           onSelect={() => {
                             form.setValue("disciplerId", member._id);
-                            console.log(member._id);
+                            // console.log(member._id);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              member.value === field.value
+                              member._id === field.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}

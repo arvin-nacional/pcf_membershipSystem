@@ -14,6 +14,7 @@ const Page = async ({ params }: ParamsProps) => {
           type="edit"
           memberNames={memberNames}
           memberDetails={JSON.stringify(result)}
+          memberId={params.id}
         />
       </div>
     </>
