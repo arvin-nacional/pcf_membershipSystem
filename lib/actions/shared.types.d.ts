@@ -1,5 +1,5 @@
 import { IMember } from "@/database/member.model";
-import { Document, Model } from "mongoose";
+import { Document, Model, Schema } from "mongoose";
 
 export interface CreateMemberParams {
   lastName: string;
@@ -67,6 +67,11 @@ export interface EditMemberParams {
   disciplerId: string | undefined;
   disciples: string[] | undefined;
   memberId: string | undefined;
+}
+
+export interface EditSecondaryMinistriesParams {
+  _id: Schema.Types.ObjectId;
+  name: string;
 }
 
 export interface GetAllMembersParams {

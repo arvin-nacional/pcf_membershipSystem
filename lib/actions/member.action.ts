@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import {
   CreateMemberParams,
   EditMemberParams,
+  EditSecondaryMinistriesParams,
   GetAllMembersParams,
   GetMemberByIdParams,
 } from "./shared.types";
@@ -20,6 +21,7 @@ import Status from "@/database/status.model";
 import SpiritualGift from "@/database/spiritualGift.model";
 import Training from "@/database/training";
 import SmallGroup from "@/database/smallGroup.model";
+import path from "path";
 
 // import SmallGroup from "@/database/smallGroup.model";
 
@@ -486,6 +488,7 @@ export async function editMember(params: EditMemberParams) {
       .populate({
         path: "secondaryMinistries",
         model: Ministry,
+        select: "name",
       })
       .populate({
         path: "lifeGearSeries",
@@ -732,7 +735,7 @@ export async function editMember(params: EditMemberParams) {
         $pull: { members: memberId },
       });
 
-      // create ministry or update them if they already exist
+      // create status or update them if they already exist
       const existingDocumentId = await Status.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${status}$`, "i") } },
         {
@@ -750,8 +753,6 @@ export async function editMember(params: EditMemberParams) {
 
     // Check if the discipler field is being updated
     if (member.discipler?._id.toString() !== disciplerId) {
-      console.log("diff id");
-
       if (member.discipler) {
         // Remove the member from the previous small group's list of members
         await SmallGroup.findOneAndUpdate(
@@ -790,6 +791,80 @@ export async function editMember(params: EditMemberParams) {
           $unset: { discipler: 1 },
         });
       }
+    }
+
+    // Check if the secondaryMinistries field is being updated
+    // convert old ministries obj into an array of names
+    const ministriesArr: string[] = member.secondaryMinistries.map(
+      (ministry: EditSecondaryMinistriesParams) => ministry.name
+    );
+
+    // Initialize arrays to store differences
+    const differencesInSecondary: string[] = [];
+    const differencesInMinistries: string[] = [];
+
+    if (secondaryMinistries) {
+      // check for differences between secondaryMinistries and ministriesArr
+      differencesInSecondary.push(
+        ...secondaryMinistries.filter((value) => !ministriesArr.includes(value))
+      );
+
+      differencesInMinistries.push(
+        ...ministriesArr.filter((value) => !secondaryMinistries.includes(value))
+      );
+
+      if (
+        differencesInSecondary.length > 0 ||
+        differencesInMinistries.length > 0
+      ) {
+        console.log(
+          `Values in secondaryMinistries not present in ministriesArr: ${differencesInSecondary.join(
+            ", "
+          )}`
+        );
+
+        // create ministry or update if it exist
+        for (const ministry of differencesInSecondary) {
+          const addMinistry = await Ministry.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${ministry}$`, "i") } },
+            {
+              $setOnInsert: { name: ministry },
+              $push: { members: member._id },
+            },
+            { upsert: true, new: true }
+          );
+          // update the member
+          await Member.findOneAndUpdate(member._id, {
+            $push: { secondaryMinistries: addMinistry._id },
+          });
+        }
+        console.log(
+          `Values in ministriesArr not present in secondaryMinistries: ${differencesInMinistries.join(
+            ", "
+          )}`
+        );
+
+        // remove memberId from the ministry list of members
+        for (const ministry of differencesInMinistries) {
+          const removeMinistry = await Ministry.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${ministry}$`, "i") } },
+            {
+              $pull: { members: member._id },
+            }
+          );
+          // remove ministry id from the secondaryMinistries of the member
+          await Member.findOneAndUpdate(member._id, {
+            $pull: { secondaryMinistries: removeMinistry._id },
+          });
+        }
+
+        // Perform actions with the differences
+        // For example, update other data, trigger events, etc.
+        // Your custom logic goes here
+        // ...
+      }
+    } else {
+      console.log("secondaryMinistries is undefined");
     }
 
     await member.save();
