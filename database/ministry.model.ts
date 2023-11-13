@@ -5,15 +5,17 @@ export interface IMinistry extends Document {
   members: Schema.Types.ObjectId[];
   leader: Schema.Types.ObjectId[];
   description: string;
+  createdAt: Date;
 }
 
-const MinisrySchema = new Schema({
+const MinistrySchema = new Schema({
   name: { type: String, required: true, unique: true },
   members: [{ type: Schema.Types.ObjectId, ref: "Member" }],
   leader: [{ type: Schema.Types.ObjectId, ref: "Member" }],
   description: { type: String },
+  createdAt: { type: Date, default: Date.now },
 });
 
-const Ministry = models.Ministry || model("Ministry", MinisrySchema);
+const Ministry = models.Ministry || model("Ministry", MinistrySchema);
 
 export default Ministry;

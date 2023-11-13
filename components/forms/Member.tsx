@@ -706,7 +706,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="cursor-pointer bg-light-900">
+                <SelectContent className="max-h-44 cursor-pointer overflow-y-auto bg-light-900">
                   <SelectItem value="None" key="None">
                     None
                   </SelectItem>

@@ -73,6 +73,13 @@ export interface EditSecondaryMinistriesParams {
   _id: Schema.Types.ObjectId;
   name: string;
 }
+export interface EditSpiritualGiftsParams {
+  _id: Schema.Types.ObjectId;
+  name: string;
+}
+export interface EditDisciplesParams {
+  _id: Schema.Types.ObjectId;
+}
 
 export interface GetAllMembersParams {
   page?: number;

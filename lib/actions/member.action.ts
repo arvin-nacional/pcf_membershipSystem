@@ -5,6 +5,7 @@ import { connectToDatabase } from "../mongoose";
 import { revalidatePath } from "next/cache";
 import {
   CreateMemberParams,
+  EditDisciplesParams,
   EditMemberParams,
   EditSecondaryMinistriesParams,
   GetAllMembersParams,
@@ -21,7 +22,6 @@ import Status from "@/database/status.model";
 import SpiritualGift from "@/database/spiritualGift.model";
 import Training from "@/database/training";
 import SmallGroup from "@/database/smallGroup.model";
-import path from "path";
 
 // import SmallGroup from "@/database/smallGroup.model";
 
@@ -518,10 +518,6 @@ export async function editMember(params: EditMemberParams) {
         model: Member,
       })
       .populate({
-        path: "disciples",
-        model: Member,
-      })
-      .populate({
         path: "preferredLanguage",
         model: PreferredLanguage,
         select: "name",
@@ -857,14 +853,240 @@ export async function editMember(params: EditMemberParams) {
             $pull: { secondaryMinistries: removeMinistry._id },
           });
         }
-
-        // Perform actions with the differences
-        // For example, update other data, trigger events, etc.
-        // Your custom logic goes here
-        // ...
       }
     } else {
       console.log("secondaryMinistries is undefined");
+    }
+
+    // Check if the spiritualGifts field is being updated
+    // change array of objects into array of names
+    const spiritualGiftsArr: string[] = member.spiritualGifts.map(
+      (spiritualGift: EditSecondaryMinistriesParams) => spiritualGift.name
+    );
+
+    // Initialize arrays to store differences
+    const differencesInSpiritualGiftsParams: string[] = [];
+    const differencesInSpiritualGiftsDatabase: string[] = [];
+
+    if (spiritualGifts) {
+      // check for differences between spiritualGifts and ministriesArr
+      differencesInSpiritualGiftsParams.push(
+        ...spiritualGifts.filter((value) => !spiritualGiftsArr.includes(value))
+      );
+
+      differencesInSpiritualGiftsDatabase.push(
+        ...spiritualGiftsArr.filter((value) => !spiritualGifts.includes(value))
+      );
+
+      if (
+        differencesInSpiritualGiftsParams.length > 0 ||
+        differencesInSpiritualGiftsDatabase.length > 0
+      ) {
+        console.log(
+          `Values in spiritualGifts not present in spiritualGiftsArr: ${differencesInSpiritualGiftsParams.join(
+            ", "
+          )}`
+        );
+
+        // create spiritualGift or update if it exist
+        for (const spiritualGift of differencesInSpiritualGiftsParams) {
+          const addSpiritualGift = await SpiritualGift.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${spiritualGift}$`, "i") } },
+            {
+              $setOnInsert: { name: spiritualGift },
+              $push: { members: member._id },
+            },
+            { upsert: true, new: true }
+          );
+          // update the member
+          await Member.findOneAndUpdate(member._id, {
+            $push: { spiritualGifts: addSpiritualGift._id },
+          });
+        }
+        console.log(
+          `Values in spiritualGiftsArr not present in spiritualGifts: ${differencesInSpiritualGiftsDatabase.join(
+            ", "
+          )}`
+        );
+
+        // remove memberId from the spiritualGift list of members
+        for (const spiritualGift of differencesInSpiritualGiftsDatabase) {
+          const removeSpiritualGift = await SpiritualGift.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${spiritualGift}$`, "i") } },
+            {
+              $pull: { members: member._id },
+            }
+          );
+          // remove spiritualGift id from the spiritualGifts of the member
+          await Member.findOneAndUpdate(member._id, {
+            $pull: { spiritualGifts: removeSpiritualGift._id },
+          });
+        }
+      }
+    } else {
+      console.log("spiritualGifts is undefined");
+    }
+
+    // Check if the trainings field is being updated
+    // change array of objects into array of names
+    const trainingsArr: string[] = member.trainings.map(
+      (spiritualGift: EditSecondaryMinistriesParams) => spiritualGift.name
+    );
+
+    // Initialize arrays to store differences
+    const differencesInTrainingsParams: string[] = [];
+    const differencesInTrainingsDatabase: string[] = [];
+
+    if (trainings) {
+      // check for differences between trainings and ministriesArr
+      differencesInTrainingsParams.push(
+        ...trainings.filter((value) => !trainingsArr.includes(value))
+      );
+
+      differencesInTrainingsDatabase.push(
+        ...trainingsArr.filter((value) => !trainings.includes(value))
+      );
+
+      if (
+        differencesInTrainingsParams.length > 0 ||
+        differencesInTrainingsDatabase.length > 0
+      ) {
+        console.log(
+          `Values in trainings not present in trainingsArr: ${differencesInTrainingsParams.join(
+            ", "
+          )}`
+        );
+
+        // create training or update if it exist
+        for (const training of differencesInTrainingsParams) {
+          const addTraining = await Training.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${training}$`, "i") } },
+            {
+              $setOnInsert: { name: training },
+              $push: { members: member._id },
+            },
+            { upsert: true, new: true }
+          );
+          // update the member
+          await Member.findOneAndUpdate(member._id, {
+            $push: { trainings: addTraining._id },
+          });
+        }
+        console.log(
+          `Values in trainingsArr not present in trainings: ${differencesInTrainingsDatabase.join(
+            ", "
+          )}`
+        );
+
+        // remove memberId from the training list of members
+        for (const training of differencesInTrainingsDatabase) {
+          const removeTraining = await Training.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${training}$`, "i") } },
+            {
+              $pull: { members: member._id },
+            }
+          );
+          // remove training id from the trainings of the member
+          await Member.findOneAndUpdate(member._id, {
+            $pull: { trainings: removeTraining._id },
+          });
+        }
+      }
+    } else {
+      console.log("trainings is undefined");
+    }
+
+    // Todo: disciples edit
+    // Check if the disciples field is being updated
+    // change array of objects into array of names
+    const disciplesIdArr: string[] = member.disciples.map(
+      (spiritualGift: EditDisciplesParams) => spiritualGift._id.toString()
+    );
+    // Initialize arrays to store differences
+    const differencesInDisciplesParams: string[] = [];
+    const differencesInDisciplesDatabase: string[] = [];
+
+    if (disciples) {
+      // check for differences between disciples and ministriesArr
+      differencesInDisciplesParams.push(
+        ...disciples.filter((value) => !disciplesIdArr.includes(value))
+      );
+
+      differencesInDisciplesDatabase.push(
+        ...disciplesIdArr.filter((value) => !disciples.includes(value))
+      );
+
+      if (
+        differencesInDisciplesParams.length > 0 ||
+        differencesInDisciplesDatabase.length > 0
+      ) {
+        console.log(
+          `Values in disciples not present in disciplesIdArr: ${differencesInDisciplesParams.join(
+            ", "
+          )}`
+        );
+
+        for (const disciple of differencesInDisciplesParams) {
+          // update the disciple's discipler field
+          const discipleObj = await Member.findByIdAndUpdate(disciple, {
+            discipler: member._id,
+          });
+
+          // create small Group or update it if it exist
+          await SmallGroup.findOneAndUpdate(
+            { discipler: member._id },
+            {
+              $setOnInsert: { discipler: member._id },
+              $push: { disciples: discipleObj._id },
+            },
+            { upsert: true, new: true }
+          );
+          // update the member
+          await Member.findOneAndUpdate(member._id, {
+            $push: { disciples: discipleObj._id },
+          });
+        }
+        console.log(
+          `Values in disciplesIdArr not present in disciples: ${differencesInDisciplesDatabase.join(
+            ", "
+          )}`
+        );
+
+        // remove memberId from the SmallGroup list of members
+        for (const disciple of differencesInDisciplesDatabase) {
+          // update the disciple's discipler field
+          const discipleObj = await Member.findByIdAndUpdate(
+            disciple,
+            { $unset: { discipler: 1 } },
+            { new: true }
+          );
+
+          // update smallGroup
+          await SmallGroup.findOneAndUpdate(
+            { discipler: member._id },
+            {
+              $pull: { disciples: discipleObj._id },
+            }
+          );
+
+          // Find the updated SmallGroup
+          const updatedSmallGroup = await SmallGroup.findOne({
+            discipler: member._id,
+          });
+
+          // If the SmallGroup is empty, remove it
+          if (updatedSmallGroup && updatedSmallGroup.disciples.length === 0) {
+            await SmallGroup.findOneAndRemove({ discipler: member._id });
+          }
+
+          // remove training id from the disciples of the member
+          await Member.findOneAndUpdate(member._id, {
+            $pull: { disciples: discipleObj._id },
+          });
+        }
+      }
+    } else {
+      console.log("disciples is undefined");
     }
 
     await member.save();

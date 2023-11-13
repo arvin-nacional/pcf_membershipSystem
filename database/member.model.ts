@@ -27,6 +27,7 @@ export interface IMember extends Document {
   trainings: Schema.Types.ObjectId[];
   discipler: Schema.Types.ObjectId;
   disciples: Schema.Types.ObjectId[];
+  createdAt: Date;
 }
 
 const MemberSchema = new Schema({
@@ -80,6 +81,7 @@ const MemberSchema = new Schema({
       ref: "Member",
     },
   ],
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Member = models.Member || model("Member", MemberSchema);
