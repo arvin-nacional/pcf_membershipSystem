@@ -29,6 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -70,6 +71,25 @@ interface Training {
 
 const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preview, setPreview] = useState({
+    name: "default",
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
+  });
+
+  // convert image to string
+  const handleImageChange = (file: File) => {
+    const reader = (readFile: File) =>
+      new Promise<string>((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.onload = () => resolve(fileReader.result as string);
+        fileReader.readAsDataURL(readFile);
+      });
+
+    reader(file).then((result: string) =>
+      setPreview({ name: file?.name, url: result })
+    );
+  };
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -123,7 +143,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
       // disciplerId: "",
       disciplerId: parsedMemberDetails?.discipler?._id || "none",
       waterBaptism: parsedMemberDetails?.waterBaptism || "",
-      // memberPhoto: "",
+      memberPhoto: parsedMemberDetails?.memberPhoto || "",
     },
   });
 
@@ -168,13 +188,11 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           spiritualGifts: values.spiritualGifts,
           secondaryMinistries: values.secondaryMinistries,
           trainings: values.trainings,
-          // disciplerId: values.disciplerId,
           disciplerId,
           disciples: selectedDisciples,
-          // status: values.status,
-          // memberPhoto: values.memberPhoto,
           path: pathname,
           memberId,
+          memberPhoto: preview.url,
         });
       } else {
         // creating
@@ -205,7 +223,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           disciplerId,
           disciples: selectedDisciples,
           // status: values.status,
-          // memberPhoto: values.memberPhoto,
+          memberPhoto: preview.url,
           path: pathname,
         });
       }
@@ -915,6 +933,43 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* TODO: upload photo */}
+        <Avatar className="h-24 w-24">
+          {parsedMemberDetails.memberPhoto ? (
+            <AvatarImage src={parsedMemberDetails.memberPhoto} />
+          ) : (
+            <AvatarImage src={preview.url} />
+          )}
+
+          <AvatarFallback>Your Photo</AvatarFallback>
+        </Avatar>
+        <FormField
+          control={form.control}
+          name="memberPhoto"
+          render={({ field: { onChange, value, ...rest } }) => (
+            <>
+              <FormItem>
+                <FormLabel>Member Photo</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    {...rest}
+                    onChange={(e) => {
+                      // @ts-ignore
+                      handleImageChange(e.target.files[0]);
+                    }}
+                  />
+                </FormControl>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Choose your image. We prefer square photo.
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            </>
+          )}
+        />
+
         <Button
           type="submit"
           className="primary-gradient w-fit !text-light-900"

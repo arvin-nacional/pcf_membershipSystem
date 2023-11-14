@@ -10,6 +10,7 @@ interface Props {
   disciplerId: string;
   email: string;
   id: string;
+  photo: string;
 }
 const MemberList = ({
   name,
@@ -20,19 +21,31 @@ const MemberList = ({
   disciplerId,
   email,
   id,
+  photo,
 }: Props) => {
+  console.log(photo);
   return (
     <div className="background-light900_dark200 body-regular text-dark400_light800  shadow-light300_darknone mb-5 flex w-full flex-row items-center justify-start gap-[20px] rounded-md p-2 text-left ">
       <div className="background-light900_dark200 flex flex-1 flex-row items-center justify-around">
         <div className="flex w-[200px] flex-row items-center justify-start gap-[10px]">
           <div className="relative h-[38px] w-[38px]">
-            <Image
-              className="absolute inset-[0%] h-full max-h-full w-full max-w-full overflow-hidden rounded-xl object-cover"
-              alt=""
-              src="/assets/images/sampleImage.png"
-              width={20}
-              height={20}
-            />
+            {photo ? (
+              <Image
+                className="absolute inset-[0%] h-full max-h-full w-full max-w-full overflow-hidden rounded-xl object-cover"
+                alt=""
+                src={photo}
+                width={20}
+                height={20}
+              />
+            ) : (
+              <Image
+                className="absolute inset-[0%] h-full max-h-full w-full max-w-full overflow-hidden rounded-xl object-cover"
+                alt=""
+                src={"/assets/images/Default_photo.png"}
+                width={20}
+                height={20}
+              />
+            )}
           </div>
           <div className="flex flex-1 flex-col items-start justify-center gap-[5px]">
             <div className="small-medium relative self-stretch leading-[16px]">

@@ -23,6 +23,7 @@ const Page = async () => {
               disciplerId={member.discipler?._id}
               email={member.emailAddress}
               id={JSON.stringify(member._id)}
+              photo={member.memberPhoto}
             />
           ))
         ) : (

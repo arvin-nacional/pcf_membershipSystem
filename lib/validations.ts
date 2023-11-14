@@ -39,7 +39,7 @@ export const MemberSchema = z.object({
   disciplerId: z.union([z.string(), z.undefined()]),
 
   // status: z.string(),
-  // memberPhoto: z.string(),
+  memberPhoto: z.string(),
 });
 //   explanation: z.string().min(20),
 //   tags: z.array(z.string().min(1).max(15)).min(1).max(3),

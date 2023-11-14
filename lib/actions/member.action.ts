@@ -23,6 +23,14 @@ import SpiritualGift from "@/database/spiritualGift.model";
 import Training from "@/database/training";
 import SmallGroup from "@/database/smallGroup.model";
 
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 // import SmallGroup from "@/database/smallGroup.model";
 
 export async function createMember(params: CreateMemberParams) {
@@ -55,18 +63,21 @@ export async function createMember(params: CreateMemberParams) {
       disciplerId,
       disciples,
       // disciplerId,
-      // memberPhoto,
+      memberPhoto,
       path,
     } = params;
     console.log(params);
+
+    // Upload the member photo to Cloudinary
+    const photoUploadResult = await cloudinary.uploader.upload(memberPhoto, {
+      // Additional Cloudinary options if needed
+    });
 
     const member = await Member.create({
       // create all params without refs
 
       firstName,
-      // middleName,
       lastName,
-      // suffix,
       birthday,
       contactNumber,
       emailAddress,
@@ -74,8 +85,7 @@ export async function createMember(params: CreateMemberParams) {
       emergencyContactNumber,
       emergencyContactPerson,
       waterBaptism,
-      // preferredLanguage,
-      // memberPhoto,
+      memberPhoto: photoUploadResult.url, // Use the Cloudinary URL
     });
 
     // create education or get them if they already exist
@@ -455,7 +465,7 @@ export async function editMember(params: EditMemberParams) {
       disciplerId,
       disciples,
       // disciplerId,
-      // memberPhoto,
+      memberPhoto,
       path,
       memberId,
     } = params;
@@ -539,6 +549,19 @@ export async function editMember(params: EditMemberParams) {
     member.emergencyContactPerson = emergencyContactPerson;
     member.waterBaptism = waterBaptism;
     console.log(member);
+
+    // check if memberPHoto is being updated
+    if (member.memberPhoto !== memberPhoto) {
+      // Upload the member photo to Cloudinary
+      const photoUploadResult = await cloudinary.uploader.upload(memberPhoto, {
+        // Additional Cloudinary options if needed
+      });
+
+      // Update the memberPhoto field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        memberPhoto: photoUploadResult.url,
+      });
+    }
 
     // Check if the Education field is being updated
     if (member.highestEducation.name !== highestEducation) {
@@ -995,8 +1018,6 @@ export async function editMember(params: EditMemberParams) {
     } else {
       console.log("trainings is undefined");
     }
-
-    // Todo: disciples edit
     // Check if the disciples field is being updated
     // change array of objects into array of names
     const disciplesIdArr: string[] = member.disciples.map(

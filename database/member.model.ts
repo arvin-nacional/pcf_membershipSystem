@@ -27,6 +27,7 @@ export interface IMember extends Document {
   trainings: Schema.Types.ObjectId[];
   discipler: Schema.Types.ObjectId;
   disciples: Schema.Types.ObjectId[];
+  memberPhoto: string;
   createdAt: Date;
 }
 
@@ -82,6 +83,7 @@ const MemberSchema = new Schema({
     },
   ],
   createdAt: { type: Date, default: Date.now },
+  memberPhoto: String,
 });
 
 const Member = models.Member || model("Member", MemberSchema);
