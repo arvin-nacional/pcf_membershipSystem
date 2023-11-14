@@ -44,7 +44,6 @@ import { createMember, editMember } from "@/lib/actions/member.action";
 import { ministries, spiritualGifts, trainings } from "@/constants";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
-import { name } from "assert";
 
 // get member names for the disciples and discipler formfield
 interface Props {

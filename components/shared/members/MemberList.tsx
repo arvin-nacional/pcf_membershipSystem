@@ -23,7 +23,6 @@ const MemberList = ({
   id,
   photo,
 }: Props) => {
-  console.log(photo);
   return (
     <div className="background-light900_dark200 body-regular text-dark400_light800  shadow-light300_darknone mb-5 flex w-full flex-row items-center justify-start gap-[20px] rounded-md p-2 text-left ">
       <div className="background-light900_dark200 flex flex-1 flex-row items-center justify-around">
