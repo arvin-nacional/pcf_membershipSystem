@@ -99,3 +99,8 @@ export interface GetAllMemberNamesParams {
 export interface GetMemberByIdParams {
   memberId: string;
 }
+
+export interface DeleteMemberParams {
+  memberId: string;
+  path: string;
+}

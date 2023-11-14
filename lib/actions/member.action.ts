@@ -5,6 +5,7 @@ import { connectToDatabase } from "../mongoose";
 import { revalidatePath } from "next/cache";
 import {
   CreateMemberParams,
+  DeleteMemberParams,
   EditDisciplesParams,
   EditMemberParams,
   EditSecondaryMinistriesParams,
@@ -1117,6 +1118,92 @@ export async function editMember(params: EditMemberParams) {
     revalidatePath(path);
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteMember(params: DeleteMemberParams) {
+  try {
+    connectToDatabase();
+    const { memberId, path } = params;
+    // Fetch the member to get its userId
+    const member = await Member.findById(memberId);
+
+    if (!member) {
+      console.log("Member not found.");
+      return;
+    }
+
+    // Delete the member
+    await Member.findByIdAndDelete(memberId);
+
+    // Remove references in other documents
+    await Education.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await Gender.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await MemberType.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await PreferredLanguage.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await FollowUpSeries.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await LifeGearSeries.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await Ministry.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await Status.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await SpiritualGift.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await Training.updateMany(
+      { members: memberId },
+      { $pull: { members: memberId } }
+    );
+    await SmallGroup.updateMany(
+      { disciples: memberId },
+      { $pull: { disciples: memberId } }
+    );
+
+    // If the member has a discipler, update the discipler's disciples list
+    if (member.discipler) {
+      await Member.findByIdAndUpdate(member.discipler, {
+        $pull: { disciples: memberId },
+      });
+    }
+
+    // If the member has disciples, update their discipler field
+    if (member.disciples.length > 0) {
+      await Member.updateMany(
+        { _id: { $in: member.disciples } },
+        { $unset: { discipler: 1 } }
+      );
+      // remove the small group
+      await SmallGroup.findOneAndDelete({ discipler: memberId });
+    }
+
+    console.log("Member deleted successfully.");
+    revalidatePath(path);
+  } catch (error) {
+    console.error("Error deleting member:", error);
     throw error;
   }
 }
