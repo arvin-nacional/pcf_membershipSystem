@@ -41,7 +41,12 @@ import { Button } from "../ui/button";
 import { useRouter, usePathname } from "next/navigation";
 import { MemberSchema } from "@/lib/validations";
 import { createMember, editMember } from "@/lib/actions/member.action";
-import { ministries, spiritualGifts, trainings } from "@/constants";
+import {
+  ministries,
+  missionExposures,
+  spiritualGifts,
+  trainings,
+} from "@/constants";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
 
@@ -71,6 +76,8 @@ interface Training {
 
 const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // convert memberDetails to object
   const parsedMemberDetails = memberDetails
     ? JSON.parse(memberDetails || "")
     : null;
@@ -141,15 +148,19 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
       followUpSeries: parsedMemberDetails?.followUpSeries?.name || "",
       spiritualGifts: spiritualGiftsArr || undefined,
       secondaryMinistries: secondaryMinistriesArr || undefined,
-      status: parsedMemberDetails?.status?.name || "",
+      status: parsedMemberDetails?.status?.name || "Active",
       trainings: trainingsArr || undefined,
       disciples: disciplesArr || undefined,
       // disciplerId: "",
       disciplerId: parsedMemberDetails?.discipler?._id || "none",
       waterBaptism: parsedMemberDetails?.waterBaptism || "",
       memberPhoto: parsedMemberDetails?.memberPhoto || "",
+      missionaryPartner: parsedMemberDetails?.missionaryPartner || "",
+      missionExposure: parsedMemberDetails?.missionExposure || undefined,
     },
   });
+
+  // const missionaryPartnerValue = form.getValues("missionaryPartner");
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof MemberSchema>) {
@@ -197,6 +208,8 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           path: pathname,
           memberId,
           memberPhoto: preview.url,
+          missionaryPartner: values.missionaryPartner,
+          missionExposure: values.missionExposure,
         });
       } else {
         // creating
@@ -229,13 +242,15 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           // status: values.status,
           memberPhoto: preview.url,
           path: pathname,
+          missionaryPartner: values.missionaryPartner,
+          missionExposure: values.missionExposure,
         });
       }
 
       router.push("/");
     } catch (error) {
       console.log(error);
-      throw new Error();
+      throw error;
     } finally {
       setIsSubmitting(false);
     }
@@ -268,7 +283,6 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="lastName"
@@ -460,7 +474,6 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         /> */}
-
         <FormField
           control={form.control}
           name="emailAddress"
@@ -482,7 +495,6 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="highestEducation"
@@ -764,6 +776,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select your secondary ministry. Leave blank if none.
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -784,6 +797,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select your spiritual gifts. Leave blank if unknown.
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -804,10 +818,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select trainings attended. Leave blank if none
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="disciplerId"
@@ -886,11 +900,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select the name of your discipler or leader
               </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="disciples"
@@ -908,9 +921,62 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select members in your discipleship group. Leave blank if none
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="missionaryPartner"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col ">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Are you a missionary partner?{" "}
+                <span className="text-primary-500">*</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="missionaryPartner">Yes</SelectItem>
+                  <SelectItem value="nonMisisonaryPartner">No</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select an option.
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        {/* Conditionally render the 'Mission Exposure' field */}
+        {/* {missionaryPartnerValue === "missionaryPartner" && ( */}
+        <FormField
+          control={form.control}
+          name="missionExposure"
+          render={({ field: { ...field } }) => (
+            <FormItem>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Mission Exposure <span className="text-primary-500">*</span>
+              </FormLabel>
+              <MultiSelect
+                selected={field.value}
+                options={missionExposures}
+                {...field}
+                className="background-light900_dark300"
+              />
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Select the kind of missions attended. Leave blank if none
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        {/* )} */}
 
         <FormField
           control={form.control}
@@ -938,16 +1004,8 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
-
-        {/* TODO: upload photo */}
         <Avatar className="h-24 w-24">
-          {/* {parsedMemberDetails?.memberPhoto ? (
-            <AvatarImage src={parsedMemberDetails?.memberPhoto} />
-          ) : ( */}
-
           <AvatarImage src={preview.url} />
-          {/* )} */}
-
           <AvatarFallback>Your Photo</AvatarFallback>
         </Avatar>
         <FormField
@@ -975,7 +1033,6 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </>
           )}
         />
-
         <Button
           type="submit"
           className="primary-gradient w-fit !text-light-900"

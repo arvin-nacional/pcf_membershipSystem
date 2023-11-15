@@ -40,6 +40,8 @@ export const MemberSchema = z.object({
 
   // status: z.string(),
   memberPhoto: z.string(),
+  missionaryPartner: z.string().min(1),
+  missionExposure: z.union([z.array(z.string()), z.undefined()]),
 });
 //   explanation: z.string().min(20),
 //   tags: z.array(z.string().min(1).max(15)).min(1).max(3),

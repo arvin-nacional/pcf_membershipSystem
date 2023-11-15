@@ -30,6 +30,8 @@ export interface CreateMemberParams {
   disciplerId: string | undefined;
   disciples: string[] | undefined;
   memberPhoto: string;
+  missionaryPartner: string;
+  missionExposure: string[] | undefined;
 }
 
 export interface UpdateFieldParams {
@@ -69,6 +71,8 @@ export interface EditMemberParams {
   disciples: string[] | undefined;
   memberId: string | undefined;
   memberPhoto: string;
+  missionaryPartner: string;
+  missionExposure: string[] | undefined;
 }
 
 export interface EditSecondaryMinistriesParams {

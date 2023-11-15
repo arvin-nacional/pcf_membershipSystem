@@ -26,6 +26,11 @@ export interface SpiritualGifts {
   label: string;
 }
 
+export interface MissionExposures {
+  value: string;
+  label: string;
+}
+
 export interface Disciples {}
 
 export interface Job {

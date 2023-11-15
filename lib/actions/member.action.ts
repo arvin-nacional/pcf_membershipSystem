@@ -25,6 +25,8 @@ import Training from "@/database/training";
 import SmallGroup from "@/database/smallGroup.model";
 
 import { v2 as cloudinary } from "cloudinary";
+import MissionaryPartner from "@/database/missionaryParter.model";
+import MissionExposure from "@/database/missionExposure.model";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -66,6 +68,8 @@ export async function createMember(params: CreateMemberParams) {
       // disciplerId,
       memberPhoto,
       path,
+      missionaryPartner,
+      missionExposure,
     } = params;
     console.log(params);
 
@@ -87,6 +91,7 @@ export async function createMember(params: CreateMemberParams) {
       emergencyContactPerson,
       waterBaptism,
       memberPhoto: photoUploadResult.url, // Use the Cloudinary URL
+      missionaryPartner,
     });
 
     // create education or get them if they already exist
@@ -158,6 +163,16 @@ export async function createMember(params: CreateMemberParams) {
       { name: { $regex: new RegExp(`^${status}$`, "i") } },
       {
         $setOnInsert: { name: status },
+        $push: { members: member._id },
+      },
+      { upsert: true, new: true }
+    );
+
+    // create MissionaryPartner  or update them if they already exist
+    await MissionaryPartner.findOneAndUpdate(
+      { name: { $regex: new RegExp(`^${missionaryPartner}$`, "i") } },
+      {
+        $setOnInsert: { name: missionaryPartner },
         $push: { members: member._id },
       },
       { upsert: true, new: true }
@@ -243,6 +258,23 @@ export async function createMember(params: CreateMemberParams) {
         { upsert: true, new: true }
       );
       secondaryMinistriesIds.push(existingMinistry._id);
+    }
+
+    if (missionExposure) {
+      const missionExposureArr = missionExposure || [];
+      for (const missionExposure of missionExposureArr) {
+        await MissionExposure.findOneAndUpdate(
+          { name: { $regex: new RegExp(`^${missionExposure}$`, "i") } },
+          {
+            $setOnInsert: { name: missionExposure },
+            $push: { members: member._id },
+          },
+          { upsert: true, new: true }
+        );
+      }
+      await Member.findByIdAndUpdate(member._id, {
+        missionExposure: missionExposureArr,
+      });
     }
 
     const trainingsArr = trainings || [];
@@ -469,6 +501,8 @@ export async function editMember(params: EditMemberParams) {
       memberPhoto,
       path,
       memberId,
+      missionaryPartner,
+      missionExposure,
     } = params;
 
     const member = await Member.findById(memberId)
@@ -771,6 +805,32 @@ export async function editMember(params: EditMemberParams) {
       });
     }
 
+    // Check if the missionaryPartner is being updated
+    if (member.missionaryPartner !== missionaryPartner) {
+      // Remove the member from the previous missionaryPartner's list of members
+      await MissionaryPartner.findOneAndUpdate(
+        { name: member.missionaryPartner },
+        {
+          $pull: { members: memberId },
+        }
+      );
+
+      // create missionaryPartner or update them if they already exist
+      await MissionaryPartner.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${missionaryPartner}$`, "i") } },
+        {
+          $setOnInsert: { name: missionaryPartner },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+
+      // Update the missionaryPartner field for the member
+      await Member.findByIdAndUpdate(memberId, {
+        missionaryPartner,
+      });
+    }
+
     // Check if the discipler field is being updated
     if (member.discipler?._id.toString() !== disciplerId) {
       if (member.discipler) {
@@ -811,6 +871,75 @@ export async function editMember(params: EditMemberParams) {
           $unset: { discipler: 1 },
         });
       }
+    }
+
+    // Check if the missionaryExposure field is being updated
+
+    // Initialize arrays to store differences
+    const differencesInMissionaryExposure: string[] = [];
+    const differencesInMissionaryExposureDatabase: string[] = [];
+
+    if (missionExposure) {
+      // check for differences between missionExposure and member.missionExposure
+      differencesInMissionaryExposure.push(
+        ...missionExposure.filter(
+          (value) => !member.missionExposure.includes(value)
+        )
+      );
+
+      differencesInMissionaryExposureDatabase.push(
+        ...member.missionExposure.filter(
+          (value: string) => !missionExposure.includes(value)
+        )
+      );
+
+      if (
+        differencesInMissionaryExposure.length > 0 ||
+        differencesInMissionaryExposureDatabase.length > 0
+      ) {
+        console.log(
+          `Values in missionExposure not present in member.missionExposure: ${differencesInMissionaryExposure.join(
+            ", "
+          )}`
+        );
+
+        // create ministry or update if it exist
+        for (const item of differencesInMissionaryExposure) {
+          await MissionExposure.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${item}$`, "i") } },
+            {
+              $setOnInsert: { name: item },
+              $push: { members: member._id },
+            },
+            { upsert: true, new: true }
+          );
+          // update the member
+          await Member.findOneAndUpdate(member._id, {
+            $push: { missionExposure: item },
+          });
+        }
+        console.log(
+          `Values in member.missionExposure not present in missionExposure: ${differencesInMissionaryExposureDatabase.join(
+            ", "
+          )}`
+        );
+
+        // remove memberId from the ministry list of members
+        for (const item of differencesInMissionaryExposureDatabase) {
+          await MissionExposure.findOneAndUpdate(
+            { name: { $regex: new RegExp(`^${item}$`, "i") } },
+            {
+              $pull: { members: member._id },
+            }
+          );
+          // remove ministry id from the missionExposure of the member
+          await Member.findOneAndUpdate(member._id, {
+            $pull: { missionExposure: item },
+          });
+        }
+      }
+    } else {
+      console.log("missionExposure is undefined");
     }
 
     // Check if the secondaryMinistries field is being updated

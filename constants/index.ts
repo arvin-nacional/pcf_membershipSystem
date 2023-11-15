@@ -1,4 +1,10 @@
-import { Ministries, SidebarLink, SpiritualGifts, Trainings } from "@/types";
+import {
+  Ministries,
+  MissionExposures,
+  SidebarLink,
+  SpiritualGifts,
+  Trainings,
+} from "@/types";
 
 export const themes = [
   { value: "light", label: "Light", icon: "/assets/icons/sun.svg" },
@@ -123,4 +129,9 @@ export const trainings: Trainings[] = [
   { value: "Life On Mission", label: "Life On Mission" },
   { value: "Evangelism", label: "Evangelism" },
   { value: "Multimedia Class", label: "Multimedia Class" },
+];
+export const missionExposures: MissionExposures[] = [
+  { value: "Community", label: "Community" },
+  { value: "Provincial", label: "Provincial" },
+  { value: "Foreign", label: "Foreign" },
 ];

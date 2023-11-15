@@ -29,6 +29,8 @@ export interface IMember extends Document {
   disciples: Schema.Types.ObjectId[];
   memberPhoto: string;
   createdAt: Date;
+  missionaryPartner: string;
+  missionExposure: string[];
 }
 
 const MemberSchema = new Schema({
@@ -58,6 +60,7 @@ const MemberSchema = new Schema({
   // status: { type: String, required: true },
   // memberPhoto: { type: String, required: true },
   waterBaptism: { type: String, required: true },
+  missionaryPartner: { type: String, required: true },
   spiritualGifts: [
     {
       type: Schema.Types.ObjectId,
@@ -82,6 +85,7 @@ const MemberSchema = new Schema({
       ref: "Member",
     },
   ],
+  missionExposure: [{ type: String }],
   createdAt: { type: Date, default: Date.now },
   memberPhoto: String,
 });
