@@ -953,57 +953,65 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           )}
         />
 
-        {/* Conditionally render the 'Mission Exposure' field */}
-        {/* {missionaryPartnerValue === "missionaryPartner" && ( */}
-        <FormField
-          control={form.control}
-          name="missionExposure"
-          render={({ field: { ...field } }) => (
-            <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Mission Exposure <span className="text-primary-500">*</span>
-              </FormLabel>
-              <MultiSelect
-                selected={field.value}
-                options={missionExposures}
-                {...field}
-                className="background-light900_dark300"
-              />
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select the kind of missions attended. Leave blank if none
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        {/* )} */}
+        {/* conditionally render the mission exposures */}
+        <span className="hidden">{form.watch("missionaryPartner")}</span>
+        {form.getValues("missionaryPartner") === "missionaryPartner" && (
+          <FormField
+            control={form.control}
+            name="missionExposure"
+            render={({ field: { ...field } }) => (
+              <FormItem>
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Mission Exposure <span className="text-primary-500">*</span>
+                </FormLabel>
+                <MultiSelect
+                  selected={field.value}
+                  options={missionExposures}
+                  {...field}
+                  className="background-light900_dark300"
+                />
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Select the kind of missions attended. Leave blank if none
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
 
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col ">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Status <span className="text-primary-500">*</span>
-              </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
-                    <SelectValue />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select member status
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
+        {/* )} */}
+        {type === "edit" && (
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col ">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Status <span className="text-primary-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="cursor-pointer bg-light-900">
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="Inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Select member status
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
+        {/* photo preview */}
         <Avatar className="h-24 w-24">
           <AvatarImage src={preview.url} />
           <AvatarFallback>Your Photo</AvatarFallback>
