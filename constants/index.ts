@@ -6,6 +6,33 @@ import {
   Trainings,
 } from "@/types";
 
+export const summaryInfo = [
+  {
+    title: "Members",
+    value: 684,
+    series: [684, 1000],
+    colors: ["#BECCDA", "#2ED480"],
+  },
+  {
+    title: "Regular Members",
+    value: 684,
+    series: [10, 25],
+    colors: ["#BECCDA", "#FD8539"],
+  },
+  {
+    title: "New Members",
+    value: 30,
+    series: [13, 25],
+    colors: ["#BECCDA", "#01545B"],
+  },
+  {
+    title: "Newly Baptized",
+    value: 10,
+    series: [25, 25],
+    colors: ["#BECCDA", "#FE6D8E"],
+  },
+];
+
 export const themes = [
   { value: "light", label: "Light", icon: "/assets/icons/sun.svg" },
   { value: "dark", label: "Dark", icon: "/assets/icons/moon.svg" },
