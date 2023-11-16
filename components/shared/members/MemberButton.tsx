@@ -25,7 +25,7 @@ const MemberButton = ({ memberId }: Props) => {
   return (
     <Menubar className="relative border-none bg-transparent shadow-none">
       <MenubarMenu>
-        <MenubarTrigger className="w-[50px] cursor-pointer  dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200">
+        <MenubarTrigger className="w-[50px] cursor-pointer dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200">
           {mode === "light" ? (
             <Image
               src="assets/icons/menudots.svg"
@@ -44,7 +44,7 @@ const MemberButton = ({ memberId }: Props) => {
             />
           )}
         </MenubarTrigger>
-        <MenubarContent className="absolute right-[-10rem] top-[-5rem] min-w-[120px] rounded border bg-light-900  dark:border-dark-400 dark:bg-dark-300">
+        <MenubarContent className="absolute right-[-3rem] min-w-[120px] rounded border bg-light-900  dark:border-dark-400 dark:bg-dark-300">
           {memberButtons.map((item) => (
             <MenubarItem
               key={item.value}
