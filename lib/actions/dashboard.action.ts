@@ -74,14 +74,18 @@ export async function getRecentlyAddedMembers() {
     const recentMembers: IMember[] = await Member.find({})
       .sort({ createdAt: -1 }) // Sort by createdAt in descending order
       .limit(5) // Limit to 5 members
-      .select("firstName lastName memberType memberPhoto") // Select specific fields
+      .select("firstName lastName memberType memberPhoto")
+      .populate({
+        path: "memberType",
+        select: "name", // Select only the 'name' field from the memberType document
+      }) // Select specific fields
       .lean(); // Convert Mongoose documents to plain JavaScript objects
 
     // Map the retrieved data into the required format
     const members = recentMembers.map((member) => ({
       id: member._id.toString(),
       name: `${member.firstName} ${member.lastName}`,
-      role: member.memberType || "Default Type",
+      role: member.memberType?.name || "Default Type",
       imageSrc:
         member.memberPhoto ||
         "http://res.cloudinary.com/dey07xuvf/image/upload/v1700142353/fdhz26kwwxfgsooezo8a.png",
