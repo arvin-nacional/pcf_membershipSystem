@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
-import ReactApexChart from "react-apexcharts";
 import { PieChartProps } from "@/types";
+
+import { Donut } from "./Donut";
 
 const SummaryItem = ({ title, value, series, colors }: PieChartProps) => {
   return (
@@ -10,22 +12,12 @@ const SummaryItem = ({ title, value, series, colors }: PieChartProps) => {
           <div className="text-light400_light500 relative truncate">
             {title}
           </div>
+
           <div className="text-dark300_light700 base-semibold relative">
             {value}
           </div>
         </div>
-
-        <ReactApexChart
-          options={{
-            chart: { type: "donut" },
-            legend: { show: false },
-            dataLabels: { enabled: false },
-            colors,
-          }}
-          series={series}
-          type="donut"
-          width="130px"
-        />
+        <Donut series={series} colors={colors} />
       </div>
     </div>
   );

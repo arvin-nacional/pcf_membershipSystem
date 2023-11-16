@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import SummaryItem from "./SummaryItem";
 import { summaryInfo } from "@/constants";

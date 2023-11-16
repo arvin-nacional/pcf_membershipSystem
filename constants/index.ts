@@ -15,7 +15,7 @@ export const summaryInfo = [
   },
   {
     title: "Regular Members",
-    value: 684,
+    value: 683,
     series: [10, 25],
     colors: ["#BECCDA", "#FD8539"],
   },
