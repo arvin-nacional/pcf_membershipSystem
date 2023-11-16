@@ -13,7 +13,7 @@ const MemberStats = async () => {
   const disciplesCount = await getDisciplesCount();
   return (
     <div
-      className="background-light800_dark400 w-[340px] flex-col items-start justify-start rounded  p-5 
+      className="background-light800_darkgradient w-[340px] flex-col items-start justify-start rounded  p-5 
     text-left  shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]"
     >
       <div className="flex flex-col items-start justify-start gap-[14px] px-0 py-[9px]">

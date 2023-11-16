@@ -276,6 +276,7 @@ export async function createMember(params: CreateMemberParams) {
         missionExposure: missionExposureArr,
       });
     }
+
     const trainingsArr = trainings || [];
     const trainingsIds = [];
     for (const training of trainingsArr) {

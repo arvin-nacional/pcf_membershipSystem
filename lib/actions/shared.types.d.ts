@@ -108,3 +108,11 @@ export interface DeleteMemberParams {
   memberId: string;
   path: string;
 }
+
+export interface getRecentlyAddedMembersParams {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  memberType: string;
+  memberPhoto: string;
+}

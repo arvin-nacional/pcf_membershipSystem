@@ -69,27 +69,27 @@ export async function getDisciplesCount() {
   }
 }
 
-export async function getRecentlyAddedMembers(): Promise<
-  { id: string; name: string; role: string; imageSrc: string }[]
-> {
+export async function getRecentlyAddedMembers() {
   try {
     const recentMembers: IMember[] = await Member.find({})
-      .sort({ createdAt: -1 }) // Sorting in descending order by createdAt field
-      .limit(5); // Limiting the result to 5 members
+      .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+      .limit(5) // Limit to 5 members
+      .select("firstName lastName memberType memberPhoto") // Select specific fields
+      .lean(); // Convert Mongoose documents to plain JavaScript objects
 
-    // Constructing the required array structure
-    const members = recentMembers.map((member: IMember) => ({
-      id: member._id.toString(), // Assuming _id is the unique identifier for members
+    // Map the retrieved data into the required format
+    const members = recentMembers.map((member) => ({
+      id: member._id.toString(),
       name: `${member.firstName} ${member.lastName}`,
-      role: "Your Role", // You can set the role based on your requirements
+      role: member.memberType || "Default Type",
       imageSrc:
         member.memberPhoto ||
-        "https://res.cloudinary.com/dey07xuvf/image/upload/v1700148763/default-user-square_fmd1az.svg", // Assuming memberPhoto is the URL of the image or provide a default URL
+        "http://res.cloudinary.com/dey07xuvf/image/upload/v1700142353/fdhz26kwwxfgsooezo8a.png",
     }));
 
     return members;
   } catch (error) {
-    // Handle errors here
-    throw new Error(`Error fetching recently added members: ${error}`);
+    console.error(`Error fetching recently added members: ${error}`);
+    throw error;
   }
 }
