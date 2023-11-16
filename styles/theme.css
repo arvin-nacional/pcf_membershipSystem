@@ -201,6 +201,25 @@
     background: #005704;
   }
 
+  .bg-purple {
+    background: #6c5dd3;
+  }
+  .bg-green {
+    background: #7fba7a;
+  }
+  .bg-yellow {
+    background: #ffce73;
+  }
+  .bg-pink {
+    background: #ffa2c0;
+  }
+  .bg-red {
+    background: #f45252;
+  }
+  .bg-grey {
+    background: #e4e8ef;
+  }
+
   .primary-gradient {
     background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
   }

@@ -87,7 +87,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
     url: `${
       parsedMemberDetails?.memberPhoto
         ? parsedMemberDetails.memberPhoto
-        : "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
+        : "https://res.cloudinary.com/dey07xuvf/image/upload/v1700148763/default-user-square_fmd1az.svg"
     }`,
   });
 
@@ -1031,6 +1031,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
                       // @ts-ignore
                       handleImageChange(e.target.files[0]);
                     }}
+                    className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border align-baseline"
                   />
                 </FormControl>
                 <FormDescription className="body-regular mt-2.5 text-light-500">
