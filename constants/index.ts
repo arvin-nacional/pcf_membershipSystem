@@ -20,8 +20,8 @@ export const summaryInfo = [
     colors: ["#BECCDA", "#FD8539"],
   },
   {
-    title: "New Members",
-    value: 30,
+    title: "Ministries",
+    value: 12,
     series: [13, 25],
     colors: ["#BECCDA", "#01545B"],
   },
@@ -134,18 +134,114 @@ export const spiritualGifts: SpiritualGifts[] = [
 ];
 
 export const ministries: Ministries[] = [
-  { value: "Praise and Worship", label: "Praise and Worship" },
-  { value: "Media", label: "Media" },
-  { value: "Design", label: "Design" },
-  { value: "Events", label: "Events" },
-  { value: "Youth", label: "Youth" },
-  { value: "Prayer", label: "Prayer" },
-  { value: "Ushering", label: "Ushering" },
-  { value: "Kids", label: "Kids" },
-  { value: "North Cemetery", label: "North Cemetery" },
-  { value: "Mission", label: "Mission" },
-  { value: "Prison", label: "Prison" },
-  { value: "School", label: "School" },
+  {
+    value: "Praise and Worship",
+    label: "Praise and Worship",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/paw.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Media",
+    label: "Media",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/media.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Design",
+    label: "Design",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/decor2.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Events",
+    label: "Events",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/events.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Youth",
+    label: "Youth",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/youth.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Prayer",
+    label: "Prayer",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/prayerMinistry.png",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Ushering",
+    label: "Ushering",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/ushering.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Kids",
+    label: "Kids",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/kids.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "North Cemetery",
+    label: "North Cemetery",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/northCem.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Mission",
+    label: "Mission",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/mission.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "Prison",
+    label: "Prison",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/prison.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
+  {
+    value: "School",
+    label: "School",
+    ministryHead: "Michael Medalla",
+    members: 12,
+    ministryPhoto: "/assets/icons/school.svg",
+    description:
+      "Involves musicians, singers, and tech teams responsible for leading worship services through music, song, and audiovisual elements.",
+  },
 ];
 
 export const trainings: Trainings[] = [

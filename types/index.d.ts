@@ -22,6 +22,10 @@ export interface MemberNames {
 export interface Ministries {
   value: string;
   label: string;
+  ministryHead: string;
+  members: number;
+  ministryPhoto: string;
+  description: string;
 }
 export interface Trainings {
   value: string;

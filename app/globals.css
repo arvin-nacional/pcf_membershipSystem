@@ -45,6 +45,10 @@ body {
     background: linear-gradient(93deg, #01545b -13.95%, #37929a 99.54%);
   }
 
+  .primary-text-gradient {
+    color: linear-gradient(93deg, #01545b -13.95%, #37929a 99.54%);
+  }
+
   .dark-gradient {
     background: linear-gradient(
       232deg,

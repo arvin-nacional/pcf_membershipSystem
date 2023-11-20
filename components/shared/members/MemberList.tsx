@@ -92,8 +92,12 @@ const MemberList = ({
             Status
           </div>
           <div className="text-dark400_light800 flex flex-row items-center justify-center gap-[5px] text-sm">
-            <div className="bg-darkgreen relative h-[7px] w-[7px] rounded-[50%]" />
-            <div className="relative font-medium leading-[16px]">Active</div>
+            {status === "Active" ? (
+              <div className="bg-darkgreen relative h-[7px] w-[7px] rounded-[50%]" />
+            ) : (
+              <div className="bg-red relative h-[7px] w-[7px] rounded-[50%]" />
+            )}
+            <div className="relative font-medium leading-[16px]">{status}</div>
           </div>
         </div>
       </div>
