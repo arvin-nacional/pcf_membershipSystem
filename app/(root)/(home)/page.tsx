@@ -1,6 +1,7 @@
 import MemberStats from "@/components/charts/MemberStats";
 import Summary from "@/components/charts/Summary";
 import RecentlyAddedMembers from "@/components/shared/dashboard/RecentlyAddedMembers";
+import UpcomingBirthdays from "@/components/shared/dashboard/UpcomingBirthdays";
 // import { Donut } from "@/components/charts/Donut";
 // import { ExampleChart } from "@/components/charts/lineChart";
 
@@ -13,7 +14,7 @@ const Home = () => {
         <Summary />
       </div>
       <div className="mt-6 flex flex-wrap gap-5">
-        <MemberStats /> <RecentlyAddedMembers />
+        <MemberStats /> <RecentlyAddedMembers /> <UpcomingBirthdays />
       </div>
     </div>
   );

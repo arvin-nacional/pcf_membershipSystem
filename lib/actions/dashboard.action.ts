@@ -99,3 +99,84 @@ export async function getRecentlyAddedMembers() {
     throw error;
   }
 }
+
+export async function getUpcomingBirthdays(): Promise<
+  {
+    id: string;
+    name: string;
+    birthdate: string;
+    birthdayNumber: string;
+    imageSrc: string;
+    age: string;
+  }[]
+> {
+  try {
+    const today = new Date(); // Get today's date
+
+    // Query for upcoming birthdays, sorted by the nearest month and day to today
+    const upcomingBirthdays: IMember[] = await Member.find({
+      birthday: {
+        $gte: today.toLocaleDateString("en-US", {
+          month: "2-digit",
+          day: "2-digit",
+        }),
+      },
+    })
+      .sort({ birthday: 1 })
+      .limit(5)
+      .lean();
+
+    const birthdays = upcomingBirthdays.map((member) => {
+      const birthDate = new Date(member.birthday);
+      const formattedBirthday = birthDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      const formattedDay =
+        birthDate.getDate() +
+        (birthDate.getDate() % 10 === 1 && birthDate.getDate() !== 11
+          ? "st"
+          : birthDate.getDate() % 10 === 2 && birthDate.getDate() !== 12
+          ? "nd"
+          : birthDate.getDate() % 10 === 3 && birthDate.getDate() !== 13
+          ? "rd"
+          : "th");
+
+      const nextBirthday = new Date(
+        today.getFullYear(),
+        birthDate.getMonth(),
+        birthDate.getDate()
+      );
+
+      if (nextBirthday < today) {
+        nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+      }
+
+      const age = nextBirthday.getFullYear() - birthDate.getFullYear();
+
+      const suffixes = ["th", "st", "nd", "rd"];
+      const ordinalNum =
+        age % 10 <= 3 && age % 10 >= 1 && age !== 11 && age !== 12 && age !== 13
+          ? suffixes[age % 10]
+          : suffixes[0];
+
+      return {
+        id: member._id.toString(),
+        name: `${member.firstName} ${member.lastName}`,
+        birthdate: formattedBirthday,
+        birthdayNumber: `${formattedDay}`,
+        imageSrc:
+          member.memberPhoto ||
+          "http://res.cloudinary.com/dey07xuvf/image/upload/v1700142353/fdhz26kwwxfgsooezo8a.png",
+        age: `${age}${ordinalNum}`,
+      };
+    });
+
+    return birthdays;
+  } catch (error) {
+    console.error(`Error fetching upcoming birthdays: ${error}`);
+    throw error;
+  }
+}
