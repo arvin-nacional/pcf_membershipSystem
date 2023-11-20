@@ -3,6 +3,7 @@
 import Member, { IMember } from "@/database/member.model";
 import { connectToDatabase } from "../mongoose";
 import Status from "@/database/status.model";
+import MemberType from "@/database/memberType.model";
 
 export async function GetMemberCount() {
   try {
@@ -77,7 +78,8 @@ export async function getRecentlyAddedMembers() {
       .select("firstName lastName memberType memberPhoto")
       .populate({
         path: "memberType",
-        select: "name", // Select only the 'name' field from the memberType document
+        select: "name",
+        model: MemberType, // Select only the 'name' field from the memberType document
       }) // Select specific fields
       .lean(); // Convert Mongoose documents to plain JavaScript objects
 
@@ -85,7 +87,7 @@ export async function getRecentlyAddedMembers() {
     const members = recentMembers.map((member) => ({
       id: member._id.toString(),
       name: `${member.firstName} ${member.lastName}`,
-      role: member.memberType?.name || "Default Type",
+      role: (member.memberType as any)?.name || "Default Type",
       imageSrc:
         member.memberPhoto ||
         "http://res.cloudinary.com/dey07xuvf/image/upload/v1700142353/fdhz26kwwxfgsooezo8a.png",
