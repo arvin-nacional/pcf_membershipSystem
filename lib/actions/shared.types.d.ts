@@ -120,8 +120,11 @@ export interface getRecentlyAddedMembersParams {
 export interface getMinistryMembersParams {
   ministryName: string;
 }
+export interface getSmallGroupMembersParams {
+  id: string;
+}
 
-export interface MinistryMemberProps {
+export interface MemberCardProps {
   _id: string;
   name: string;
   contactNumber: string;

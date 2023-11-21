@@ -1,22 +1,23 @@
 import MemberCard from "@/components/shared/members/MemberCard";
-import { getMinistryMembers } from "@/lib/actions/ministry.action";
 import { MemberCardProps } from "@/lib/actions/shared.types";
+import { getSmallGroupMembers } from "@/lib/actions/smallGroup.action";
 import { ParamsProps } from "@/types";
 import React from "react";
 
-const MinistryMember = async ({ params }: ParamsProps) => {
-  const result = await getMinistryMembers({ ministryName: params.id });
+const Page = async ({ params }: ParamsProps) => {
+  const result = await getSmallGroupMembers({ id: params.id });
 
+  console.log(result);
   return (
-    <>
+    <div>
       <div>
         <h1 className="h1-bold text-dark100_light900 mb-5">
-          {result?.ministry.name} Ministry Members
+          {result.smallGroup.discipler.firstName}{" "}
+          {result.smallGroup.discipler.lastName} <span> </span> Discipleship
+          Group Members
         </h1>
-      </div>
-      <div className="flex flex-row flex-wrap gap-5">
-        {result?.members && result.members.length > 0 ? (
-          result.members.map((member: MemberCardProps) => (
+        <div className="flex flex-row flex-wrap gap-5">
+          {result.members.map((member: MemberCardProps) => (
             <MemberCard
               key={member._id}
               name={member.name}
@@ -28,15 +29,11 @@ const MinistryMember = async ({ params }: ParamsProps) => {
               image={member.imageSrc}
               memberId={member._id}
             />
-          ))
-        ) : (
-          <div>
-            <p>No members</p>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default MinistryMember;
+export default Page;
