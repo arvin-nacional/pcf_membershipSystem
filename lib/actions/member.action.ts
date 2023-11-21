@@ -853,8 +853,10 @@ export async function editMember(params: EditMemberParams) {
         await SmallGroup.findOneAndUpdate(
           { discipler: disciplerId },
           {
+            $setOnInsert: { discipler: disciplerId },
             $push: { disciples: member._id },
-          }
+          },
+          { upsert: true, new: true }
         );
         // Add the member from to the new leader's list of disciples
         const newDiscipler = await Member.findByIdAndUpdate(disciplerId, {
