@@ -61,6 +61,11 @@ export const sidebarLinks: SidebarLink[] = [
     label: "Ministries",
   },
   {
+    imgURL: "/assets/icons/group.svg",
+    route: "/smallGroups",
+    label: "Small Groups",
+  },
+  {
     imgURL: "/assets/icons/suitcase.svg",
     route: "/calendar",
     label: "Calendar",

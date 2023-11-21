@@ -116,3 +116,18 @@ export interface getRecentlyAddedMembersParams {
   memberType: string;
   memberPhoto: string;
 }
+
+export interface getMinistryMembersParams {
+  ministryName: string;
+}
+
+export interface MinistryMemberProps {
+  _id: string;
+  name: string;
+  contactNumber: string;
+  role: string;
+  email: string;
+  address: string;
+  disciples: number;
+  imageSrc: string;
+}
