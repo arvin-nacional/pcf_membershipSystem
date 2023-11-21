@@ -835,12 +835,20 @@ export async function editMember(params: EditMemberParams) {
     if (member.discipler?._id.toString() !== disciplerId) {
       if (member.discipler) {
         // Remove the member from the previous small group's list of members
-        await SmallGroup.findOneAndUpdate(
+        const smallGroup = await SmallGroup.findOneAndUpdate(
           { discipler: member.discipler._id.toString() },
           {
             $pull: { disciples: member._id },
-          }
+          },
+          { new: true } // Ensure to get the updated smallGroup document
         );
+
+        // delete the small group if disciples is empty
+        if (smallGroup && smallGroup.disciples.length === 0) {
+          await SmallGroup.findOneAndDelete({
+            discipler: member.discipler._id.toString(),
+          });
+        }
 
         // Remove the member from the previous leader's list of disciples
         await Member.findByIdAndUpdate(member.discipler._id.toString(), {
