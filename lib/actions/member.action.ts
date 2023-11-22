@@ -333,6 +333,8 @@ export async function getAllMembers(params: GetAllMembersParams) {
 
     let sortOptions = {};
 
+    const noMinistry = await Ministry.findOne({ name: "None" });
+
     switch (filter) {
       case "new_members":
         sortOptions = { createdAt: -1 };
@@ -361,10 +363,7 @@ export async function getAllMembers(params: GetAllMembersParams) {
         query.disciples = { $size: 0 };
         break;
       case "no_ministry":
-        query.$or = [
-          { primaryMinistry: null },
-          { secondaryMinistries: { $size: 0 } },
-        ];
+        query.primaryMinistry = noMinistry._id;
         break;
 
       default:
@@ -784,7 +783,7 @@ export async function editMember(params: EditMemberParams) {
 
       // Update the language field for the member
       await Member.findByIdAndUpdate(memberId, {
-        memberType: existingDocumentId._id,
+        primaryMinistry: existingDocumentId._id,
       });
     }
 

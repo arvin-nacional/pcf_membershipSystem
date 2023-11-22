@@ -4,6 +4,7 @@ import Member, { IMember } from "@/database/member.model";
 import { connectToDatabase } from "../mongoose";
 import Status from "@/database/status.model";
 import MemberType from "@/database/memberType.model";
+import Ministry from "@/database/ministry.model";
 
 export async function GetMemberCount() {
   try {
@@ -34,9 +35,14 @@ export async function GetActiveMemberCount() {
 export async function getLeadersCount() {
   try {
     connectToDatabase();
+
+    // Fetch the Ministry document with name 'None'
+    const noMinistry = await Ministry.findOne({ name: "None" });
+
     const count = await Member.countDocuments({
-      primaryMinistry: { $exists: true, $ne: null },
+      primaryMinistry: { $ne: noMinistry?._id }, // Filter based on the ObjectId of associated primaryMinistry
     });
+
     return count;
   } catch (error) {
     console.log(error);
