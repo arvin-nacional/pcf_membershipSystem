@@ -1,13 +1,25 @@
 import MemberList from "@/components/shared/members/MemberList";
 import React from "react";
 import { getAllMembers } from "@/lib/actions/member.action";
+import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
+import { SearchParamsProps } from "@/types";
 
-const Page = async () => {
-  const result = await getAllMembers({});
+const Page = async ({ searchParams }: SearchParamsProps) => {
+  const result = await getAllMembers({ searchQuery: searchParams.q });
   // console.log(result.members);
   return (
     <div>
       <h1 className="h1-bold text-dark100_light900 mb-5">All Members</h1>
+      <div className="mb-6 flex justify-between gap-5 max-sm:flex-col sm:items-center">
+        <LocalSearchbar
+          route="/"
+          iconPosition="left"
+          imgSrc="/assets/icons/search.svg"
+          placeholder="Search for members"
+          otherClasses="flex-1"
+        />
+      </div>
+
       <div>
         {result.members.length > 0 ? (
           result.members.map((member) => (

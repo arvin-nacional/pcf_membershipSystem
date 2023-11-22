@@ -27,6 +27,7 @@ import SmallGroup from "@/database/smallGroup.model";
 import { v2 as cloudinary } from "cloudinary";
 import MissionaryPartner from "@/database/missionaryParter.model";
 import MissionExposure from "@/database/missionExposure.model";
+import { FilterQuery } from "mongoose";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -319,7 +320,18 @@ export async function getAllMembers(params: GetAllMembersParams) {
   try {
     connectToDatabase();
 
-    const members = await Member.find({})
+    const { searchQuery } = params;
+
+    const query: FilterQuery<typeof Member> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { firstName: { $regex: new RegExp(searchQuery, "i") } },
+        { lastName: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+
+    const members = await Member.find(query)
       .populate({
         path: "highestEducation",
         model: Education,
