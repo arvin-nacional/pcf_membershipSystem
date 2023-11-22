@@ -91,6 +91,11 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
     }`,
   });
 
+  // remove the id of the member to the list of members for discipler and disciples options
+  const updatedMemberNames = memberNames.filter(
+    (member) => member._id !== memberId
+  );
+
   // convert image to string
   const handleImageChange = (file: File) => {
     const reader = (readFile: File) =>
@@ -873,7 +878,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
                         />
                         No Discipler
                       </CommandItem>
-                      {memberNames.map((member) => (
+                      {updatedMemberNames.map((member) => (
                         <CommandItem
                           value={member.name}
                           key={member._id}
@@ -914,7 +919,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               </FormLabel>
               <DiscipleSelect
                 selected={field.value}
-                members={memberNames}
+                members={updatedMemberNames}
                 {...field}
                 className="background-light900_dark300"
               />
