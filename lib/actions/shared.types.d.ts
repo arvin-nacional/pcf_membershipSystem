@@ -93,6 +93,13 @@ export interface GetAllMembersParams {
   filter?: string;
   searchQuery?: string;
 }
+export interface GetSmallGroupsParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
+
 export interface GetAllMemberNamesParams {
   page?: number;
   pageSize?: number;

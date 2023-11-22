@@ -2,12 +2,45 @@ import SmallGroup from "@/database/smallGroup.model";
 import { connectToDatabase } from "../mongoose";
 import Member from "@/database/member.model";
 import MemberType from "@/database/memberType.model";
-import { getSmallGroupMembersParams } from "./shared.types";
+import {
+  GetSmallGroupsParams,
+  getSmallGroupMembersParams,
+} from "./shared.types";
+import { FilterQuery } from "mongoose";
 
-export async function getSmallGroups() {
+export async function getSmallGroups(params: GetSmallGroupsParams) {
   try {
     connectToDatabase();
-    const result = await SmallGroup.find({})
+
+    const { searchQuery } = params;
+
+    let query: FilterQuery<typeof SmallGroup> = {};
+
+    if (searchQuery) {
+      const memberQuery: FilterQuery<typeof Member> = {
+        $or: [
+          { firstName: { $regex: new RegExp(searchQuery, "i") } },
+          { lastName: { $regex: new RegExp(searchQuery, "i") } },
+        ],
+      };
+
+      // Find members matching the search query
+      const matchingMembers = await Member.find(memberQuery);
+
+      if (matchingMembers.length > 0) {
+        query = {
+          $or: [
+            { discipler: { $in: matchingMembers.map((member) => member._id) } },
+            { disciples: { $in: matchingMembers.map((member) => member._id) } },
+          ],
+        };
+      } else {
+        // If no matching members found, return an empty result
+        return [];
+      }
+    }
+
+    const result = await SmallGroup.find(query)
       .populate({
         path: "discipler",
         model: Member,
