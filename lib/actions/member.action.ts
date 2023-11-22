@@ -320,7 +320,10 @@ export async function getAllMembers(params: GetAllMembersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+
+    // Calculcate the number of posts to skip based on the page number and page size
+    const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Member> = {};
 
@@ -424,9 +427,15 @@ export async function getAllMembers(params: GetAllMembersParams) {
         path: "preferredLanguage",
         model: PreferredLanguage,
       })
+      .skip(skipAmount)
+      .limit(pageSize)
       .sort(sortOptions);
 
-    return { members };
+    const totalMembers = await Member.countDocuments(query);
+
+    const isNext = totalMembers > skipAmount + members.length;
+
+    return { members, isNext };
   } catch (error) {
     console.log(error);
     throw Error;

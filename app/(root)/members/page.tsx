@@ -5,11 +5,13 @@ import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { SearchParamsProps } from "@/types";
 import Filter from "@/components/shared/search/Filter";
 import { MemberFilters } from "@/constants/filters";
+import Pagination from "@/components/shared/search/Pagination";
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllMembers({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   });
   // console.log(result.members);
   return (
@@ -54,6 +56,12 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
             <p>No members</p>
           </div>
         )}
+      </div>
+      <div className="mt-10">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </div>
   );
