@@ -19,6 +19,16 @@ export const QuestionFilters = [
   { name: "Most Answered", value: "most_answered" },
 ];
 
+export const MemberFilters = [
+  { name: "New Members", value: "new_members" },
+  { name: "Old Members", value: "old_members" },
+  { name: "Active", value: "active" },
+  { name: "Inactive", value: "inactive" },
+  { name: "No Discipler", value: "no_discipler" },
+  { name: "No Disciples", value: "no_disciples" },
+  { name: "No Ministry", value: "no_ministry" },
+];
+
 export const TagFilters = [
   { name: "Popular", value: "popular" },
   { name: "Recent", value: "recent" },

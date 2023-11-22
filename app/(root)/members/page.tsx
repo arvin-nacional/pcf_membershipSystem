@@ -3,9 +3,14 @@ import React from "react";
 import { getAllMembers } from "@/lib/actions/member.action";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { SearchParamsProps } from "@/types";
+import Filter from "@/components/shared/search/Filter";
+import { MemberFilters } from "@/constants/filters";
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
-  const result = await getAllMembers({ searchQuery: searchParams.q });
+  const result = await getAllMembers({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
   // console.log(result.members);
   return (
     <div>
@@ -17,6 +22,11 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           imgSrc="/assets/icons/search.svg"
           placeholder="Search for members"
           otherClasses="flex-1"
+        />
+
+        <Filter
+          filters={MemberFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>
 

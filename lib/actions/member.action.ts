@@ -320,7 +320,7 @@ export async function getAllMembers(params: GetAllMembersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof Member> = {};
 
@@ -329,6 +329,46 @@ export async function getAllMembers(params: GetAllMembersParams) {
         { firstName: { $regex: new RegExp(searchQuery, "i") } },
         { lastName: { $regex: new RegExp(searchQuery, "i") } },
       ];
+    }
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case "new_members":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "old_members":
+        sortOptions = { createdAt: 1 };
+        break;
+      case "active":
+        // eslint-disable-next-line no-case-declarations
+        const activeStatus = await Status.findOne({ name: "Active" }); // Fetch the Active status
+        if (activeStatus) {
+          query.status = activeStatus._id; // Filter by Active status ObjectId
+        }
+        break;
+      case "inactive":
+        // eslint-disable-next-line no-case-declarations
+        const inactiveStatus = await Status.findOne({ name: "Inactive" }); // Fetch the Inactive status
+        if (inactiveStatus) {
+          query.status = inactiveStatus._id; // Filter by Inactive status ObjectId
+        }
+        break;
+      case "no_discipler":
+        query.discipler = null;
+        break;
+      case "no_disciples":
+        query.disciples = { $size: 0 };
+        break;
+      case "no_ministry":
+        query.$or = [
+          { primaryMinistry: null },
+          { secondaryMinistries: { $size: 0 } },
+        ];
+        break;
+
+      default:
+        break;
     }
 
     const members = await Member.find(query)
@@ -385,7 +425,7 @@ export async function getAllMembers(params: GetAllMembersParams) {
         path: "preferredLanguage",
         model: PreferredLanguage,
       })
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
 
     return { members };
   } catch (error) {
