@@ -12,7 +12,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
       <h1 className="h1-bold text-dark100_light900 mb-5">All Members</h1>
       <div className="mb-6 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearchbar
-          route="/"
+          route="/members"
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeholder="Search for members"
