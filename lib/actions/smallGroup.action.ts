@@ -22,10 +22,16 @@ export async function getSmallGroups() {
       })
       .populate({ path: "disciples", model: Member, select: "memberPhoto" });
 
-    // if (!result) {
-    //   return null;
-    // }
-    const smallGroups = result.map((smallGroup) => ({
+    if (!result) {
+      return null;
+    }
+
+    // Sort small groups by the length of the disciples array
+    const sortedSmallGroups = result.sort(
+      (a, b) => b.disciples.length - a.disciples.length
+    );
+
+    const smallGroups = sortedSmallGroups.map((smallGroup) => ({
       id: smallGroup._id.toString(),
       leader: `${smallGroup.discipler?.firstName} ${smallGroup.discipler?.lastName}`,
       role: smallGroup.discipler.memberType.name,
