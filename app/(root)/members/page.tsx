@@ -6,6 +6,8 @@ import { SearchParamsProps } from "@/types";
 import Filter from "@/components/shared/search/Filter";
 import { MemberFilters } from "@/constants/filters";
 import Pagination from "@/components/shared/search/Pagination";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllMembers({
@@ -16,7 +18,15 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
   // console.log(result.members);
   return (
     <div>
-      <h1 className="h1-bold text-dark100_light900 mb-5">All Members</h1>
+      <div className="mb-5 flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
+        <h1 className="h1-bold text-dark100_light900 ">All Questions</h1>
+
+        <Link href="/add-member" className="flex justify-end max-sm:w-full">
+          <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+            Add a Member
+          </Button>
+        </Link>
+      </div>
       <div className="mb-6 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearchbar
           route="/members"

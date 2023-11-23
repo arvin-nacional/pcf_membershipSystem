@@ -252,7 +252,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
         });
       }
 
-      router.push("/");
+      router.push("/members");
     } catch (error) {
       console.log(error);
       throw error;
