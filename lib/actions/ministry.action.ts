@@ -1,6 +1,11 @@
 import Ministry from "@/database/ministry.model";
 import { connectToDatabase } from "../mongoose";
-import { getMinistryMembersParams } from "./shared.types";
+import {
+  EditMinistryParams,
+  GetAllMinistryParams,
+  GetMinistryByIdParams,
+  getMinistryMembersParams,
+} from "./shared.types";
 import Member from "@/database/member.model";
 import MemberType from "@/database/memberType.model";
 
@@ -43,6 +48,69 @@ export async function getMinistryMembers(params: getMinistryMembersParams) {
     }));
 
     return { members, ministry };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function editMinistry(params: EditMinistryParams) {
+  try {
+    const { name, leader, members, photo, description, ministryId } = params;
+
+    const ministry = await Ministry.findById(ministryId)
+      .populate({
+        path: "leader",
+        model: Member,
+      })
+      .populate({ path: "members", model: Member });
+
+    if (!ministry) {
+      throw new Error("Ministry not found");
+    }
+
+    ministry.name = name;
+    ministry.description = description;
+    console.log(ministry);
+
+    await ministry.save();
+
+    console.log(params);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getMinistries(params: GetAllMinistryParams) {
+  try {
+    connectToDatabase();
+    const ministries = await Ministry.find()
+      .populate({
+        path: "leader",
+        model: Member,
+      })
+      .populate({ path: "members", model: Member });
+
+    return ministries;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getMinistryById(params: GetMinistryByIdParams) {
+  try {
+    connectToDatabase();
+    const { ministryId } = params;
+    const ministry = Ministry.findById(ministryId)
+      .populate({
+        path: "leader",
+        model: Member,
+      })
+      .populate({ path: "members", model: Member });
+
+    return ministry;
   } catch (error) {
     console.log(error);
     throw error;

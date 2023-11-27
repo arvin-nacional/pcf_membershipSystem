@@ -1,20 +1,23 @@
 import MinistryCard from "@/components/shared/ministries/MinistryCard";
-import { ministries } from "@/constants";
+import { getMinistries } from "@/lib/actions/ministry.action";
 import React from "react";
 
-const Page = () => {
+const Page = async () => {
+  const ministriesArr = await getMinistries({});
+  console.log(ministriesArr);
   return (
     <div>
       <h1 className="h1-bold text-dark100_light900 mb-5">All Ministries</h1>
       <div className="flex flex-wrap gap-5">
-        {ministries.map((ministry) => (
+        {ministriesArr.map((ministry) => (
           <MinistryCard
-            key={ministry.label}
-            label={ministry.label}
+            key={ministry._id}
+            name={ministry.name}
             description={ministry.description}
-            ministryHead={ministry.ministryHead}
+            ministryHead={ministry.leader}
             members={ministry.members}
-            ministryPhoto={ministry.ministryPhoto}
+            ministryPhoto={ministry.photo}
+            ministryId={ministry._id.toString()}
           />
         ))}
       </div>

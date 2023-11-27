@@ -49,3 +49,11 @@ export const MemberSchema = z.object({
 // export const AnswerSchema = z.object({
 //   answer: z.string().min(100),
 // });
+
+export const MinistrySchema = z.object({
+  name: z.string(),
+  members: z.array(z.string()),
+  leader: z.string(),
+  description: z.string(),
+  photo: z.string(),
+});

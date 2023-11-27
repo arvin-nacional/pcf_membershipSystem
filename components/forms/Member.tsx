@@ -756,7 +756,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
                   </SelectItem>
                   {ministries.map((ministry) => (
                     <SelectItem value={ministry.value} key={ministry.value}>
-                      {ministry.label}
+                      {ministry.value}
                     </SelectItem>
                   ))}
                 </SelectContent>

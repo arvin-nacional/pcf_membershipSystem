@@ -90,6 +90,6 @@ const MemberSchema = new Schema({
   memberPhoto: String,
 });
 
-const Member = models.Member || model("Member", MemberSchema);
+const Member = models?.Member || model("Member", MemberSchema);
 
 export default Member;

@@ -93,6 +93,12 @@ export interface GetAllMembersParams {
   filter?: string;
   searchQuery?: string;
 }
+export interface GetAllMinistryParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
 export interface GetSmallGroupsParams {
   page?: number;
   pageSize?: number;
@@ -109,6 +115,9 @@ export interface GetAllMemberNamesParams {
 
 export interface GetMemberByIdParams {
   memberId: string;
+}
+export interface GetMinistryByIdParams {
+  ministryId: string;
 }
 
 export interface DeleteMemberParams {
@@ -140,4 +149,13 @@ export interface MemberCardProps {
   address: string;
   disciples: number;
   imageSrc: string;
+}
+
+export interface EditMinistryParams {
+  name: string;
+  leader: string | undefined;
+  description: string;
+  members: string[] | undefined;
+  ministryId: string | undefined;
+  photo: string;
 }

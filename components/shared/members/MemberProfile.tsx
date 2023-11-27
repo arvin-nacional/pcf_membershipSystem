@@ -333,8 +333,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               Missionary Partner
             </p>
             <p className="body-medium text-dark400_light700">
-              {parsedMemberDetails.missionaryPartner === "missionaryPartner" &&
-                "Yes"}
+              {parsedMemberDetails.missionaryPartner}
             </p>
           </div>
           <div className="flex min-w-[250px] flex-col gap-1">
