@@ -252,7 +252,11 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
         });
       }
 
-      router.push("/members");
+      if (type === "edit") {
+        router.push(`/members/${memberId}`);
+      } else {
+        router.push(`/members?filter=new_members`);
+      }
     } catch (error) {
       console.log(error);
       throw error;

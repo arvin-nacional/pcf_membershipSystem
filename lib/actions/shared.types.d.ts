@@ -132,7 +132,7 @@ export interface getSmallGroupMembersParams {
 }
 
 export interface MemberCardProps {
-  _id: string;
+  id: string;
   name: string;
   contactNumber: string;
   role: string;

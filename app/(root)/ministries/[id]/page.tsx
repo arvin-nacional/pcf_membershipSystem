@@ -6,6 +6,7 @@ import React from "react";
 
 const MinistryMember = async ({ params }: ParamsProps) => {
   const result = await getMinistryMembers({ ministryName: params.id });
+  console.log(result);
 
   return (
     <>
@@ -18,7 +19,7 @@ const MinistryMember = async ({ params }: ParamsProps) => {
         {result?.members && result.members.length > 0 ? (
           result.members.map((member: MemberCardProps) => (
             <MemberCard
-              key={member._id}
+              key={member.id}
               name={member.name}
               contactNumber={member.contactNumber}
               role={member.role}
@@ -26,7 +27,7 @@ const MinistryMember = async ({ params }: ParamsProps) => {
               address={member.address}
               disciples={member.disciples}
               image={member.imageSrc}
-              memberId={member._id}
+              memberId={member.id}
             />
           ))
         ) : (

@@ -19,7 +19,7 @@ const Page = async ({ params }: ParamsProps) => {
         <div className="flex flex-row flex-wrap gap-5">
           {result.members.map((member: MemberCardProps) => (
             <MemberCard
-              key={member._id}
+              key={member.id}
               name={member.name}
               contactNumber={member.contactNumber}
               role={member.role}
@@ -27,7 +27,7 @@ const Page = async ({ params }: ParamsProps) => {
               address={member.address}
               disciples={member.disciples}
               image={member.imageSrc}
-              memberId={member._id}
+              memberId={member.id}
             />
           ))}
         </div>
