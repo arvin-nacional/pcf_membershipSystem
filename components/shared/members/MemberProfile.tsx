@@ -350,7 +350,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
                 </p>
               ))
             ) : (
-              <p className="body-medium text-dark400_light700">No Disciples</p>
+              <p className="body-medium text-dark400_light700">No Exposure</p>
             )}
           </div>
           {/* <div className="flex min-w-[250px] flex-col gap-1">
