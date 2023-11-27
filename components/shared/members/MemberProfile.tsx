@@ -275,7 +275,9 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               Primary Ministry
             </p>
             <p className="body-medium text-dark400_light700">
-              {parsedMemberDetails.primaryMinistry.name}
+              {parsedMemberDetails.primaryMinistry
+                ? parsedMemberDetails.primaryMinistry?.name
+                : "None"}
             </p>
           </div>
           <div className="flex min-w-[250px] flex-col gap-1">

@@ -5,7 +5,7 @@ import { ParamsProps } from "@/types";
 import React from "react";
 
 const MinistryMember = async ({ params }: ParamsProps) => {
-  const result = await getMinistryMembers({ ministryName: params.id });
+  const result = await getMinistryMembers({ id: params.id });
   console.log(result);
 
   return (

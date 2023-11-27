@@ -86,6 +86,9 @@ export interface EditSpiritualGiftsParams {
 export interface EditDisciplesParams {
   _id: Schema.Types.ObjectId;
 }
+export interface EditMinistryMembersParams {
+  _id: Schema.Types.ObjectId;
+}
 
 export interface GetAllMembersParams {
   page?: number;
@@ -134,7 +137,7 @@ export interface getRecentlyAddedMembersParams {
 }
 
 export interface getMinistryMembersParams {
-  ministryName: string;
+  id: string;
 }
 export interface getSmallGroupMembersParams {
   id: string;
@@ -158,4 +161,5 @@ export interface EditMinistryParams {
   members: string[] | undefined;
   ministryId: string | undefined;
   photo: string;
+  path: string;
 }

@@ -15,7 +15,7 @@ const MinistrySchema = new Schema({
   leader: { type: Schema.Types.ObjectId, ref: "Member" },
   description: { type: String },
   createdAt: { type: Date, default: Date.now },
-  photo: String,
+  photo: { type: String },
 });
 
 const Ministry = models.Ministry || model("Ministry", MinistrySchema);

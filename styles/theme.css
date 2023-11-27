@@ -223,6 +223,13 @@
   .primary-gradient {
     background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
   }
+  .secondary-gradient {
+    background: linear-gradient(
+      90deg,
+      rgba(1, 84, 91, 0.33) 0%,
+      rgba(55, 146, 154, 0.17) 91.63%
+    );
+  }
   .ministry-gradient {
     color: linear-gradient(180deg, #0b6067 0%, #359097 100%);
   }

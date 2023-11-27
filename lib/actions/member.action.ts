@@ -150,15 +150,20 @@ export async function createMember(params: CreateMemberParams) {
       },
       { upsert: true, new: true }
     );
-    // create Ministry or get them if they already exist
-    const existingMinistry = await Ministry.findOneAndUpdate(
-      { name: { $regex: new RegExp(`^${primaryMinistry}$`, "i") } },
-      {
-        $setOnInsert: { name: primaryMinistry },
-        $push: { members: member._id },
-      },
-      { upsert: true, new: true }
-    );
+
+    let existingMinistry;
+    if (primaryMinistry !== "None") {
+      // create Ministry or get them if they already exist
+      existingMinistry = await Ministry.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${primaryMinistry}$`, "i") } },
+        {
+          $setOnInsert: { name: primaryMinistry },
+          $push: { members: member._id },
+        },
+        { upsert: true, new: true }
+      );
+      // Rest of your logic for this case...
+    }
     // create Status or get them if they already exist
     const existingStatus = await Status.findOneAndUpdate(
       { name: { $regex: new RegExp(`^${status}$`, "i") } },
@@ -336,8 +341,6 @@ export async function getAllMembers(params: GetAllMembersParams) {
 
     let sortOptions = {};
 
-    const noMinistry = await Ministry.findOne({ name: "None" });
-
     switch (filter) {
       case "new_members":
         sortOptions = { createdAt: -1 };
@@ -366,7 +369,7 @@ export async function getAllMembers(params: GetAllMembersParams) {
         query.disciples = { $size: 0 };
         break;
       case "no_ministry":
-        query.primaryMinistry = noMinistry._id;
+        query.primaryMinistry = null;
         break;
 
       default:
@@ -773,27 +776,42 @@ export async function editMember(params: EditMemberParams) {
       });
     }
 
-    // Check if the primaryMinistry field is being updated
-    if (member.primaryMinistry.name !== primaryMinistry) {
-      // Remove the member from the previous highest education's list of members
-      await Ministry.findByIdAndUpdate(member.primaryMinistry, {
-        $pull: { members: memberId },
-      });
+    if (primaryMinistry === "None") {
+      // Check if the member currently has a primary ministry assigned
+      if (member.primaryMinistry) {
+        // Remove the member from the current primary ministry's list of members
+        await Ministry.findByIdAndUpdate(member.primaryMinistry, {
+          $pull: { members: memberId },
+        });
 
-      // create ministry or update them if they already exist
-      const existingDocumentId = await Ministry.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${primaryMinistry}$`, "i") } },
-        {
-          $setOnInsert: { name: primaryMinistry },
-          $push: { members: member._id },
-        },
-        { upsert: true, new: true }
-      );
+        // Unset the primaryMinistry field for the member
+        await Member.findByIdAndUpdate(memberId, {
+          $unset: { primaryMinistry: 1 },
+        });
+      }
+    } else {
+      // If primaryMinistry !== "None", proceed with the original logic
+      if (member.primaryMinistry?.name !== primaryMinistry) {
+        // Remove the member from the previous highest education's list of members
+        await Ministry.findByIdAndUpdate(member.primaryMinistry, {
+          $pull: { members: memberId },
+        });
 
-      // Update the language field for the member
-      await Member.findByIdAndUpdate(memberId, {
-        primaryMinistry: existingDocumentId._id,
-      });
+        // create ministry or update them if they already exist
+        const existingDocumentId = await Ministry.findOneAndUpdate(
+          { name: { $regex: new RegExp(`^${primaryMinistry}$`, "i") } },
+          {
+            $setOnInsert: { name: primaryMinistry },
+            $push: { members: member._id },
+          },
+          { upsert: true, new: true }
+        );
+
+        // Update the language field for the member
+        await Member.findByIdAndUpdate(memberId, {
+          primaryMinistry: existingDocumentId._id,
+        });
+      }
     }
 
     // Check if the lifegearseries field is being updated
@@ -1218,6 +1236,7 @@ export async function editMember(params: EditMemberParams) {
     } else {
       console.log("trainings is undefined");
     }
+
     // Check if the disciples field is being updated
     // change array of objects into array of names
     const disciplesIdArr: string[] = member.disciples.map(

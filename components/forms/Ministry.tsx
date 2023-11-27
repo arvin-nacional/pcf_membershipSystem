@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
 import { editMinistry } from "@/lib/actions/ministry.action";
+import { useRouter, usePathname } from "next/navigation";
 
 interface Props {
   memberNames: MemberNames[];
@@ -54,6 +55,8 @@ const MinistryForm = ({
   //   });
 
   // convert memberDetails to object
+  const router = useRouter();
+  const pathname = usePathname();
 
   console.log(ministryDetails);
   const parsedMinistryDetails = ministryDetails
@@ -82,7 +85,7 @@ const MinistryForm = ({
       leader: parsedMinistryDetails?.leader?._id || "none",
       // middleName: "",
       // suffix: "",
-      description: "",
+      description: parsedMinistryDetails.description || "",
       photo: parsedMinistryDetails?.photo || "",
       members: membersArr || undefined,
     },
@@ -90,35 +93,35 @@ const MinistryForm = ({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof MinistrySchema>) {
-    if (!isSubmitting) {
-      setIsSubmitting(true);
-      try {
-        // change the names of disciples to their ids
-        const selectedMembers = values.members
-          ? (values.members
-              .map(
-                (name) =>
-                  memberNames.find((member) => member.name === name)?._id
-              )
-              .filter((id) => id !== undefined) as string[])
-          : undefined;
+    setIsSubmitting(true);
+    try {
+      // change the names of disciples to their ids
+      const selectedMembers = values.members
+        ? (values.members
+            .map(
+              (name) => memberNames.find((member) => member.name === name)?._id
+            )
+            .filter((id) => id !== undefined) as string[])
+        : undefined;
 
-        const leaderId =
-          values.leader === "none" ? undefined : values.disciplerId;
+      const leaderId = values.leader === "none" ? undefined : values.leader;
 
-        await editMinistry({
-          name: values.name,
-          description: values.description,
-          leader: leaderId,
-          members: selectedMembers,
-          photo: values.photo,
-        });
-      } catch (error) {
-        console.log(error);
-        throw error;
-      } finally {
-        setIsSubmitting(false);
-      }
+      await editMinistry({
+        name: values.name,
+        description: values.description,
+        leader: leaderId,
+        members: selectedMembers,
+        photo: preview.url,
+        ministryId: parsedMinistryDetails._id,
+        path: pathname,
+      });
+
+      router.push("/ministries");
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
