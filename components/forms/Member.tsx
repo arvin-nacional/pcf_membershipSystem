@@ -1053,9 +1053,9 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <>{type === "edit" ? "Editing..." : "Adding"}</>
+            <>{type === "edit" ? "Saving..." : "Adding"}</>
           ) : (
-            <>{type === "edit" ? "Edit Member" : "Add a Member"}</>
+            <>{type === "edit" ? "Save" : "Add a Member"}</>
           )}
         </Button>
       </form>

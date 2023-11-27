@@ -77,3 +77,23 @@ export const removeKeysFromQuery = ({
     { skipNull: true }
   );
 };
+
+export const calculateAge = (dateString: string): number | null => {
+  const [birthMonth, birthDay, birthYear] = dateString.split("/");
+  const today = new Date();
+
+  const todayMonth = today.getMonth() + 1; // Adding 1 because getMonth() is zero-based
+  const todayDay = today.getDate();
+
+  let age = today.getFullYear() - parseInt(birthYear, 10);
+
+  if (
+    todayMonth < parseInt(birthMonth, 10) ||
+    (todayMonth === parseInt(birthMonth, 10) &&
+      todayDay < parseInt(birthDay, 10))
+  ) {
+    age--;
+  }
+
+  return age < 0 ? null : age;
+};

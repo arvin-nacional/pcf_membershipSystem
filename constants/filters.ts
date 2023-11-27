@@ -20,8 +20,8 @@ export const QuestionFilters = [
 ];
 
 export const MemberFilters = [
-  { name: "New Members", value: "new_members" },
-  { name: "Old Members", value: "old_members" },
+  { name: "Recently Added", value: "new_members" },
+  { name: "Chronological", value: "old_members" },
   { name: "Active", value: "active" },
   { name: "Inactive", value: "inactive" },
   { name: "No Discipler", value: "no_discipler" },

@@ -52,7 +52,7 @@ export const sidebarLinks: SidebarLink[] = [
   },
   {
     imgURL: "/assets/icons/users.svg",
-    route: "/members",
+    route: "/members?filter=new_members",
     label: "Members",
   },
   {
