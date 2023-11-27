@@ -8,6 +8,8 @@ const Page = async ({ params }: ParamsProps) => {
   const result = await getSmallGroupMembers({ id: params.id });
 
   console.log(result);
+
+  console.log(result);
   return (
     <div>
       <div>

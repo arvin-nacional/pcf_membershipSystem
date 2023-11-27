@@ -92,7 +92,7 @@ export async function getSmallGroupMembers(params: getSmallGroupMembersParams) {
         path: "discipler",
         model: Member,
         select:
-          "firstName lastName emailAddress homeAddress disciples memberType memberPhoto",
+          "firstName lastName emailAddress homeAddress disciples memberType memberPhoto contactNumber",
         populate: {
           path: "memberType",
           model: MemberType,
@@ -103,7 +103,7 @@ export async function getSmallGroupMembers(params: getSmallGroupMembersParams) {
         path: "disciples",
         model: Member,
         select:
-          "firstName lastName emailAddress homeAddress disciples memberType memberPhoto",
+          "firstName lastName emailAddress homeAddress disciples memberType memberPhoto contactNumber",
         populate: {
           path: "memberType",
           model: MemberType,
