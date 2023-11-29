@@ -3,7 +3,7 @@ import React, { useState, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction";
-
+import listPlugin from "@fullcalendar/list";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { Dialog, Transition } from "@headlessui/react";
@@ -238,13 +238,14 @@ const Calendar = ({ events }: Props) => {
           interactionPlugin,
           timeGridPlugin,
           multiMonthPlugin,
+          listPlugin,
         ]}
         initialView="dayGridMonth"
         weekends={true}
         headerToolbar={{
           left: "prev,next today",
           center: "title",
-          right: "dayGridMonth,timeGridWeek,multiMonthYear",
+          right: "dayGridMonth,timeGridWeek,multiMonthYear,listWeek",
         }}
         events={parsedEvents}
         dateClick={handleDateClick}
