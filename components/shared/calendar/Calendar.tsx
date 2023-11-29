@@ -2,13 +2,14 @@
 import React, { useState, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
-import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
+import interactionPlugin from "@fullcalendar/interaction";
+
 import timeGridPlugin from "@fullcalendar/timegrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { Dialog, Transition } from "@headlessui/react";
 import EventForm from "@/components/forms/Event";
 import { usePathname } from "next/navigation";
-import { deleteEvent } from "@/lib/actions/event.action";
+import { deleteEvent, editEvent } from "@/lib/actions/event.action";
 
 interface Props {
   events?: string;
@@ -50,9 +51,55 @@ const Calendar = ({ events }: Props) => {
     setEventId(data.event._def.extendedProps._id);
   };
 
-  // function openModal() {
-  //   setIsOpen(true);
-  // }
+  const handleEventDropAndResize = async (arg: any) => {
+    console.log(arg);
+    const eventToUpdate = arg.event;
+
+    const updatedEvent = {
+      id: eventToUpdate._def.extendedProps._id,
+      title: eventToUpdate.title,
+      start: arg.event.startStr, // New start date after drop
+      // Calculate new end date based on the event's duration
+      end: arg.event.allDay
+        ? arg.event.endStr // For all-day events
+        : arg.event.end
+        ? arg.event.endStr // For timed events with an end time
+        : arg.event.startStr, // For events without an end time
+    };
+
+    // desctructure
+    const { id, title, start, end } = updatedEvent;
+    // edit event
+    try {
+      await editEvent({ path, id, title, start, end });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  //   const handleEventResize = async (arg: any) => {
+  //     console.log(arg);
+  //     const eventToUpdate = arg.event;
+
+  //     const updatedEvent = {
+  //       id: eventToUpdate._def.extendedProps._id,
+  //       title: eventToUpdate.title,
+  //       start: arg.event.startStr, // Start date remains the same after resize
+  //       // Calculate new end date based on the event's resized duration
+  //       end: arg.event.endStr, // For resized events, directly use the new endStr
+  //     };
+
+  //     // desctructure
+  //     const { id, title, start, end } = updatedEvent;
+  //     // edit event
+  //     try {
+  //       await editEvent({ path, id, title, start, end });
+  //     } catch (error) {
+  //       console.log(error);
+  //       throw error;
+  //     }
+  //   };
   return (
     <div className="rounded-xl bg-light-900 p-5">
       <Transition appear show={isOpen} as={Fragment}>
@@ -202,6 +249,11 @@ const Calendar = ({ events }: Props) => {
         events={parsedEvents}
         dateClick={handleDateClick}
         eventClick={(data) => handleDeleteModal(data)}
+        eventDrop={handleEventDropAndResize} // Handle event drop
+        droppable={true}
+        editable={true}
+        selectable={true}
+        eventResize={handleEventDropAndResize}
       />
     </div>
   );

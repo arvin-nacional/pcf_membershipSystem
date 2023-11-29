@@ -26,7 +26,6 @@ interface Props {
 }
 
 const EventForm = ({ closeModal, eventArg }: Props) => {
-  console.log(eventArg);
   const type = "edit";
   const [isSubmitting, setIsSubmitting] = useState(false);
 

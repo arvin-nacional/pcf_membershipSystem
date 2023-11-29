@@ -172,4 +172,12 @@ export interface CreateEventParams {
   title: string;
   start: string;
   path: string;
+  end?: string;
+}
+export interface EditEventsParams {
+  title: string;
+  start: string;
+  path: string;
+  end?: string;
+  id: string;
 }
