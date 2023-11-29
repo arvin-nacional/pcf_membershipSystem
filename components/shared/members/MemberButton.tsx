@@ -130,7 +130,7 @@ const MemberButton = ({ memberId }: Props) => {
                 Delete
               </div>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="background-light900_dark300 text-dark400_light700">
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>

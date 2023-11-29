@@ -64,7 +64,7 @@ const EventForm = ({ closeModal, eventArg }: Props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-5 flex w-full flex-col gap-10"
+        className=" mt-5 flex w-full flex-col gap-10"
       >
         {" "}
         <FormField
@@ -72,7 +72,7 @@ const EventForm = ({ closeModal, eventArg }: Props) => {
           name="title"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
+              <FormLabel className="paragraph-semibold text-dark-400">
                 Event Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
@@ -93,7 +93,7 @@ const EventForm = ({ closeModal, eventArg }: Props) => {
           name="start"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
+              <FormLabel className="paragraph-semibold text-dark-400">
                 Event Date <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
