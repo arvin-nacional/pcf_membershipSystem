@@ -57,3 +57,8 @@ export const MinistrySchema = z.object({
   description: z.string(),
   photo: z.string(),
 });
+
+export const EventSchema = z.object({
+  title: z.string(),
+  start: z.string(),
+});

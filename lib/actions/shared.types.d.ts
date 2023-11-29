@@ -163,3 +163,9 @@ export interface EditMinistryParams {
   photo: string;
   path: string;
 }
+
+export interface CreateEventParams {
+  title: string;
+  start: string;
+  path: string;
+}
