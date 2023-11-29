@@ -127,6 +127,10 @@ export interface DeleteMemberParams {
   memberId: string;
   path: string;
 }
+export interface DeleteEventParams {
+  eventId: string;
+  path: string;
+}
 
 export interface getRecentlyAddedMembersParams {
   _id: string;

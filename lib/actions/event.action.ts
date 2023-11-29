@@ -2,7 +2,7 @@
 
 import Event from "@/database/event.model";
 import { connectToDatabase } from "../mongoose";
-import { CreateEventParams } from "./shared.types";
+import { CreateEventParams, DeleteEventParams } from "./shared.types";
 import { revalidatePath } from "next/cache";
 
 export async function createEvent(params: CreateEventParams) {
@@ -31,6 +31,19 @@ export async function getAllEvents() {
     const events = await Event.find({});
 
     return events;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function deleteEvent(params: DeleteEventParams) {
+  try {
+    connectToDatabase();
+    const { eventId, path } = params;
+    // Delete the event
+    await Event.findByIdAndDelete(eventId);
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     throw error;
