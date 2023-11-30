@@ -79,7 +79,7 @@ export async function editMinistry(params: EditMinistryParams) {
     }
 
     ministry.name = name;
-    ministry.description = description;
+    ministry.description = description || "";
     console.log(params);
 
     // check if  photo is being updated
