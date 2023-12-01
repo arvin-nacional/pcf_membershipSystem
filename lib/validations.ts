@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { validateDate } from "./utils";
 // import { validateDate } from "./utils";
 
 export const MemberSchema = z.object({
@@ -15,18 +16,18 @@ export const MemberSchema = z.object({
   emergencyContactNumber: z.string(),
   highestEducation: z.string(),
   preferredLanguage: z.string(),
-  // birthday: z.string().trim().refine(validateDate, {
-  //   message:
-  //     "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
-  // }),
-  birthday: z.string(),
+  birthday: z.string().trim().refine(validateDate, {
+    message:
+      "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
+  }),
+  // birthday: z.string(),
   gender: z.string().min(1),
   memberType: z.string().min(1),
-  // waterBaptism: z.string().trim().refine(validateDate, {
-  //   message:
-  //     "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
-  // }),
-  waterBaptism: z.string(),
+  waterBaptism: z.string().trim().refine(validateDate, {
+    message:
+      "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
+  }),
+  // waterBaptism: z.string(),
   followUpSeries: z.string(),
   lifeGearSeries: z.string(),
   primaryMinistry: z.string().min(1),
