@@ -49,6 +49,7 @@ import {
 } from "@/constants";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
+import { toast } from "../ui/use-toast";
 
 // get member names for the disciples and discipler formfield
 interface Props {
@@ -263,6 +264,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
     } finally {
       setIsSubmitting(false);
     }
+    // return toast({
+    //   title: `Successfully ${type === "edit" ? "Edited" : "Added"}`,
+    //   variant: "default",
+    // });
   }
 
   return (
@@ -483,7 +488,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         /> */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="emailAddress"
           render={({ field }) => (
@@ -503,7 +508,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="highestEducation"
