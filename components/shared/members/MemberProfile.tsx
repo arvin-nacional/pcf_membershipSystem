@@ -24,7 +24,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               width={135}
               height={135}
               alt="Image"
-              className="rounded-md"
+              className="h-[135px] w-[135px] rounded-md object-cover object-left-top"
             />
             <div className="text-dark400_light800 flex flex-col items-start justify-center gap-1">
               <div className=" flex flex-row items-center justify-center gap-[8px] text-sm">
@@ -128,7 +128,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               {parsedMemberDetails.highestEducation.name}
             </p>
           </div>
-          <div className="flex min-w-[250px] flex-col gap-1">
+          <div className="flex max-w-[250px] flex-col gap-1">
             <p className="small-regular text-light400_light500">Home Address</p>
             <p className="body-medium text-dark400_light700">
               {parsedMemberDetails.homeAddress}

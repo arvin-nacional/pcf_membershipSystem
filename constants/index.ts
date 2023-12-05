@@ -26,7 +26,7 @@ export const summaryInfo = [
     colors: ["#BECCDA", "#01545B"],
   },
   {
-    title: "Newly Baptized",
+    title: "Attendees",
     value: 10,
     series: [25, 25],
     colors: ["#BECCDA", "#FE6D8E"],

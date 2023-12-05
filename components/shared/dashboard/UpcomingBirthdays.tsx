@@ -23,7 +23,7 @@ const UpcomingBirthdays = async () => {
           >
             <div className=" relative h-[50px] w-[50px] overflow-hidden">
               <Image
-                className="absolute inset-0 rounded-lg object-cover"
+                className="absolute inset-0 h-[50px] w-[50px] rounded-lg object-cover object-left-top"
                 alt=""
                 src={member?.imageSrc}
                 height={50}

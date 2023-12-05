@@ -264,10 +264,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
     } finally {
       setIsSubmitting(false);
     }
-    // return toast({
-    //   title: `Successfully ${type === "edit" ? "Edited" : "Added"}`,
-    //   variant: "default",
-    // });
+    return toast({
+      title: `Successfully ${type === "edit" ? "Edited" : "Added"}`,
+      variant: "default",
+    });
   }
 
   return (
@@ -629,6 +629,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Member">Attendee</SelectItem>
                   <SelectItem value="Member">Member</SelectItem>
                   <SelectItem value="Church Staff">Church Staff</SelectItem>
                   <SelectItem value="Leader">Leader</SelectItem>
@@ -1027,7 +1028,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
         )}
         {/* photo preview */}
         <Avatar className="h-24 w-24">
-          <AvatarImage src={preview.url} />
+          <AvatarImage
+            src={preview.url}
+            className="object-cover object-left-top"
+          />
           <AvatarFallback>Your Photo</AvatarFallback>
         </Avatar>
         <FormField

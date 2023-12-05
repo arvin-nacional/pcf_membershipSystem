@@ -24,25 +24,25 @@ const MemberList = ({
   photo,
 }: Props) => {
   return (
-    <div className="background-light900_dark200 body-regular text-dark400_light800  shadow-light300_darknone mb-5 flex w-full flex-row items-center justify-start gap-[20px] rounded-md p-2 text-left ">
-      <div className="background-light900_dark200 flex flex-1 flex-row items-center justify-around">
-        <div className="flex w-[200px] flex-row items-center justify-start gap-[10px]">
+    <div className="background-light900_dark200 body-regular text-dark400_light800  shadow-light300_darknone mb-5 flex w-full flex-row items-center justify-start gap-[20px] rounded-md p-2 text-left max-sm:gap-[0px] ">
+      <div className="background-light900_dark200 flex w-full flex-1 flex-row items-center justify-around">
+        <div className="flex w-[200px] flex-row items-center justify-start gap-[10px] ">
           <div className="relative h-[38px] w-[38px]">
             {photo ? (
               <Image
-                className="absolute inset-[0%] h-full max-h-full w-full max-w-full overflow-hidden rounded-xl object-cover"
+                className="absolute inset-0 h-[35px] w-[35px] rounded-md object-cover object-left-top"
                 alt=""
                 src={photo}
-                width={20}
-                height={20}
+                width={35}
+                height={35}
               />
             ) : (
               <Image
                 className="absolute inset-[0%] h-full max-h-full w-full max-w-full overflow-hidden rounded-xl object-cover"
                 alt=""
                 src={"/assets/images/Default_photo.png"}
-                width={20}
-                height={20}
+                width={35}
+                height={35}
               />
             )}
           </div>
@@ -71,8 +71,8 @@ const MemberList = ({
             {phoneNumber}
           </div>
         </div>
-        <div className="flex w-32 flex-col items-start justify-center gap-[5px]">
-          <div className="small-medium relative self-stretch leading-[16px]">
+        <div className="flex w-32 flex-col items-start justify-center gap-[5px] max-sm:w-[100px]">
+          <div className="small-medium relative self-stretch leading-[16px] max-sm:w-[150px] ">
             Role
           </div>
           <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">

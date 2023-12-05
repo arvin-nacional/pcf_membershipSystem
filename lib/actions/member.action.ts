@@ -28,6 +28,7 @@ import { v2 as cloudinary } from "cloudinary";
 import MissionaryPartner from "@/database/missionaryParter.model";
 import MissionExposure from "@/database/missionExposure.model";
 import { FilterQuery } from "mongoose";
+import { capitalizeText } from "../utils";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -82,8 +83,8 @@ export async function createMember(params: CreateMemberParams) {
     const member = await Member.create({
       // create all params without refs
 
-      firstName,
-      lastName,
+      firstName: capitalizeText(firstName),
+      lastName: capitalizeText(lastName),
       birthday,
       contactNumber,
       emailAddress,
@@ -635,9 +636,9 @@ export async function editMember(params: EditMemberParams) {
       throw new Error("Member not found");
     }
 
-    member.firstName = firstName;
+    member.firstName = capitalizeText(firstName);
     // middleName,
-    member.lastName = lastName;
+    member.lastName = capitalizeText(lastName);
     // suffix,
     member.birthday = birthday;
     member.contactNumber = contactNumber;

@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 
 interface Props {
   memberId: string;
@@ -55,7 +56,7 @@ const MemberButton = ({ memberId }: Props) => {
             />
           )}
         </MenubarTrigger>
-        <MenubarContent className="absolute right-[-3rem] min-w-[120px] rounded border bg-light-900  dark:border-dark-400 dark:bg-dark-300">
+        <MenubarContent className="absolute right-[-3rem] rounded border bg-light-900 dark:border-dark-400  dark:bg-dark-300 max-sm:w-[50px]">
           {/* item.value === "view" && router.push(`/members/${memberId}`);
                 item.value === "delete" && deleteMember({ path, memberId }); */}
           <MenubarItem
@@ -145,6 +146,10 @@ const MemberButton = ({ memberId }: Props) => {
                     className="bg-red text-light-800"
                     onClick={() => {
                       deleteMember({ path, memberId });
+                      return toast({
+                        title: "Member Deleted",
+                        variant: "default",
+                      });
                     }}
                   >
                     Continue
