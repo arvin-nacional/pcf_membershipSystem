@@ -31,6 +31,19 @@ export async function GetActiveMemberCount() {
     throw error;
   }
 }
+export async function GetInActiveMemberCount() {
+  try {
+    connectToDatabase();
+    // get the total numbers of members in the Member model
+    const status = await Status?.findOne({ name: "Inactive" });
+    const statusCount = status?.members.length;
+
+    return statusCount;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 export async function getLeadersCount() {
   try {

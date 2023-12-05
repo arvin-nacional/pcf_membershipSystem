@@ -14,22 +14,23 @@ export const summaryInfo = [
     colors: ["#BECCDA", "#2ED480"],
   },
   {
-    title: "Regular Members",
+    title: "Active Members",
     value: 683,
     series: [10, 25],
     colors: ["#BECCDA", "#FD8539"],
+  },
+
+  {
+    title: "Inactive Members",
+    value: 10,
+    series: [25, 25],
+    colors: ["#BECCDA", "#FE6D8E"],
   },
   {
     title: "Ministries",
     value: 12,
     series: [13, 25],
     colors: ["#BECCDA", "#01545B"],
-  },
-  {
-    title: "Attendees",
-    value: 10,
-    series: [25, 25],
-    colors: ["#BECCDA", "#FE6D8E"],
   },
 ];
 

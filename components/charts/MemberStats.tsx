@@ -82,7 +82,7 @@ const MemberStats = async () => {
             <div className="flex w-[300px] flex-col items-start justify-start gap-[10px]">
               <div className="flex flex-row items-center justify-between  self-stretch">
                 <div className="paragraph-medium relative flex-1">
-                  Training Sessions
+                  Attendees
                 </div>
                 <div className=" paragraph-medium relative flex-1 text-right">
                   80
@@ -93,7 +93,7 @@ const MemberStats = async () => {
                 <div className="bg-pink absolute left-[0px] top-[0px] h-2 w-[237.2px] rounded" />
               </div>
             </div>
-            <div className="flex w-[300px] flex-col items-start justify-start gap-[10px]">
+            {/* <div className="flex w-[300px] flex-col items-start justify-start gap-[10px]">
               <div className="flex flex-row items-center justify-between self-stretch">
                 <div className="paragraph-medium relative flex-1">Missions</div>
                 <div className=" paragraph-medium relative flex-1 text-right">
@@ -104,7 +104,7 @@ const MemberStats = async () => {
                 <div className="bg-grey absolute left-[0px] top-[0px] h-2 w-[300px] rounded" />
                 <div className="bg-red absolute left-[0px] top-[0px] h-2 w-[96.2px] rounded" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

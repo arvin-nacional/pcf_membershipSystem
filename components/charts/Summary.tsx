@@ -3,6 +3,7 @@ import SummaryItem from "./SummaryItem";
 import { summaryInfo } from "@/constants";
 import {
   GetActiveMemberCount,
+  GetInActiveMemberCount,
   GetMemberCount,
 } from "@/lib/actions/dashboard.action";
 
@@ -11,8 +12,11 @@ const Summary = async () => {
     if (item.title === "Members") {
       item.value = await GetMemberCount();
     }
-    if (item.title === "Regular Members") {
+    if (item.title === "Active Members") {
       item.value = await GetActiveMemberCount();
+    }
+    if (item.title === "Inactive Members") {
+      item.value = await GetInActiveMemberCount();
     }
   }
 
