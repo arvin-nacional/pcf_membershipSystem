@@ -24,9 +24,9 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               width={135}
               height={135}
               alt="Image"
-              className="h-[135px] w-[135px] rounded-md object-cover object-left-top"
+              className="h-[135px] w-[135px] rounded-md object-cover object-left-top max-sm:h-[100px] max-sm:w-[100px] max-sm:object-left-top "
             />
-            <div className="text-dark400_light800 flex flex-col items-start justify-center gap-1">
+            <div className="text-dark400_light800 flex flex-col items-start justify-center gap-1 max-sm:scale-75">
               <div className=" flex flex-row items-center justify-center gap-[8px] text-sm">
                 {parsedMemberDetails.status.name === "Active" ? (
                   <div className="bg-darkgreen relative ml-1 h-[7px] w-[7px] rounded-[50%]" />
@@ -37,7 +37,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
                   {parsedMemberDetails.status.name}
                 </div>
               </div>
-              <p className="h2-semibold text-dark400_light700">
+              <p className="h2-semibold text-dark400_light700 ">
                 {parsedMemberDetails.firstName} {parsedMemberDetails.lastName}
               </p>
               <div className="flex flex-row items-start gap-2">
@@ -61,7 +61,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
           className="flex justify-end max-sm:w-full"
         >
           <div className="flex">
-            <Button className="primary-gradient min-h-[46px] gap-2 px-4 py-3 !text-light-900">
+            <Button className="primary-gradient min-h-[46px] gap-2 px-4 py-3 !text-light-900 max-sm:scale-50">
               <Image
                 src="/assets/icons/write.svg"
                 alt="write"

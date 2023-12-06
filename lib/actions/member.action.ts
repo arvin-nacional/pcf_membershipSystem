@@ -88,9 +88,9 @@ export async function createMember(params: CreateMemberParams) {
       birthday,
       contactNumber,
       emailAddress,
-      homeAddress,
+      homeAddress: capitalizeText(homeAddress),
       emergencyContactNumber,
-      emergencyContactPerson,
+      emergencyContactPerson: capitalizeText(emergencyContactPerson),
       waterBaptism,
       memberPhoto: photoUploadResult.url, // Use the Cloudinary URL
       missionaryPartner,
@@ -643,9 +643,9 @@ export async function editMember(params: EditMemberParams) {
     member.birthday = birthday;
     member.contactNumber = contactNumber;
     member.emailAddress = emailAddress;
-    member.homeAddress = homeAddress;
+    member.homeAddress = capitalizeText(homeAddress);
     member.emergencyContactNumber = emergencyContactNumber;
-    member.emergencyContactPerson = emergencyContactPerson;
+    member.emergencyContactPerson = capitalizeText(emergencyContactPerson);
     member.waterBaptism = waterBaptism;
     console.log(member);
 
