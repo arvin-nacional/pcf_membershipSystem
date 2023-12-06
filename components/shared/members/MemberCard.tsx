@@ -24,14 +24,14 @@ const MemberCard = ({
 }: Props) => {
   return (
     <div className="flex w-[400px] flex-row gap-6 rounded-xl p-8 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]">
-      <Link href={`/members/${memberId}`}>
+      <Link href={`/members/${memberId}`} className="h-[135px] w-[135px]">
         {" "}
         <Image
           src={image}
           alt="default"
           width={135}
           height={135}
-          className=" rounded object-cover"
+          className="h-[135px] w-[135px] rounded object-cover"
         />
       </Link>
 
@@ -61,7 +61,7 @@ const MemberCard = ({
               />
               <p className="body-regular">{contactNumber}</p>
             </div>
-            <div className="flex flex-row gap-2">
+            <div className="flex max-w-[250px] flex-row gap-2">
               <Image
                 src="/assets/icons/pin.svg"
                 alt="default"
