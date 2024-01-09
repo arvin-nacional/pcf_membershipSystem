@@ -131,6 +131,10 @@ export interface DeleteEventParams {
   eventId: string;
   path: string;
 }
+export interface GetEventParams {
+  eventId: string;
+  path: string;
+}
 
 export interface getRecentlyAddedMembersParams {
   _id: string;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction";
@@ -10,6 +10,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import EventForm from "@/components/forms/Event";
 import { usePathname } from "next/navigation";
 import { deleteEvent, editEvent } from "@/lib/actions/event.action";
+import { findEventById, formatDate, getTimeOfDay } from "@/lib/utils";
+import Image from "next/image";
 
 interface Props {
   events?: string;
@@ -26,6 +28,13 @@ const Calendar = ({ events }: Props) => {
     date: "",
   });
   const [eventId, setEventId] = useState("");
+  const [eventDetails, setEventDetails] = useState({
+    title: "",
+    _id: "",
+    end: "",
+    start: "",
+    allDay: "",
+  });
 
   const handleDateClick = (arg: any) => {
     // bind with an arrow function
@@ -35,7 +44,6 @@ const Calendar = ({ events }: Props) => {
       ...prevEventArg, // Spread the previous state
       date: arg.dateStr, // Update the 'date' property
     }));
-    console.log(eventArg);
   };
 
   const closeModal = () => {
@@ -48,8 +56,50 @@ const Calendar = ({ events }: Props) => {
 
   const handleDeleteModal = (data: any) => {
     setShowDeleteModal(true);
-    setEventId(data.event._def.extendedProps._id);
+    const eventIdFromData = data.event._def.extendedProps._id;
+    setEventId(eventIdFromData);
+
+    if (data.event._def.allDay === true) {
+      setEventDetails((prevState) => ({
+        ...prevState,
+        allDay: "true",
+      }));
+    } else {
+      setEventDetails((prevState) => ({
+        ...prevState,
+        allDay: "false",
+      }));
+    }
+
+    console.log(data);
   };
+
+  useEffect(() => {
+    // This code runs after the state updates
+    const foundEvent = findEventById(parsedEvents, eventId);
+
+    if (foundEvent) {
+      const { title, _id, start, end } = foundEvent;
+
+      setEventDetails((prevState) => ({
+        ...prevState,
+        title,
+        _id,
+        start,
+        end,
+      }));
+    } else {
+      console.log("Event not found");
+      setEventDetails({
+        title: "",
+        _id: "",
+        start: "",
+        end: "",
+        allDay: "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventId, events]); // useEffect runs whenever eventId changes
 
   const handleEventDropAndResize = async (arg: any) => {
     console.log(arg);
@@ -190,17 +240,58 @@ const Calendar = ({ events }: Props) => {
                   <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <Dialog.Title
+                        {/* <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
+
+                        </Dialog.Title> */}
+                        {/* <Dialog.Title
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
                           Delete Event
-                        </Dialog.Title>
-                        <div className="mt-2">
-                          <p className="text-sm text-gray-500">
-                            Are you sure you want to delete this event?
+                        </Dialog.Title> */}
+                        <div className="mb-2 flex flex-row gap-2">
+                          <Image
+                            src="/assets/icons/calendar-title.svg"
+                            alt="default"
+                            width={18}
+                            height={18}
+                          />
+                          <p className="paragraph-medium">
+                            {eventDetails.title}
                           </p>
                         </div>
+                        <div className=" mb-2 flex flex-row gap-2">
+                          <Image
+                            src="/assets/icons/calendar-check.svg"
+                            alt="default"
+                            width={18}
+                            height={18}
+                          />
+                          <p className="body-regular">
+                            {formatDate(eventDetails.start)}
+                          </p>
+                        </div>
+                        <div className=" mb-2 flex flex-row gap-2">
+                          <Image
+                            src="/assets/icons/time.svg"
+                            alt="default"
+                            width={18}
+                            height={18}
+                          />
+                          <p className="body-regular">
+                            {eventDetails.allDay === "true"
+                              ? "All Day"
+                              : getTimeOfDay(eventDetails.start)}
+                          </p>
+                        </div>
+                        {/* <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            {eventDetails.end}
+                          </p>
+                        </div> */}
                       </div>
                     </div>
                   </div>

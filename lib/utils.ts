@@ -105,3 +105,38 @@ export const capitalizeText = (text: string): string => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
+export const formatDate = (dateString: any) => {
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
+  const dayOfWeek = daysOfWeek[date.getDay()];
+
+  return `${month} ${day}, ${year} (${dayOfWeek})`;
+};
+export const findEventById = (
+  events: { _id: string; title: string; start: string; end: string }[],
+  id: string
+): { _id: string; title: string; start: string; end: string } | undefined =>
+  events.find((event) => event._id === id);
+
+export const getTimeOfDay = (dateTimeString: string): string => {
+  const date = new Date(dateTimeString);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+
+  return date.toLocaleTimeString(undefined, timeOptions);
+};

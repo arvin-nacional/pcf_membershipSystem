@@ -6,6 +6,7 @@ import {
   CreateEventParams,
   DeleteEventParams,
   EditEventsParams,
+  GetEventParams,
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 
@@ -67,6 +68,21 @@ export async function deleteEvent(params: DeleteEventParams) {
     await Event.findByIdAndDelete(eventId);
 
     revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getEvent(params: GetEventParams) {
+  try {
+    connectToDatabase();
+    const { eventId, path } = params;
+
+    const event = Event.findById(eventId);
+
+    revalidatePath(path);
+    return { event };
   } catch (error) {
     console.log(error);
     throw error;
