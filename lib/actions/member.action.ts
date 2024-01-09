@@ -337,6 +337,38 @@ export async function getAllMembers(params: GetAllMembersParams) {
       query.$or = [
         { firstName: { $regex: new RegExp(searchQuery, "i") } },
         { lastName: { $regex: new RegExp(searchQuery, "i") } },
+        // Searching by role names from MemberType model
+        {
+          memberType: {
+            $in: await MemberType.find({
+              name: { $regex: new RegExp(searchQuery, "i") },
+            }).distinct("_id"),
+          },
+        },
+        // Searching by LifeGearSeries names
+        {
+          $or: [
+            {
+              lifeGearSeries: {
+                $in: await LifeGearSeries.find({
+                  name: { $regex: new RegExp(searchQuery, "i") },
+                }).distinct("_id"),
+              },
+            },
+          ],
+        },
+        // Searching by Training names
+        {
+          $or: [
+            {
+              trainings: {
+                $in: await Training.find({
+                  name: { $regex: new RegExp(searchQuery, "i") },
+                }).distinct("_id"),
+              },
+            },
+          ],
+        },
       ];
     }
 
