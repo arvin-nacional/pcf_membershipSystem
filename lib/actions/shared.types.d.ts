@@ -95,6 +95,7 @@ export interface GetAllMembersParams {
   pageSize?: number;
   filter?: string;
   searchQuery?: string;
+  training?: string;
 }
 export interface GetAllMinistryParams {
   page?: number;

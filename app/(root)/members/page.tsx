@@ -8,6 +8,7 @@ import { MemberFilters } from "@/constants/filters";
 import Pagination from "@/components/shared/search/Pagination";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+// import TrainingFilter from "@/components/shared/search/TrainingFilter";
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllMembers({
@@ -36,6 +37,10 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           otherClasses="flex-1"
         />
 
+        {/* <TrainingFilter
+          filters={TrainingFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+        /> */}
         <Filter
           filters={MemberFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"

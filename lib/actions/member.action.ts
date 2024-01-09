@@ -372,6 +372,51 @@ export async function getAllMembers(params: GetAllMembersParams) {
       case "no_ministry":
         query.primaryMinistry = null;
         break;
+      case "lifeGear_501":
+        // eslint-disable-next-line no-case-declarations
+        const lifeGear501 = await LifeGearSeries.findOne({
+          name: "Life Gear 501",
+        });
+        if (lifeGear501) {
+          query.lifeGearSeries = lifeGear501._id;
+        }
+        break;
+      case "lifeGear_101":
+        // eslint-disable-next-line no-case-declarations
+        const lifeGear101 = await LifeGearSeries.findOne({
+          name: "Life Gear 101",
+        });
+        if (lifeGear101) {
+          query.lifeGearSeries = lifeGear101._id;
+        }
+        break;
+      case "lifeGear_201":
+        // eslint-disable-next-line no-case-declarations
+        const lifeGear201 = await LifeGearSeries.findOne({
+          name: "Life Gear 201",
+        });
+        if (lifeGear201) {
+          query.lifeGearSeries = lifeGear201._id;
+        }
+        break;
+      case "lifeGear_301":
+        // eslint-disable-next-line no-case-declarations
+        const lifeGear301 = await LifeGearSeries.findOne({
+          name: "Life Gear 301",
+        });
+        if (lifeGear301) {
+          query.lifeGearSeries = lifeGear301._id;
+        }
+        break;
+      case "lifeGear_401":
+        // eslint-disable-next-line no-case-declarations
+        const lifeGear401 = await LifeGearSeries.findOne({
+          name: "Life Gear 401",
+        });
+        if (lifeGear401) {
+          query.lifeGearSeries = lifeGear401._id;
+        }
+        break;
 
       default:
         break;

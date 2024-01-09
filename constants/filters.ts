@@ -27,6 +27,11 @@ export const MemberFilters = [
   { name: "No Discipler", value: "no_discipler" },
   { name: "No Disciples", value: "no_disciples" },
   { name: "No Ministry", value: "no_ministry" },
+  { name: "Life Gear 101", value: "lifeGear_101" },
+  { name: "Life Gear 201", value: "lifeGear_201" },
+  { name: "Life Gear 301", value: "lifeGear_301" },
+  { name: "Life Gear 401", value: "lifeGear_401" },
+  { name: "Life Gear 501", value: "lifeGear_501" },
 ];
 export const TrainingFilters = [
   { name: "Life Gear 101", value: "lifeGear_101" },
