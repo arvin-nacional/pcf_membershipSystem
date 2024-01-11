@@ -71,3 +71,12 @@ export const AttendeeSchema = z.object({
   address: z.string(),
   status: z.string().min(1),
 });
+export const FollowUpSchema = z.object({
+  distinction: z.string().min(1),
+  name: z.string().min(1),
+  responsible: z.string().min(1),
+  type: z.string(),
+  status: z.string().min(1),
+  remarks: z.string().min(1),
+  action: z.string().min(1),
+});

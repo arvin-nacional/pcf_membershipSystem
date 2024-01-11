@@ -6,6 +6,8 @@ export interface IFollowUp extends Document {
   status: string;
   remarks: string;
   type: string;
+  distinction: string;
+  action: string;
 }
 
 const FollowUpSchema = new Schema({
@@ -14,6 +16,8 @@ const FollowUpSchema = new Schema({
   status: { type: String, required: true },
   remarks: { type: String, required: true },
   type: { type: String, required: true },
+  distinction: { type: String, required: true },
+  action: { type: String, required: true },
 });
 
 const FollowUp =
