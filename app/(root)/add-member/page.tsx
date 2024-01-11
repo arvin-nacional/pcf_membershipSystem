@@ -9,7 +9,7 @@ const Page = async () => {
     <div>
       <h1 className="h1-bold text-dark100_light900">Add a Member</h1>
       <div>
-        <Member memberNames={memberNames} />
+        <Member memberNames={memberNames} type="create" />
       </div>
     </div>
   );

@@ -13,11 +13,11 @@ const Navbar = () => {
           src="/assets/images/pcf_logo.png"
           width={40}
           height={40}
-          alt="DevFlow"
+          alt="PCF Logo"
         />
 
         <p className=" h2-bold  font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
-          <span className="text-dark200_light900">PCF Membership System</span>
+          <span className="text-dark200_light900">PCF MEMBERSHIP SYSTEM</span>
         </p>
       </Link>
       {/* <GlobalSearch /> */}

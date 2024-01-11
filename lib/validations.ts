@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { validateDate } from "./utils";
 // import { validateDate } from "./utils";
 
 export const MemberSchema = z.object({
@@ -15,21 +16,21 @@ export const MemberSchema = z.object({
   emergencyContactNumber: z.string(),
   highestEducation: z.string(),
   preferredLanguage: z.string(),
-  // birthday: z.string().trim().refine(validateDate, {
-  //   message:
-  //     "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
-  // }),
-  birthday: z.string(),
+  birthday: z.string().trim().refine(validateDate, {
+    message:
+      "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
+  }),
+  // birthday: z.string(),
   gender: z.string().min(1),
   memberType: z.string().min(1),
-  // waterBaptism: z.string().trim().refine(validateDate, {
-  //   message:
-  //     "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
-  // }),
-  waterBaptism: z.string(),
+  waterBaptism: z.string().trim().refine(validateDate, {
+    message:
+      "Invalid date. Please use the MM/DD/YYYY format and ensure the date is valid.",
+  }),
+  // waterBaptism: z.string(),
   followUpSeries: z.string(),
   lifeGearSeries: z.string(),
-  primaryMinistry: z.union([z.string(), z.undefined()]),
+  primaryMinistry: z.string().min(1),
   status: z.string().min(1),
   spiritualGifts: z.union([z.array(z.string()), z.undefined()]),
   secondaryMinistries: z.union([z.array(z.string()), z.undefined()]),
@@ -39,7 +40,9 @@ export const MemberSchema = z.object({
   disciplerId: z.union([z.string(), z.undefined()]),
 
   // status: z.string(),
-  // memberPhoto: z.string(),
+  memberPhoto: z.string(),
+  missionaryPartner: z.string().min(1),
+  missionExposure: z.union([z.array(z.string()), z.undefined()]),
 });
 //   explanation: z.string().min(20),
 //   tags: z.array(z.string().min(1).max(15)).min(1).max(3),
@@ -47,3 +50,24 @@ export const MemberSchema = z.object({
 // export const AnswerSchema = z.object({
 //   answer: z.string().min(100),
 // });
+
+export const MinistrySchema = z.object({
+  name: z.string(),
+  members: z.array(z.string()),
+  leader: z.string(),
+  description: z.string(),
+  photo: z.string(),
+});
+
+export const EventSchema = z.object({
+  title: z.string(),
+  start: z.string(),
+});
+
+export const AttendeeSchema = z.object({
+  name: z.string().min(1),
+  contactNumber: z.string().min(10),
+  gender: z.string(),
+  address: z.string(),
+  status: z.string().min(1),
+});

@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import qs from "query-string";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,4 +35,108 @@ export const validateDate = (value: string): boolean => {
   }
 
   return true; // Input is valid
+};
+interface UrlQueryParams {
+  params: string;
+  key: string;
+  value: string | null;
+}
+export const formUrlQuery = ({ params, key, value }: UrlQueryParams) => {
+  const currentUrl = qs.parse(params);
+
+  currentUrl[key] = value;
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  );
+};
+
+interface RemoveUrlQueryParams {
+  params: string;
+  keysToRemove: string[];
+}
+export const removeKeysFromQuery = ({
+  params,
+  keysToRemove,
+}: RemoveUrlQueryParams) => {
+  const currentUrl = qs.parse(params);
+
+  keysToRemove.forEach((key) => {
+    delete currentUrl[key];
+  });
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  );
+};
+
+export const calculateAge = (dateString: string): number | null => {
+  const [birthMonth, birthDay, birthYear] = dateString.split("/");
+  const today = new Date();
+
+  const todayMonth = today.getMonth() + 1; // Adding 1 because getMonth() is zero-based
+  const todayDay = today.getDate();
+
+  let age = today.getFullYear() - parseInt(birthYear, 10);
+
+  if (
+    todayMonth < parseInt(birthMonth, 10) ||
+    (todayMonth === parseInt(birthMonth, 10) &&
+      todayDay < parseInt(birthDay, 10))
+  ) {
+    age--;
+  }
+
+  return age < 0 ? null : age;
+};
+
+export const capitalizeText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+export const formatDate = (dateString: any) => {
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
+  const dayOfWeek = daysOfWeek[date.getDay()];
+
+  return `${month} ${day}, ${year} (${dayOfWeek})`;
+};
+export const findEventById = (
+  events: { _id: string; title: string; start: string; end: string }[],
+  id: string
+): { _id: string; title: string; start: string; end: string } | undefined =>
+  events.find((event) => event._id === id);
+
+export const getTimeOfDay = (dateTimeString: string): string => {
+  const date = new Date(dateTimeString);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+
+  return date.toLocaleTimeString(undefined, timeOptions);
 };

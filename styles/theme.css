@@ -194,9 +194,44 @@
   .shadow-light500_darknone {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   }
+  .shadow-light300_darknone {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
+  }
+  .bg-darkgreen {
+    background: #005704;
+  }
+
+  .bg-purple {
+    background: #6c5dd3;
+  }
+  .bg-green {
+    background: #7fba7a;
+  }
+  .bg-yellow {
+    background: #ffce73;
+  }
+  .bg-pink {
+    background: #ffa2c0;
+  }
+  .bg-red {
+    background: #f45252;
+  }
+  .bg-grey {
+    background: #e4e8ef;
+  }
 
   .primary-gradient {
     background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
+  }
+  .secondary-gradient {
+    background: linear-gradient(
+      90deg,
+      rgba(1, 84, 91, 0.33) 0%,
+      rgba(55, 146, 154, 0.17) 91.63%
+    );
+  }
+  .ministry-gradient {
+    color: linear-gradient(180deg, #0b6067 0%, #359097 100%);
   }
 
   .dark-gradient {

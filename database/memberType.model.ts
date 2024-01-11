@@ -10,6 +10,6 @@ const MemberTypeSchema = new Schema({
   members: [{ type: Schema.Types.ObjectId, ref: "Member" }],
 });
 
-const MemberType = models.MemberType || model("MemberType", MemberTypeSchema);
+const MemberType = models?.MemberType || model("MemberType", MemberTypeSchema);
 
 export default MemberType;

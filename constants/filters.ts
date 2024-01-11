@@ -19,6 +19,34 @@ export const QuestionFilters = [
   { name: "Most Answered", value: "most_answered" },
 ];
 
+export const MemberFilters = [
+  { name: "Recently Added", value: "new_members" },
+  { name: "Chronological", value: "old_members" },
+  { name: "Active", value: "active" },
+  { name: "Inactive", value: "inactive" },
+  { name: "No Discipler", value: "no_discipler" },
+  { name: "No Disciples", value: "no_disciples" },
+  { name: "No Ministry", value: "no_ministry" },
+  { name: "Life Gear 101", value: "lifeGear_101" },
+  { name: "Life Gear 201", value: "lifeGear_201" },
+  { name: "Life Gear 301", value: "lifeGear_301" },
+  { name: "Life Gear 401", value: "lifeGear_401" },
+  { name: "Life Gear 501", value: "lifeGear_501" },
+];
+export const AttendeeFilters = [
+  { name: "Recently Added", value: "new_members" },
+  { name: "Chronological", value: "old_members" },
+  { name: "Active", value: "active" },
+  { name: "Inactive", value: "inactive" },
+];
+export const TrainingFilters = [
+  { name: "Life Gear 101", value: "lifeGear_101" },
+  { name: "Life Gear 201", value: "lifeGear_201" },
+  { name: "Life Gear 301", value: "lifeGear_301" },
+  { name: "Life Gear 401", value: "lifeGear_401" },
+  { name: "Life Gear 501", value: "lifeGear_501" },
+];
+
 export const TagFilters = [
   { name: "Popular", value: "popular" },
   { name: "Recent", value: "recent" },

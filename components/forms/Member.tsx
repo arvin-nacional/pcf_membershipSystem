@@ -29,6 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -39,54 +40,133 @@ import * as z from "zod";
 import { Button } from "../ui/button";
 import { useRouter, usePathname } from "next/navigation";
 import { MemberSchema } from "@/lib/validations";
-import { createMember } from "@/lib/actions/member.action";
-import { ministries, spiritualGifts, trainings } from "@/constants";
+import { createMember, editMember } from "@/lib/actions/member.action";
+import {
+  ministries,
+  missionExposures,
+  spiritualGifts,
+  trainings,
+} from "@/constants";
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
-
-const type: any = "create";
+import { toast } from "../ui/use-toast";
 
 // get member names for the disciples and discipler formfield
 interface Props {
   memberNames: MemberNames[];
+  type?: string;
+  memberDetails?: string;
+  memberId?: string;
+}
+interface Ministry {
+  _id: string;
+  name: string;
+  leaders: string[];
+  members: string[];
+}
+interface SpiritualGift {
+  _id: string;
+  name: string;
+  members: string[];
+}
+interface Training {
+  _id: string;
+  name: string;
+  members: string[];
 }
 
-const Member = ({ memberNames }: Props) => {
+const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // convert memberDetails to object
+  const parsedMemberDetails = memberDetails
+    ? JSON.parse(memberDetails || "")
+    : null;
+
+  const [preview, setPreview] = useState({
+    name: "default",
+    url: `${
+      parsedMemberDetails?.memberPhoto
+        ? parsedMemberDetails.memberPhoto
+        : "https://res.cloudinary.com/dey07xuvf/image/upload/v1700148763/default-user-square_fmd1az.svg"
+    }`,
+  });
+
+  // remove the id of the member to the list of members for discipler and disciples options
+  const updatedMemberNames = memberNames.filter(
+    (member) => member._id !== memberId
+  );
+
+  // convert image to string
+  const handleImageChange = (file: File) => {
+    const reader = (readFile: File) =>
+      new Promise<string>((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.onload = () => resolve(fileReader.result as string);
+        fileReader.readAsDataURL(readFile);
+      });
+
+    reader(file).then((result: string) =>
+      setPreview({ name: file?.name, url: result })
+    );
+  };
+
   const router = useRouter();
   const pathname = usePathname();
+
+  // change the array of Ministries OBJ to array of ministry names
+  const secondaryMinistriesArr: string[] =
+    parsedMemberDetails?.secondaryMinistries?.map((obj: Ministry) => obj.name);
+
+  // change the array of Spiritual Gifts OBJ to array of spiritualgift names
+  const spiritualGiftsArr: string[] = parsedMemberDetails?.spiritualGifts?.map(
+    (obj: SpiritualGift) => obj.name
+  );
+  // change the array of trainings OBJ to array of training names
+  const trainingsArr: string[] = parsedMemberDetails?.trainings?.map(
+    (obj: Training) => obj.name
+  );
+  // change the array of member OBJ to array of member names
+  const disciplesArr: string[] = parsedMemberDetails?.disciples?.map(
+    (obj: any) => `${obj.firstName} ${obj.lastName}`
+  );
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof MemberSchema>>({
     resolver: zodResolver(MemberSchema),
     defaultValues: {
-      lastName: "",
-      firstName: "",
+      lastName: parsedMemberDetails?.lastName || "",
+      firstName: parsedMemberDetails?.firstName || "",
       // middleName: "",
       // suffix: "",
-      emailAddress: "",
-      contactNumber: "",
-      homeAddress: "",
-      emergencyContactPerson: "",
-      emergencyContactNumber: "",
-      highestEducation: "",
-      preferredLanguage: "",
-      birthday: "",
-      gender: "",
-      memberType: "",
-      primaryMinistry: "",
-      lifeGearSeries: "",
-      followUpSeries: "",
-      spiritualGifts: undefined,
-      secondaryMinistries: undefined,
-      status: "",
-      trainings: undefined,
-      disciples: undefined,
+      emailAddress: parsedMemberDetails?.emailAddress || "",
+      contactNumber: parsedMemberDetails?.contactNumber || "",
+      homeAddress: parsedMemberDetails?.homeAddress || "",
+      emergencyContactPerson: parsedMemberDetails?.emergencyContactPerson || "",
+      emergencyContactNumber: parsedMemberDetails?.emergencyContactNumber || "",
+      highestEducation: parsedMemberDetails?.highestEducation?.name || "",
+      preferredLanguage: parsedMemberDetails?.preferredLanguage?.name || "",
+      birthday: parsedMemberDetails?.birthday || "",
+      gender: parsedMemberDetails?.gender?.name || "",
+      memberType: parsedMemberDetails?.memberType?.name || "",
+      primaryMinistry: parsedMemberDetails?.primaryMinistry?.name || "",
+      lifeGearSeries: parsedMemberDetails?.lifeGearSeries?.name || "",
+      followUpSeries: parsedMemberDetails?.followUpSeries?.name || "",
+      spiritualGifts: spiritualGiftsArr || undefined,
+      secondaryMinistries: secondaryMinistriesArr || undefined,
+      status: parsedMemberDetails?.status?.name || "Active",
+      trainings: trainingsArr || undefined,
+      disciples: disciplesArr || undefined,
       // disciplerId: "",
-      disciplerId: undefined,
-      // memberPhoto: "",
+      disciplerId: parsedMemberDetails?.discipler?._id || "none",
+      waterBaptism: parsedMemberDetails?.waterBaptism || "",
+      memberPhoto: parsedMemberDetails?.memberPhoto || "",
+      missionaryPartner: parsedMemberDetails?.missionaryPartner || "",
+      missionExposure: parsedMemberDetails?.missionExposure || undefined,
     },
   });
+
+  // const missionaryPartnerValue = form.getValues("missionaryPartner");
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof MemberSchema>) {
@@ -101,45 +181,93 @@ const Member = ({ memberNames }: Props) => {
             .filter((id) => id !== undefined) as string[])
         : undefined;
 
-      // creating
-      await createMember({
-        lastName: values.lastName,
-        firstName: values.firstName,
-        // middleName: values.middleName,
-        // suffix: values.suffix,
-        emailAddress: values.emailAddress,
-        contactNumber: values.contactNumber,
-        homeAddress: values.homeAddress,
-        emergencyContactPerson: values.emergencyContactPerson,
-        emergencyContactNumber: values.emergencyContactNumber,
-        highestEducation: values.highestEducation,
-        preferredLanguage: values.preferredLanguage,
-        birthday: values.birthday,
-        gender: values.gender,
-        memberType: values.memberType,
-        waterBaptism: values.waterBaptism,
-        primaryMinistry: values.primaryMinistry,
-        followUpSeries: values.followUpSeries,
-        lifeGearSeries: values.lifeGearSeries,
-        status: values.status,
-        spiritualGifts: values.spiritualGifts,
-        secondaryMinistries: values.secondaryMinistries,
-        trainings: values.trainings,
-        // disciplerId: values.disciplerId,
-        disciplerId: values.disciplerId,
-        disciples: selectedDisciples,
-        // status: values.status,
-        // memberPhoto: values.memberPhoto,
-        path: pathname,
-      });
+      // Set disciplerId to undefined if "none" is selected
+      const disciplerId =
+        values.disciplerId === "none" ? undefined : values.disciplerId;
 
-      router.push("/");
+      if (type === "edit") {
+        await editMember({
+          lastName: values.lastName,
+          firstName: values.firstName,
+          // middleName: values.middleName,
+          // suffix: values.suffix,
+          emailAddress: values.emailAddress,
+          contactNumber: values.contactNumber,
+          homeAddress: values.homeAddress,
+          emergencyContactPerson: values.emergencyContactPerson,
+          emergencyContactNumber: values.emergencyContactNumber,
+          highestEducation: values.highestEducation,
+          preferredLanguage: values.preferredLanguage,
+          birthday: values.birthday,
+          gender: values.gender,
+          memberType: values.memberType,
+          waterBaptism: values.waterBaptism,
+          primaryMinistry: values.primaryMinistry,
+          followUpSeries: values.followUpSeries,
+          lifeGearSeries: values.lifeGearSeries,
+          status: values.status,
+          spiritualGifts: values.spiritualGifts,
+          secondaryMinistries: values.secondaryMinistries,
+          trainings: values.trainings,
+          disciplerId,
+          disciples: selectedDisciples,
+          path: pathname,
+          memberId,
+          memberPhoto: preview.url,
+          missionaryPartner: values.missionaryPartner,
+          missionExposure: values.missionExposure,
+        });
+      } else {
+        // creating
+        await createMember({
+          lastName: values.lastName,
+          firstName: values.firstName,
+          // middleName: values.middleName,
+          // suffix: values.suffix,
+          emailAddress: values.emailAddress,
+          contactNumber: values.contactNumber,
+          homeAddress: values.homeAddress,
+          emergencyContactPerson: values.emergencyContactPerson,
+          emergencyContactNumber: values.emergencyContactNumber,
+          highestEducation: values.highestEducation,
+          preferredLanguage: values.preferredLanguage,
+          birthday: values.birthday,
+          gender: values.gender,
+          memberType: values.memberType,
+          waterBaptism: values.waterBaptism,
+          primaryMinistry: values.primaryMinistry,
+          followUpSeries: values.followUpSeries,
+          lifeGearSeries: values.lifeGearSeries,
+          status: values.status,
+          spiritualGifts: values.spiritualGifts,
+          secondaryMinistries: values.secondaryMinistries,
+          trainings: values.trainings,
+          // disciplerId: values.disciplerId,
+          disciplerId,
+          disciples: selectedDisciples,
+          // status: values.status,
+          memberPhoto: preview.url,
+          path: pathname,
+          missionaryPartner: values.missionaryPartner,
+          missionExposure: values.missionExposure,
+        });
+      }
+
+      if (type === "edit") {
+        router.push(`/members/${memberId}`);
+      } else {
+        router.push(`/members?filter=new_members`);
+      }
     } catch (error) {
       console.log(error);
-      throw new Error();
+      throw error;
     } finally {
       setIsSubmitting(false);
     }
+    return toast({
+      title: `Successfully ${type === "edit" ? "Edited" : "Added"}`,
+      variant: "default",
+    });
   }
 
   return (
@@ -148,27 +276,6 @@ const Member = ({ memberNames }: Props) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-10 flex w-full flex-col gap-10"
       >
-        <FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Last Name <span className="text-primary-500">*</span>
-              </FormLabel>
-              <FormControl className="mt-3.5">
-                <Input
-                  {...field}
-                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
-                />
-              </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Enter your family name
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="firstName"
@@ -185,6 +292,27 @@ const Member = ({ memberNames }: Props) => {
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Enter your first name
+              </FormDescription>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Last Name <span className="text-primary-500">*</span>
+              </FormLabel>
+              <FormControl className="mt-3.5">
+                <Input
+                  {...field}
+                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                />
+              </FormControl>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Enter your family name
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -360,8 +488,7 @@ const Member = ({ memberNames }: Props) => {
             </FormItem>
           )}
         /> */}
-
-        <FormField
+        {/* <FormField
           control={form.control}
           name="emailAddress"
           render={({ field }) => (
@@ -381,8 +508,7 @@ const Member = ({ memberNames }: Props) => {
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
-        />
-
+        /> */}
         <FormField
           control={form.control}
           name="highestEducation"
@@ -420,6 +546,9 @@ const Member = ({ memberNames }: Props) => {
                   </SelectItem>
                   <SelectItem value="Elementary Undergraduate">
                     Elementary Undergraduate
+                  </SelectItem>
+                  <SelectItem value="Elementary Student">
+                    Elementary Student
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -500,6 +629,7 @@ const Member = ({ memberNames }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Member">Attendee</SelectItem>
                   <SelectItem value="Member">Member</SelectItem>
                   <SelectItem value="Church Staff">Church Staff</SelectItem>
                   <SelectItem value="Leader">Leader</SelectItem>
@@ -626,16 +756,19 @@ const Member = ({ memberNames }: Props) => {
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="cursor-pointer bg-light-900">
+                <SelectContent className="max-h-44 cursor-pointer overflow-y-auto bg-light-900">
+                  <SelectItem value="None" key="None">
+                    None
+                  </SelectItem>
                   {ministries.map((ministry) => (
                     <SelectItem value={ministry.value} key={ministry.value}>
-                      {ministry.label}
+                      {ministry.value}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your primary ministry
+                Select your primary ministry.
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -656,8 +789,9 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your secondary ministry
+                Select your secondary ministry. Leave blank if none.
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -676,8 +810,9 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your spiritual gifts
+                Select your spiritual gifts. Leave blank if unknown.
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -696,12 +831,12 @@ const Member = ({ memberNames }: Props) => {
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select trainings attended
+                Select trainings attended. Leave blank if none
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="disciplerId"
@@ -721,12 +856,12 @@ const Member = ({ memberNames }: Props) => {
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                      {field.value ? (
-                        memberNames?.find(
+                      {field.value !== undefined && field.value !== "none" ? (
+                        memberNames.find(
                           (memberName) => memberName._id === field.value
                         )?.value
                       ) : (
-                        <span> </span>
+                        <span>No Discipler</span>
                       )}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -736,20 +871,36 @@ const Member = ({ memberNames }: Props) => {
                   <Command>
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
-                    <CommandGroup>
-                      {memberNames?.map((member) => (
+                    <CommandGroup className="max-h-40 overflow-y-auto">
+                      <CommandItem
+                        value="none" // Use a value that represents "No Discipler"
+                        onSelect={() => {
+                          form.setValue("disciplerId", "none"); // Set the value to "none" when selected
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            field.value === undefined
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                        No Discipler
+                      </CommandItem>
+                      {updatedMemberNames.map((member) => (
                         <CommandItem
-                          value={member._id}
+                          value={member.name}
                           key={member._id}
                           onSelect={() => {
                             form.setValue("disciplerId", member._id);
-                            console.log(member._id);
+                            // console.log(member._id);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              member.value === field.value
+                              member._id === field.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
@@ -764,11 +915,10 @@ const Member = ({ memberNames }: Props) => {
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Select the name of your discipler or leader
               </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="disciples"
@@ -779,24 +929,25 @@ const Member = ({ memberNames }: Props) => {
               </FormLabel>
               <DiscipleSelect
                 selected={field.value}
-                members={memberNames}
+                members={updatedMemberNames}
                 {...field}
                 className="background-light900_dark300"
               />
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select members in your discipleship group
+                Select members in your discipleship group. Leave blank if none
               </FormDescription>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
-          name="status"
+          name="missionaryPartner"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col ">
               <FormLabel className="paragraph-semibold text-dark400_light800">
-                Status <span className="text-primary-500">*</span>
+                Are you a missionary partner?{" "}
+                <span className="text-primary-500">*</span>
               </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
@@ -805,15 +956,108 @@ const Member = ({ memberNames }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
+                  <SelectItem value="missionaryPartner">Yes</SelectItem>
+                  <SelectItem value="nonMisisonaryPartner">No</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select member status
+                Select an option.
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
+          )}
+        />
+
+        {/* conditionally render the mission exposures */}
+        <span className="hidden">{form.watch("missionaryPartner")}</span>
+        {form.getValues("missionaryPartner") === "missionaryPartner" && (
+          <FormField
+            control={form.control}
+            name="missionExposure"
+            render={({ field: { ...field } }) => (
+              <FormItem>
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Mission Exposure <span className="text-primary-500">*</span>
+                </FormLabel>
+                <MultiSelect
+                  selected={field.value}
+                  options={missionExposures}
+                  {...field}
+                  className="background-light900_dark300"
+                />
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Select the kind of missions attended. Leave blank if none
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {/* )} */}
+        {type === "edit" && (
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col ">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Status <span className="text-primary-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="cursor-pointer bg-light-900">
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="Inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Select member status
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
+        {/* photo preview */}
+        <Avatar className="h-24 w-24">
+          <AvatarImage
+            src={preview.url}
+            className="object-cover object-left-top"
+          />
+          <AvatarFallback>Your Photo</AvatarFallback>
+        </Avatar>
+        <FormField
+          control={form.control}
+          name="memberPhoto"
+          render={({ field: { onChange, value, ...rest } }) => (
+            <>
+              <FormItem>
+                <FormLabel>Member Photo</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    {...rest}
+                    onChange={(e) => {
+                      // @ts-ignore
+                      handleImageChange(e.target.files[0]);
+                    }}
+                    className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border align-baseline"
+                  />
+                </FormControl>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Choose your image. We prefer square photo.
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            </>
           )}
         />
         <Button
@@ -822,9 +1066,9 @@ const Member = ({ memberNames }: Props) => {
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <>{type === "edit" ? "Editing..." : "Adding"}</>
+            <>{type === "edit" ? "Saving..." : "Adding"}</>
           ) : (
-            <>{type === "edit" ? "Edit Question" : "Add a Member"}</>
+            <>{type === "edit" ? "Save" : "Add a Member"}</>
           )}
         </Button>
       </form>

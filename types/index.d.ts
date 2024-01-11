@@ -1,5 +1,12 @@
 import { BADGE_CRITERIA } from "@/constants";
 
+export interface PieChartProps {
+  title: string;
+  value: number;
+  series: Array<number>;
+  colors: Array<string>;
+}
+
 export interface SidebarLink {
   imgURL: string;
   route: string;
@@ -15,6 +22,10 @@ export interface MemberNames {
 export interface Ministries {
   value: string;
   label: string;
+  ministryHead: string;
+  members: number;
+  ministryPhoto: string;
+  description: string;
 }
 export interface Trainings {
   value: string;
@@ -25,6 +36,13 @@ export interface SpiritualGifts {
   value: string;
   label: string;
 }
+
+export interface MissionExposures {
+  value: string;
+  label: string;
+}
+
+export interface Disciples {}
 
 export interface Job {
   id?: string;
