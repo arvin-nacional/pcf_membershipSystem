@@ -57,7 +57,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           ))
         ) : (
           <div>
-            <p>No members</p>
+            <p>No attendee</p>
           </div>
         )}
       </div>
