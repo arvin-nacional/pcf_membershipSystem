@@ -1,6 +1,15 @@
 import { IMember } from "@/database/member.model";
 import { Document, Model, Schema } from "mongoose";
 
+export interface createAttendeeParams {
+  fullName: string;
+  gender: string;
+  address: string;
+  status: string;
+  contactNumber: string;
+  path: string;
+}
+
 export interface CreateMemberParams {
   lastName: string;
   firstName: string;
@@ -75,6 +84,16 @@ export interface EditMemberParams {
   missionExposure: string[] | undefined;
 }
 
+export interface EditAttendeeParams {
+  fullName: string;
+  gender: string;
+  address: string;
+  status: string;
+  contactNumber: string;
+  attendeeId: string | undefined;
+  path: string;
+}
+
 export interface EditSecondaryMinistriesParams {
   _id: Schema.Types.ObjectId;
   name: string;
@@ -95,7 +114,12 @@ export interface GetAllMembersParams {
   pageSize?: number;
   filter?: string;
   searchQuery?: string;
-  training?: string;
+}
+export interface GetAllAttendeesParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
 }
 export interface GetAllMinistryParams {
   page?: number;
@@ -120,12 +144,19 @@ export interface GetAllMemberNamesParams {
 export interface GetMemberByIdParams {
   memberId: string;
 }
+export interface GetAttendeeByIdParams {
+  attendeeId: string;
+}
 export interface GetMinistryByIdParams {
   ministryId: string;
 }
 
 export interface DeleteMemberParams {
   memberId: string;
+  path: string;
+}
+export interface DeleteAttendeeParams {
+  attendeeId: string;
   path: string;
 }
 export interface DeleteEventParams {

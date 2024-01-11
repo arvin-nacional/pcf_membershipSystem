@@ -17,7 +17,7 @@ const Navbar = () => {
         />
 
         <p className=" h2-bold  font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
-          <span className="text-dark200_light900">PCF Membership System</span>
+          <span className="text-dark200_light900">PCF MEMBERSHIP SYSTEM</span>
         </p>
       </Link>
       {/* <GlobalSearch /> */}

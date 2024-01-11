@@ -63,3 +63,11 @@ export const EventSchema = z.object({
   title: z.string(),
   start: z.string(),
 });
+
+export const AttendeeSchema = z.object({
+  name: z.string().min(1),
+  contactNumber: z.string().min(10),
+  gender: z.string(),
+  address: z.string(),
+  status: z.string().min(1),
+});

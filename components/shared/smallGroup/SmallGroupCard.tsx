@@ -65,7 +65,7 @@ const SmallGroupCard = ({
                   width={20}
                   height={20}
                   alt="memberPhoto"
-                  className="rounded-full"
+                  className="max-h-[20px] rounded-full object-cover object-left-top"
                 />
               ))}
             </div>
