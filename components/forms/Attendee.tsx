@@ -47,11 +47,11 @@ const AttendeeForm = ({ type, attendeeDetails, attendeeId }: Props) => {
   const form = useForm<z.infer<typeof AttendeeSchema>>({
     resolver: zodResolver(AttendeeSchema),
     defaultValues: {
-      name: parsedAttendeeDetails.fullName || "",
-      status: parsedAttendeeDetails.status || "active",
-      gender: parsedAttendeeDetails.gender || "",
-      contactNumber: parsedAttendeeDetails.contactNumber || "",
-      address: parsedAttendeeDetails.address || "",
+      name: parsedAttendeeDetails?.fullName || "",
+      status: parsedAttendeeDetails?.status || "active",
+      gender: parsedAttendeeDetails?.gender || "",
+      contactNumber: parsedAttendeeDetails?.contactNumber || "",
+      address: parsedAttendeeDetails?.address || "",
     },
   });
 
