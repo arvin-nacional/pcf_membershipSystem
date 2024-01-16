@@ -23,7 +23,7 @@ import {
 
 import { Button } from "../ui/button";
 // import { editMinistry } from "@/lib/actions/ministry.action";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 // import { createAttendee, editAttendee } from "@/lib/actions/attendee.action";
 import { cn } from "@/lib/utils";
 import {
@@ -50,7 +50,7 @@ const FollowUpForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   console.log(attendeeDetails);
   const parsedAttendeeDetails = attendeeDetails

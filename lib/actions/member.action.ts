@@ -303,7 +303,7 @@ export async function createMember(params: CreateMemberParams) {
       memberType: existingMemberType._id,
       preferredLanguage: existingLanguage._id,
       followUpSeries: existingFollowUpSeries._id,
-      primaryMinistry: existingMinistry._id,
+      primaryMinistry: existingMinistry?._id,
       lifeGearSeries: existingLifeGearSeries._id,
       status: existingStatus._id,
       $push: {
@@ -865,6 +865,8 @@ export async function editMember(params: EditMemberParams) {
         await Member.findByIdAndUpdate(memberId, {
           $unset: { primaryMinistry: 1 },
         });
+      } else {
+        return;
       }
     } else {
       // If primaryMinistry !== "None", proceed with the original logic
