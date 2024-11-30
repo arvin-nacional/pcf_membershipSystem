@@ -9,7 +9,7 @@ const Page = async () => {
     <div>
       <h1 className="h1-bold text-dark100_light900">Add a Follow Up</h1>
       <div>
-        <FollowUpForm memberNames={memberNames} type="create" />
+        <FollowUpForm memberNames={memberNames} formType="create" />
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           name="Arvin Paul Nacional" // Use attendee properties here
           contactNumber="09123456789"
           status="done"
-          address="26 Lunas Street Quezon City"
+          address="26 Lunas Street Quezon City asdf asdfa asdfasdfasdf"
           responsible="Haydee Guevara"
           type="message"
           remarks="resolved"

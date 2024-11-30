@@ -10,6 +10,15 @@ export interface createAttendeeParams {
   path: string;
 }
 
+export interface createFollowUpParams {
+  distinction: string;
+  id: string;
+  responsible: string;
+  status: string;
+  remarks: string;
+  type: string;
+}
+
 export interface CreateMemberParams {
   lastName: string;
   firstName: string;

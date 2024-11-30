@@ -79,8 +79,7 @@ export const FollowUpSchema = z.object({
   distinction: z.string().min(1),
   name: z.string().min(1),
   responsible: z.string().min(1),
-  type: z.string(),
+  type: z.string().min(1),
   status: z.string().min(1),
-  remarks: z.string().min(1),
-  action: z.string().min(1),
+  remarks: z.string(),
 });

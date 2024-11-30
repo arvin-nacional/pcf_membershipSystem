@@ -41,7 +41,7 @@ const FollowUpList = ({
               Name
             </div>
             <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
-              Arvin Paul Nacional
+              {name}
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@ const FollowUpList = ({
             Phone
           </div>
           <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
-            09123456789
+            {contactNumber}
           </div>
         </div>
         <div className="flex w-[200px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
@@ -58,7 +58,7 @@ const FollowUpList = ({
             Address
           </div>
           <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
-            26 Lunas Street Quezon City
+            {address}
           </div>
         </div>
         <div className="flex  w-28 flex-col items-start justify-center gap-[5px] max-sm:hidden">
@@ -66,7 +66,7 @@ const FollowUpList = ({
             Responsible
           </div>
           <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
-            haydee Guevara
+            {responsible}
           </div>
         </div>
         <div className="flex  w-28 flex-col items-start justify-center gap-[5px] max-sm:hidden">
@@ -74,7 +74,7 @@ const FollowUpList = ({
             Type
           </div>
           <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
-            Message
+            {type}
           </div>
         </div>
         <div className="flex w-[74px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
@@ -88,7 +88,7 @@ const FollowUpList = ({
               <div className="bg-red relative h-[7px] w-[7px] rounded-[50%]" />
             )} */}
             <div className="bg-darkgreen relative h-[7px] w-[7px] rounded-[50%]" />
-            <div className="relative font-medium leading-[16px]">done</div>
+            <div className="relative font-medium leading-[16px]">{status}</div>
           </div>
         </div>
         <div className="flex w-[74px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
@@ -107,7 +107,7 @@ const FollowUpList = ({
               width={15}
               height={15}
             />
-            <div className="relative font-medium leading-[16px]">resolved</div>
+            <div className="relative font-medium leading-[16px]">{remarks}</div>
           </div>
         </div>
       </div>

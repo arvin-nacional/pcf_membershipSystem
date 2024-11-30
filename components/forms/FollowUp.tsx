@@ -27,35 +27,29 @@ import { useRouter } from "next/navigation";
 // import { createAttendee, editAttendee } from "@/lib/actions/attendee.action";
 import { cn } from "@/lib/utils";
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
-} from "@radix-ui/react-popover";
-import { CommandInput, CommandEmpty, CommandGroup, CommandItem } from "cmdk";
-import { ChevronsUpDown, Command, Check } from "lucide-react";
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronsUpDown, Check } from "lucide-react";
 import { MemberNames } from "@/types";
+import { createFollowUp } from "@/lib/actions/followup.action";
 
 interface Props {
-  type?: string;
-  attendeeDetails?: string;
-  attendeeId?: string;
+  formType?: string;
   memberNames: MemberNames[];
 }
-const FollowUpForm = ({
-  type,
-  attendeeDetails,
-  attendeeId,
-  memberNames,
-}: Props) => {
+const FollowUpForm = ({ formType, memberNames }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
-  // const pathname = usePathname();
-
-  console.log(attendeeDetails);
-  const parsedAttendeeDetails = attendeeDetails
-    ? JSON.parse(attendeeDetails || "")
-    : null;
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof FollowUpSchema>>({
@@ -65,9 +59,8 @@ const FollowUpForm = ({
       name: "none",
       responsible: "none",
       type: "",
-      status: "",
-      remarks: "",
-      action: "",
+      status: "pending",
+      remarks: "pending",
     },
   });
 
@@ -75,28 +68,28 @@ const FollowUpForm = ({
   async function onSubmit(values: z.infer<typeof FollowUpSchema>) {
     setIsSubmitting(true);
     try {
-      //   if (type === "edit") {
-      //     await editAttendee({
-      //       fullName: values.name,
-      //       gender: values.gender,
-      //       contactNumber: values.contactNumber,
-      //       address: values.address,
-      //       status: values.status,
-      //       path: pathname,
-      //       attendeeId,
-      //     });
-      //   } else {
-      //   await createAttendee({
-      //     fullName: values.name,
-      //     gender: values.gender,
-      //     contactNumber: values.contactNumber,
-      //     address: values.address,
-      //     status: values.status,
-      //     path: pathname,
-      //   });
-      //   }
+      if (formType === "edit") {
+        // await editAttendee({
+        //   fullName: values.name,
+        //   gender: values.gender,
+        //   contactNumber: values.contactNumber,
+        //   address: values.address,
+        //   status: values.status,
+        //   path: pathname,
+        //   attendeeId,
+        // });
+      } else {
+        await createFollowUp({
+          distinction: values.distinction,
+          id: values.name,
+          responsible: values.responsible,
+          type: values.type,
+          status: values.status,
+          remarks: values.remarks,
+        });
+      }
 
-      router.push("/attendees");
+      router.push("/follow-ups");
     } catch (error) {
       console.log(error);
       throw error;
@@ -104,8 +97,8 @@ const FollowUpForm = ({
       setIsSubmitting(false);
     }
   }
+  console.log(memberNames);
 
-  console.log(parsedAttendeeDetails);
   return (
     <Form {...form}>
       <form
@@ -127,8 +120,8 @@ const FollowUpForm = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="Active">Attendee</SelectItem>
-                  <SelectItem value="Inactive">Member</SelectItem>
+                  <SelectItem value="attendee">Attendee</SelectItem>
+                  <SelectItem value="member">Member</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -162,18 +155,18 @@ const FollowUpForm = ({
                           (memberName) => memberName._id === field.value
                         )?.value
                       ) : (
-                        <span>No Discipler</span>
+                        <span>Select Name</span>
                       )}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="background-light900_dark300 text-dark400_light800 w-full p-0">
+                <PopoverContent className="background-light900_dark300 text-dark400_light800 w-[450px] p-0">
                   <Command>
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
                     <CommandGroup className="max-h-40 overflow-y-auto">
-                      <CommandItem
+                      {/* <CommandItem
                         value="none" // Use a value that represents "No Discipler"
                         onSelect={() => {
                           form.setValue("name", "none"); // Set the value to "none" when selected
@@ -187,8 +180,8 @@ const FollowUpForm = ({
                               : "opacity-0"
                           )}
                         />
-                        No Discipler
-                      </CommandItem>
+                        Select Name
+                      </CommandItem> */}
                       {memberNames.map((member) => (
                         <CommandItem
                           value={member.name}
@@ -226,7 +219,7 @@ const FollowUpForm = ({
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
-                Name to be followed-up
+                Responsible
               </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -241,7 +234,7 @@ const FollowUpForm = ({
                     >
                       {field.value !== undefined && field.value !== "none" ? (
                         memberNames.find(
-                          (memberName) => memberName._id === field.value
+                          (memberName) => memberName.name === field.value
                         )?.value
                       ) : (
                         <span>No Discipler</span>
@@ -250,7 +243,7 @@ const FollowUpForm = ({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="background-light900_dark300 text-dark400_light800 w-full p-0">
+                <PopoverContent className="background-light900_dark300 text-dark400_light800 w-[450px] p-0">
                   <Command>
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
@@ -276,14 +269,14 @@ const FollowUpForm = ({
                           value={member.name}
                           key={member._id}
                           onSelect={() => {
-                            form.setValue("name", member._id);
+                            form.setValue("responsible", member.name);
                             // console.log(member._id);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              member._id === field.value
+                              member.name === field.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
@@ -305,11 +298,11 @@ const FollowUpForm = ({
 
         <FormField
           control={form.control}
-          name="action"
+          name="type"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col ">
               <FormLabel className="paragraph-semibold text-dark400_light800">
-                Action <span className="text-primary-500">*</span>
+                Type <span className="text-primary-500">*</span>
               </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
@@ -318,22 +311,23 @@ const FollowUpForm = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="cursor-pointer bg-light-900">
-                  <SelectItem value="male">Message</SelectItem>
-                  <SelectItem value="female">Visitation</SelectItem>
+                  <SelectItem value="Message">Message</SelectItem>
+                  <SelectItem value="Meet up">Meet up</SelectItem>
+                  <SelectItem value="Visitation">Visitation</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select action
+                Select follow-up type
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-        {type === "edit" && (
+        {formType === "edit" && (
           <>
             <FormField
               control={form.control}
-              name="type"
+              name="status"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col ">
                   <FormLabel className="paragraph-semibold text-dark400_light800">
@@ -350,7 +344,7 @@ const FollowUpForm = ({
                     </FormControl>
                     <SelectContent className="cursor-pointer bg-light-900">
                       <SelectItem value="pending">pending</SelectItem>
-                      <SelectItem value="ongoing">on going</SelectItem>
+                      <SelectItem value="on going">in progress</SelectItem>
                       <SelectItem value="done">done</SelectItem>
                     </SelectContent>
                   </Select>
@@ -363,7 +357,7 @@ const FollowUpForm = ({
             />
             <FormField
               control={form.control}
-              name="type"
+              name="remarks"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col ">
                   <FormLabel className="paragraph-semibold text-dark400_light800">
@@ -401,9 +395,9 @@ const FollowUpForm = ({
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <>{type === "edit" ? "Saving..." : "Adding"}</>
+            <>{formType === "edit" ? "Saving..." : "Adding"}</>
           ) : (
-            <>{type === "edit" ? "Save" : "Add an Attendee"}</>
+            <>{formType === "edit" ? "Save" : "Add an Attendee"}</>
           )}
         </Button>
       </form>
