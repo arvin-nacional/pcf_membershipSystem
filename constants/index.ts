@@ -12,12 +12,14 @@ export const summaryInfo = [
     value: 684,
     series: [684, 1000],
     colors: ["#BECCDA", "#2ED480"],
+    href: "/members",
   },
   {
     title: "Active Members",
     value: 683,
     series: [10, 25],
     colors: ["#BECCDA", "#FD8539"],
+    href: "/members?filter=active",
   },
 
   {
@@ -25,12 +27,14 @@ export const summaryInfo = [
     value: 10,
     series: [25, 25],
     colors: ["#BECCDA", "#FE6D8E"],
+    href: "/members?filter=inactive",
   },
   {
     title: "Ministries",
     value: 12,
     series: [13, 25],
     colors: ["#BECCDA", "#01545B"],
+    href: "/ministries",
   },
 ];
 
@@ -264,6 +268,7 @@ export const trainings: Trainings[] = [
   { value: "Life On Mission", label: "Life On Mission" },
   { value: "Evangelism", label: "Evangelism" },
   { value: "Multimedia Class", label: "Multimedia Class" },
+  { value: "Others", label: "Others" },
 ];
 export const missionExposures: MissionExposures[] = [
   { value: "Community", label: "Community" },

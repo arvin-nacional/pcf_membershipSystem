@@ -72,6 +72,11 @@ export async function createMember(params: CreateMemberParams) {
       path,
       missionaryPartner,
       missionExposure,
+      remarks,
+      maritalStatus,
+      spouseName,
+      gotChildren,
+      childrenNames,
     } = params;
 
     // Upload the member photo to Cloudinary
@@ -93,6 +98,11 @@ export async function createMember(params: CreateMemberParams) {
       waterBaptism,
       memberPhoto: photoUploadResult.url, // Use the Cloudinary URL
       missionaryPartner,
+      remarks,
+      maritalStatus,
+      spouseName,
+      gotChildren,
+      childrenNames,
     });
 
     // create education or get them if they already exist
@@ -643,6 +653,11 @@ export async function editMember(params: EditMemberParams) {
       memberId,
       missionaryPartner,
       missionExposure,
+      remarks,
+      maritalStatus,
+      spouseName,
+      gotChildren,
+      childrenNames,
     } = params;
 
     const member = await Member.findById(memberId)
@@ -723,6 +738,11 @@ export async function editMember(params: EditMemberParams) {
     member.emergencyContactNumber = emergencyContactNumber;
     member.emergencyContactPerson = capitalizeText(emergencyContactPerson);
     member.waterBaptism = waterBaptism;
+    member.remarks = remarks;
+    member.maritalStatus = maritalStatus;
+    member.spouseName = spouseName;
+    member.gotChildren = gotChildren;
+    member.childrenNames = childrenNames;
     console.log(member);
 
     // check if memberPHoto is being updated

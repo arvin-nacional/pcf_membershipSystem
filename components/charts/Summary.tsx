@@ -6,6 +6,7 @@ import {
   GetInActiveMemberCount,
   GetMemberCount,
 } from "@/lib/actions/dashboard.action";
+import Link from "next/link";
 
 const Summary = async () => {
   for (const item of summaryInfo) {
@@ -23,13 +24,14 @@ const Summary = async () => {
   return (
     <div className="flex w-full flex-row flex-wrap gap-4">
       {summaryInfo.map((item) => (
-        <SummaryItem
-          key={item.title}
-          title={item.title}
-          value={item.value}
-          series={item.series}
-          colors={item.colors}
-        />
+        <Link href={item.href} key={item.title}>
+          <SummaryItem
+            title={item.title}
+            value={item.value}
+            series={item.series}
+            colors={item.colors}
+          />
+        </Link>
       ))}
     </div>
   );

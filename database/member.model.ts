@@ -31,6 +31,11 @@ export interface IMember extends Document {
   createdAt: Date;
   missionaryPartner: string;
   missionExposure: string[];
+  remarks: string;
+  maritalStatus: string;
+  spouseName: string;
+  gotChildren: string;
+  childrenNames: string;
 }
 
 const MemberSchema = new Schema({
@@ -48,6 +53,8 @@ const MemberSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Education",
   },
+  maritalStatus: String,
+  spouseName: String,
   preferredLanguage: { type: Schema.Types.ObjectId, ref: "PreferredLanguage" },
   birthday: { type: String, required: true },
   gender: { type: Schema.Types.ObjectId, ref: "Gender" },
@@ -88,6 +95,9 @@ const MemberSchema = new Schema({
   missionExposure: [{ type: String }],
   createdAt: { type: Date, default: Date.now },
   memberPhoto: String,
+  remarks: String,
+  gotChildren: String,
+  childrenNames: String,
 });
 
 const Member = models?.Member || model("Member", MemberSchema);

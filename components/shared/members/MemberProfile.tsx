@@ -122,7 +122,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
           </div>
           <div className="flex min-w-[250px] flex-col gap-1">
             <p className="small-regular text-light400_light500">
-              Highest Educational Attainment
+              Educational Attainment
             </p>
             <p className="body-medium text-dark400_light700">
               {parsedMemberDetails.highestEducation.name}
@@ -152,6 +152,34 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               {parsedMemberDetails.gender.name}
             </p>
           </div>
+          <div className="flex min-w-[250px] flex-col gap-1">
+            <p className="small-regular text-light400_light500">
+              Marital Status
+            </p>
+            {parsedMemberDetails.maritalStatus ? (
+              <p className="body-medium text-dark400_light700">
+                {parsedMemberDetails.maritalStatus}
+              </p>
+            ) : (
+              <p className="body-medium text-dark400_light700">Not Provided</p>
+            )}
+          </div>
+          {parsedMemberDetails.spouseName && (
+            <div className="flex min-w-[250px] flex-col gap-1">
+              <p className="small-regular text-light400_light500">Spouse</p>
+              <p className="body-medium text-dark400_light700">
+                {parsedMemberDetails.spouseName}
+              </p>
+            </div>
+          )}
+          {parsedMemberDetails.childrenNames && (
+            <div className="flex min-w-[250px] flex-col gap-1">
+              <p className="small-regular text-light400_light500">Children</p>
+              <p className="body-medium text-dark400_light700">
+                {parsedMemberDetails.childrenNames}
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div className="background-light900_dark200 flex w-full flex-col justify-between rounded-2xl p-5 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]">
@@ -365,6 +393,14 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
             </p>
             <p className="body-medium text-dark400_light700">First Name</p>
           </div> */}
+        </div>
+      </div>
+      <div className="background-light900_dark200 flex w-full flex-col justify-between rounded-2xl p-5 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]">
+        <h2 className="base-bold text-dark400_light700 mb-3">Remarks</h2>
+        <div className="flex-start flex w-full flex-wrap gap-5">
+          <p className="body-medium text-dark400_light700">
+            {parsedMemberDetails.remarks}
+          </p>
         </div>
       </div>
     </div>

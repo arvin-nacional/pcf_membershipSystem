@@ -11,6 +11,7 @@ export default function SignInForm() {
   const [emailAddress, setEmailAddress] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null); // Add this line
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,7 +38,8 @@ export default function SignInForm() {
         console.log(result);
       }
     } catch (err: any) {
-      console.error("error", err.errors[0].longMessage);
+      console.error(error, err.errors[0].longMessage);
+      setError(err.errors[0].longMessage); // Set the error message
     } finally {
       setIsSubmitting(false);
     }

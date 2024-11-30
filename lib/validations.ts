@@ -15,6 +15,10 @@ export const MemberSchema = z.object({
   // emergencyContactNumber: z.string().min(11),
   emergencyContactNumber: z.string(),
   highestEducation: z.string(),
+  maritalStatus: z.string().min(1),
+  gotChildren: z.string(),
+  childrenNames: z.string(),
+  spouseName: z.string(),
   preferredLanguage: z.string(),
   birthday: z.string().trim().refine(validateDate, {
     message:
@@ -39,7 +43,7 @@ export const MemberSchema = z.object({
   // disciplerId: z.string(),
   disciplerId: z.union([z.string(), z.undefined()]),
 
-  // status: z.string(),
+  remarks: z.string(),
   memberPhoto: z.string(),
   missionaryPartner: z.string().min(1),
   missionExposure: z.union([z.array(z.string()), z.undefined()]),

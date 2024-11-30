@@ -142,3 +142,24 @@ export async function editAttendee(params: EditAttendeeParams) {
     console.log(error);
   }
 }
+export async function getNumberOfActiveAttendees() {
+  try {
+    connectToDatabase();
+    const activeAttendeesCount = await Attendee.countDocuments({
+      status: "active",
+    });
+    return activeAttendeesCount;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getTotalNumberOfAttendees() {
+  try {
+    connectToDatabase();
+    const totalAttendeesCount = await Attendee.countDocuments({});
+    return totalAttendeesCount;
+  } catch (error) {
+    console.log(error);
+  }
+}

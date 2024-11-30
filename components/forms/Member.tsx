@@ -50,6 +50,7 @@ import {
 import { MemberNames } from "@/types";
 import { DiscipleSelect } from "../ui/disciple-select";
 import { toast } from "../ui/use-toast";
+import { Textarea } from "../ui/textarea";
 
 // get member names for the disciples and discipler formfield
 interface Props {
@@ -145,6 +146,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
       emergencyContactPerson: parsedMemberDetails?.emergencyContactPerson || "",
       emergencyContactNumber: parsedMemberDetails?.emergencyContactNumber || "",
       highestEducation: parsedMemberDetails?.highestEducation?.name || "",
+      maritalStatus: parsedMemberDetails?.maritalStatus || "",
       preferredLanguage: parsedMemberDetails?.preferredLanguage?.name || "",
       birthday: parsedMemberDetails?.birthday || "",
       gender: parsedMemberDetails?.gender?.name || "",
@@ -163,6 +165,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
       memberPhoto: parsedMemberDetails?.memberPhoto || "",
       missionaryPartner: parsedMemberDetails?.missionaryPartner || "",
       missionExposure: parsedMemberDetails?.missionExposure || undefined,
+      remarks: parsedMemberDetails?.remarks || "",
+      spouseName: parsedMemberDetails?.spouseName || "",
+      gotChildren: parsedMemberDetails?.gotChildren || "",
+      childrenNames: parsedMemberDetails?.childrenNames || "",
     },
   });
 
@@ -197,6 +203,10 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           emergencyContactPerson: values.emergencyContactPerson,
           emergencyContactNumber: values.emergencyContactNumber,
           highestEducation: values.highestEducation,
+          maritalStatus: values.maritalStatus,
+          spouseName: values.spouseName,
+          gotChildren: values.gotChildren,
+          childrenNames: values.childrenNames,
           preferredLanguage: values.preferredLanguage,
           birthday: values.birthday,
           gender: values.gender,
@@ -216,6 +226,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           memberPhoto: preview.url,
           missionaryPartner: values.missionaryPartner,
           missionExposure: values.missionExposure,
+          remarks: values.remarks,
         });
       } else {
         // creating
@@ -250,6 +261,11 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           path: pathname,
           missionaryPartner: values.missionaryPartner,
           missionExposure: values.missionExposure,
+          remarks: values.remarks,
+          maritalStatus: values.maritalStatus,
+          spouseName: values.spouseName,
+          gotChildren: values.gotChildren,
+          childrenNames: values.childrenNames,
         });
       }
 
@@ -446,76 +462,138 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
-          name="middleName"
+          name="maritalStatus"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
+            <FormItem className="flex w-full flex-col ">
               <FormLabel className="paragraph-semibold text-dark400_light800">
-                Middle Name <span className="text-primary-500">*</span>
+                Marital Status
+                <span className="text-primary-500">*</span>
               </FormLabel>
-              <FormControl className="mt-3.5">
-                <Input
-                  {...field}
-                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
-                />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="cursor-pointer bg-light-900">
+                  <SelectItem value="Single">Single</SelectItem>
+                  <SelectItem value="Married">Married</SelectItem>
+                  <SelectItem value="Live-in Partner">
+                    Live-in Partner
+                  </SelectItem>
+                  <SelectItem value="Single Parent">Single Parent</SelectItem>
+                  <SelectItem value="Separated">Separated</SelectItem>
+                  <SelectItem value="Annulled">Annulled</SelectItem>
+                  <SelectItem value="Widowed">Widowed</SelectItem>
+                </SelectContent>
+              </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Enter your middle name
+                Select your educational attainment
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
-        /> */}
-        {/* <FormField
-          control={form.control}
-          name="suffix"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Suffix <span className="text-primary-500">*</span>
-              </FormLabel>
-              <FormControl className="mt-3.5">
-                <Input
-                  {...field}
-                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
-                />
-              </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Enter your suffix
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        /> */}
-        {/* <FormField
-          control={form.control}
-          name="emailAddress"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Email Address <span className="text-primary-500">*</span>
-              </FormLabel>
-              <FormControl className="mt-3.5">
-                <Input
-                  {...field}
-                  className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
-                />
-              </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
-                Enter your email address
-              </FormDescription>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        /> */}
+        />
+
+        {form.watch("maritalStatus") === "Married" && (
+          <FormField
+            control={form.control}
+            name="spouseName"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Spouse Name <span className="text-primary-500">*</span>
+                </FormLabel>
+                <FormControl className="mt-3.5">
+                  <Input
+                    {...field}
+                    className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                  />
+                </FormControl>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Enter your spouse&apos;s name
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {[
+          "Married",
+          "Separated",
+          "Widowed",
+          "Annulled",
+          "Live-in Partner",
+          "Single Parent",
+        ].includes(form.watch("maritalStatus")) && (
+          <FormField
+            control={form.control}
+            name="gotChildren"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Do you have children?{" "}
+                  <span className="text-primary-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="cursor-pointer bg-light-900">
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Select an option.
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {form.watch("gotChildren") === "yes" && (
+          <FormField
+            control={form.control}
+            name="childrenNames"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Children&apos;s Names and Birthdays{" "}
+                  <span className="text-primary-500">*</span>
+                </FormLabel>
+                <FormControl className="mt-3.5">
+                  <Textarea
+                    {...field}
+                    className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                    placeholder="Enter children's names and birthdays, separated by commas. E.g., John Doe 01/01/2010, Jane Doe 02/02/2012"
+                  />
+                </FormControl>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Enter your children&apos;s names and birthdays
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="highestEducation"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col ">
               <FormLabel className="paragraph-semibold text-dark400_light800">
-                Highest Educational Attainment{" "}
+                Educational Attainment{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -553,7 +631,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
                 </SelectContent>
               </Select>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Select your highest educational attainment
+                Select your educational attainment
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -836,6 +914,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="disciplerId"
@@ -995,35 +1074,58 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
 
         {/* )} */}
         {type === "edit" && (
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem className="flex w-full flex-col ">
-                <FormLabel className="paragraph-semibold text-dark400_light800">
-                  Status <span className="text-primary-500">*</span>
-                </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="cursor-pointer bg-light-900">
-                    <SelectItem value="Active">Active</SelectItem>
-                    <SelectItem value="Inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription className="body-regular mt-2.5 text-light-500">
-                  Select member status
-                </FormDescription>
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
+          <>
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col ">
+                  <FormLabel className="paragraph-semibold text-dark400_light800">
+                    Status <span className="text-primary-500">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="cursor-pointer bg-light-900">
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription className="body-regular mt-2.5 text-light-500">
+                    Select member status
+                  </FormDescription>
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="remarks"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col ">
+                  <FormLabel className="paragraph-semibold text-dark400_light800">
+                    Remarks <span className="text-primary-500">*</span>
+                  </FormLabel>
+                  <Textarea
+                    className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                    placeholder="Type your message here."
+                    id="message-2"
+                    {...field}
+                  />
+                  <FormDescription className="body-regular mt-2.5 text-light-500">
+                    Write your remarks here.
+                  </FormDescription>
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
+          </>
         )}
         {/* photo preview */}
         <Avatar className="h-24 w-24">

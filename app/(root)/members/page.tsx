@@ -35,11 +35,6 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           placeholder="Search for members"
           otherClasses="flex-1"
         />
-
-        {/* <TrainingFilter
-          filters={TrainingFilters}
-          otherClasses="min-h-[56px] sm:min-w-[170px]"
-        /> */}
         <Filter
           filters={MemberFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"

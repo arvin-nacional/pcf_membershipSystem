@@ -41,6 +41,11 @@ export interface CreateMemberParams {
   memberPhoto: string;
   missionaryPartner: string;
   missionExposure: string[] | undefined;
+  maritalStatus: string;
+  spouseName: string;
+  gotChildren: string;
+  childrenNames: string;
+  remarks: string;
 }
 
 export interface UpdateFieldParams {
@@ -61,6 +66,10 @@ export interface EditMemberParams {
   emergencyContactPerson: string;
   emergencyContactNumber: string;
   highestEducation: string;
+  maritalStatus: string;
+  spouseName: string;
+  gotChildren: string;
+  childrenNames: string;
   birthday: string;
   gender: string;
   memberType: string;
@@ -82,6 +91,7 @@ export interface EditMemberParams {
   memberPhoto: string;
   missionaryPartner: string;
   missionExposure: string[] | undefined;
+  remarks: string;
 }
 
 export interface EditAttendeeParams {

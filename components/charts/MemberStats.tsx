@@ -1,4 +1,8 @@
 import {
+  getNumberOfActiveAttendees,
+  getTotalNumberOfAttendees,
+} from "@/lib/actions/attendee.action";
+import {
   GetMemberCount,
   getDisciplersCount,
   getDisciplesCount,
@@ -11,6 +15,9 @@ const MemberStats = async () => {
   const leadersCount = await getLeadersCount();
   const disciplerCount = await getDisciplersCount();
   const disciplesCount = await getDisciplesCount();
+  const activeAttendeesCount = await getNumberOfActiveAttendees();
+  const attendeesCount = await getTotalNumberOfAttendees();
+
   return (
     <div
       className="background-light800_darkgradient w-[340px] flex-col items-start justify-start rounded  p-5 
@@ -85,12 +92,20 @@ const MemberStats = async () => {
                   Attendees
                 </div>
                 <div className=" paragraph-medium relative flex-1 text-right">
-                  80
+                  {activeAttendeesCount} <span> / </span> {attendeesCount}
                 </div>
               </div>
               <div className="relative h-2 w-[300px]">
                 <div className="bg-grey absolute left-[0px] top-[0px] h-2 w-[300px] rounded" />
-                <div className="bg-pink absolute left-[0px] top-[0px] h-2 w-[237.2px] rounded" />
+                <div
+                  className="bg-pink absolute left-[0px] top-[0px] h-2  rounded"
+                  style={{
+                    width: `${
+                      ((activeAttendeesCount ?? 0) / (attendeesCount ?? 1)) *
+                      100
+                    }%`,
+                  }}
+                />
               </div>
             </div>
             {/* <div className="flex w-[300px] flex-col items-start justify-start gap-[10px]">
