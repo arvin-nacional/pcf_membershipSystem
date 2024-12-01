@@ -55,6 +55,7 @@ export interface CreateMemberParams {
   spiritualGifts: string[] | undefined;
   secondaryMinistries: string[] | undefined;
   trainings: string[] | undefined;
+  otherTrainings: string;
   disciplerId: string | undefined;
   disciples: string[] | undefined;
   memberPhoto: string;
@@ -104,6 +105,7 @@ export interface EditMemberParams {
   spiritualGifts: string[] | undefined;
   secondaryMinistries: string[] | undefined;
   trainings: string[] | undefined;
+  otherTrainings: string;
   disciplerId: string | undefined;
   disciples: string[] | undefined;
   memberId: string | undefined;

@@ -77,6 +77,7 @@ export async function createMember(params: CreateMemberParams) {
       spouseName,
       gotChildren,
       childrenNames,
+      otherTrainings,
     } = params;
 
     // Upload the member photo to Cloudinary
@@ -103,6 +104,7 @@ export async function createMember(params: CreateMemberParams) {
       spouseName,
       gotChildren,
       childrenNames,
+      otherTrainings,
     });
 
     // create education or get them if they already exist
@@ -658,6 +660,7 @@ export async function editMember(params: EditMemberParams) {
       spouseName,
       gotChildren,
       childrenNames,
+      otherTrainings,
     } = params;
 
     const member = await Member.findById(memberId)
@@ -743,7 +746,10 @@ export async function editMember(params: EditMemberParams) {
     member.spouseName = spouseName;
     member.gotChildren = gotChildren;
     member.childrenNames = childrenNames;
+    member.otherTrainings = otherTrainings;
     console.log(member);
+
+    await member.save();
 
     // check if memberPHoto is being updated
     if (member.memberPhoto !== memberPhoto) {

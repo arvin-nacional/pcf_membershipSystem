@@ -262,7 +262,7 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
             <p className="small-regular text-light400_light500">
               Trainings Attended
             </p>
-            <div className="flex max-w-[500px] flex-row flex-wrap">
+            <div className="flex max-w-[250px] flex-row flex-wrap">
               {" "}
               {parsedMemberDetails.trainings &&
               parsedMemberDetails.trainings.length > 0 ? (
@@ -281,6 +281,14 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
                 </p>
               )}
             </div>
+          </div>
+          <div className="flex min-w-[250px] flex-col gap-1">
+            <p className="small-regular text-light400_light500">
+              Other Trainings
+            </p>
+            <p className="body-medium text-dark400_light700 min-w-[250px]">
+              {parsedMemberDetails.otherTrainings}
+            </p>
           </div>
           {/* <div className="flex min-w-[250px] flex-col gap-1">
             <p className="small-regular text-light400_light500">

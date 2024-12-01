@@ -151,7 +151,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
       birthday: parsedMemberDetails?.birthday || "",
       gender: parsedMemberDetails?.gender?.name || "",
       memberType: parsedMemberDetails?.memberType?.name || "",
-      primaryMinistry: parsedMemberDetails?.primaryMinistry?.name || "",
+      primaryMinistry: parsedMemberDetails?.primaryMinistry?.name || "None",
       lifeGearSeries: parsedMemberDetails?.lifeGearSeries?.name || "",
       followUpSeries: parsedMemberDetails?.followUpSeries?.name || "",
       spiritualGifts: spiritualGiftsArr || undefined,
@@ -169,6 +169,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
       spouseName: parsedMemberDetails?.spouseName || "",
       gotChildren: parsedMemberDetails?.gotChildren || "",
       childrenNames: parsedMemberDetails?.childrenNames || "",
+      otherTrainings: parsedMemberDetails?.otherTrainings || "",
     },
   });
 
@@ -219,6 +220,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           spiritualGifts: values.spiritualGifts,
           secondaryMinistries: values.secondaryMinistries,
           trainings: values.trainings,
+          otherTrainings: values.otherTrainings,
           disciplerId,
           disciples: selectedDisciples,
           path: pathname,
@@ -253,6 +255,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
           spiritualGifts: values.spiritualGifts,
           secondaryMinistries: values.secondaryMinistries,
           trainings: values.trainings,
+          otherTrainings: values.otherTrainings,
           // disciplerId: values.disciplerId,
           disciplerId,
           disciples: selectedDisciples,
@@ -819,6 +822,7 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="primaryMinistry"
@@ -914,6 +918,32 @@ const Member = ({ memberNames, type, memberDetails, memberId }: Props) => {
             </FormItem>
           )}
         />
+
+        {form.watch("trainings")?.includes("Others") && (
+          <FormField
+            control={form.control}
+            name="otherTrainings"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
+                  Please specify other trainings{" "}
+                  <span className="text-primary-500">*</span>
+                </FormLabel>
+                <FormControl className="mt-3.5">
+                  <Textarea
+                    {...field}
+                    className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                    placeholder="Enter other trainings"
+                  />
+                </FormControl>
+                <FormDescription className="body-regular mt-2.5 text-light-500">
+                  Specify other trainings attended
+                </FormDescription>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        )}
 
         <FormField
           control={form.control}

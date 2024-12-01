@@ -36,6 +36,7 @@ export interface IMember extends Document {
   spouseName: string;
   gotChildren: string;
   childrenNames: string;
+  otherTrainings: string;
 }
 
 const MemberSchema = new Schema({
@@ -98,6 +99,7 @@ const MemberSchema = new Schema({
   remarks: String,
   gotChildren: String,
   childrenNames: String,
+  otherTrainings: String,
 });
 
 const Member = models?.Member || model("Member", MemberSchema);

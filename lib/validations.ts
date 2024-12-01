@@ -39,6 +39,7 @@ export const MemberSchema = z.object({
   spiritualGifts: z.union([z.array(z.string()), z.undefined()]),
   secondaryMinistries: z.union([z.array(z.string()), z.undefined()]),
   trainings: z.union([z.array(z.string()), z.undefined()]),
+  otherTrainings: z.string(),
   disciples: z.union([z.array(z.string()), z.undefined()]),
   // disciplerId: z.string(),
   disciplerId: z.union([z.string(), z.undefined()]),
