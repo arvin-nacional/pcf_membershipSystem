@@ -19,7 +19,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           otherClasses="flex-1"
         />
       </div>
-      <div className="flex flex-row flex-wrap gap-6">
+      <div className="flex flex-row flex-wrap gap-6 max-sm:w-full">
         {result?.map((item) => (
           <Link key={item.id} href={`/smallGroups/${item.id}`}>
             <SmallGroupCard

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { capitalizeText } from "@/lib/utils";
+import { capitalizeText, formatToMonthDayYear } from "@/lib/utils";
 import AttendeeButton from "./AttendeeButton";
 // import MemberButton from "./MemberButton";
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
   address: string;
   gender: string;
   id: string;
+  dateAdded: string;
 }
 const AttendeeList = ({
   name,
@@ -18,11 +19,12 @@ const AttendeeList = ({
   gender,
   id,
   address,
+  dateAdded,
 }: Props) => {
   return (
     <div className="background-light900_dark200 body-regular text-dark400_light800  shadow-light300_darknone mb-5 flex w-full flex-row items-center justify-start gap-[20px] rounded-md p-2 text-left max-sm:gap-[0px] ">
-      <div className="background-light900_dark200 flex w-full flex-1 flex-row items-center justify-around">
-        <div className="flex w-[200px] flex-row items-center justify-start gap-[10px] ">
+      <div className="background-light900_dark200 flex w-full flex-1 flex-row items-center justify-between">
+        <div className="flex w-[200px] flex-row items-center justify-start gap-[10px]  ">
           <div className="relative h-[38px] w-[38px]">
             <Image
               className="absolute inset-[0%] h-full max-h-full w-full max-w-full overflow-hidden rounded-xl object-cover"
@@ -63,6 +65,14 @@ const AttendeeList = ({
           </div>
           <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
             {capitalizeText(address)}
+          </div>
+        </div>
+        <div className="flex w-[200px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
+          <div className="small-medium relative self-stretch leading-[16px]">
+            Date Added
+          </div>
+          <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
+            {formatToMonthDayYear(dateAdded)}
           </div>
         </div>
         <div className="flex w-[74px] flex-col items-start justify-center gap-[5px] max-sm:hidden">

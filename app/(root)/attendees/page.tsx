@@ -52,6 +52,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
               status={attendee.status}
               address={attendee.address}
               gender={attendee.gender}
+              dateAdded={attendee.createdAt.toString()}
               id={JSON.stringify(attendee._id)}
             />
           ))

@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 const NavContent = () => {
   const pathname = usePathname();
   return (
-    <section className="flex h-full flex-col gap-6 pt-16">
+    <section className="flex h-full flex-col gap-6 pt-6">
       {sidebarLinks.map((item) => {
         const isActive =
           (pathname.includes(item.route) && item.route.length > 1) ||
@@ -65,15 +65,19 @@ const MobileNav = () => {
         side="left"
         className="background-light900_dark200 border-none"
       >
-        <Link href="/" className="flex items-center gap-1">
+        <Link
+          href="/"
+          className="mt-5 flex items-start justify-start gap-1 align-baseline"
+        >
           <Image
             src="/assets/images/pcf_logo.png"
             width={23}
             height={23}
             alt="DevFlow"
+            className="pb-1"
           />
 
-          <p className="h2-bold  text-dark100_light900 font-spaceGrotesk">
+          <p className="base-bold  text-dark100_light900 font-spaceGrotesk">
             PCF <span className="text-primary-500">Membership System</span>
           </p>
         </Link>

@@ -22,9 +22,9 @@ const Summary = async () => {
   }
 
   return (
-    <div className="flex w-full flex-row flex-wrap gap-4">
+    <div className="flex flex-row flex-wrap gap-4">
       {summaryInfo.map((item) => (
-        <Link href={item.href} key={item.title}>
+        <Link href={item.href} key={item.title} className="max-sm:w-full">
           <SummaryItem
             title={item.title}
             value={item.value}

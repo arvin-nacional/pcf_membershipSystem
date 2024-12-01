@@ -19,7 +19,7 @@ const SmallGroupCard = ({
 }: Props) => {
   return (
     <div
-      className="flex w-[400px] flex-row gap-6 rounded-xl p-8 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]"
+      className="flex w-[400px] flex-row gap-6 rounded-xl p-8 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)] max-sm:w-full"
       //   onClick={() => router.push(`/ministries/${label}`)}
     >
       <Image
