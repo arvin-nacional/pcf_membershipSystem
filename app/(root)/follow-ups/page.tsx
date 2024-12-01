@@ -1,20 +1,22 @@
 import Filter from "@/components/shared/search/Filter";
 import { SearchParamsProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import { AttendeeFilters } from "@/constants/filters";
+import { FollowUpFilters } from "@/constants/filters";
 // import { getAllAttendees } from "@/lib/actions/attendee.action";
 import Link from "next/link";
 import React from "react";
 // import Pagination from "@/components/shared/search/Pagination";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import FollowUpList from "@/components/shared/members/FollowUpList";
+import { getAllFollowUps } from "@/lib/actions/followup.action";
+import Pagination from "@/components/shared/search/Pagination";
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
-  // const result = await getAllAttendees({
-  //   searchQuery: searchParams.q,
-  //   filter: searchParams.filter,
-  //   page: searchParams.page ? +searchParams.page : 1,
-  // });
+  const result = await getAllFollowUps({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+  });
 
   return (
     <div>
@@ -37,48 +39,41 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
         />
 
         <Filter
-          filters={AttendeeFilters}
+          filters={FollowUpFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>
 
       <div>
-        <FollowUpList
-          name="Arvin Paul Nacional" // Use attendee properties here
-          contactNumber="09123456789"
-          status="done"
-          address="26 Lunas Street Quezon City asdf asdfa asdfasdfasdf"
-          responsible="Haydee Guevara"
-          type="message"
-          remarks="resolved"
-          id="123"
-        />
-        {/* {result && result.attendees && result.attendees.length > 0 ? (
-          result.attendees.map((attendee) => (
-            <AttendeeList
-              key={attendee._id}
-              name={attendee.fullName} // Use attendee properties here
-              contactNumber={attendee.contactNumber}
-              status={attendee.status}
-              address={attendee.address}
-              gender={attendee.gender}
-              id={JSON.stringify(attendee._id)}
+        {result?.followUps && result?.followUps.length > 0 ? (
+          result.followUps.map((followUp) => (
+            <FollowUpList
+              key={followUp._id}
+              name={followUp.name} // Use attendee properties here
+              contactNumber={followUp.contactNumber}
+              status={followUp.status}
+              address={followUp.address}
+              responsible={followUp.responsible}
+              type={followUp.type}
+              remarks={followUp.remarks}
+              id={JSON.stringify(followUp._id)}
+              updatedDate={followUp.updatedAt.toString()}
             />
           ))
         ) : (
           <div>
-            <p>No members</p>
+            <p>No follow up</p>
           </div>
-        )} */}
+        )}
       </div>
 
       <div className="mt-10">
-        {/* {result && (
+        {result && (
           <Pagination
             pageNumber={searchParams?.page ? +searchParams.page : 1}
             isNext={result.isNext}
           />
-        )} */}
+        )}
       </div>
     </div>
   );

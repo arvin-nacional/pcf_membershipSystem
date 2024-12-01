@@ -163,3 +163,19 @@ export async function getTotalNumberOfAttendees() {
     console.log(error);
   }
 }
+
+export async function getAllAttendeeNamesWithId() {
+  try {
+    connectToDatabase();
+    const attendees = await Attendee.find({}, { fullName: 1, _id: 1 });
+
+    const attendeeNames = attendees.map((attendee) => ({
+      _id: attendee._id.toHexString(),
+      name: attendee.fullName,
+      value: attendee.fullName,
+    }));
+    return attendeeNames;
+  } catch (error) {
+    console.log(error);
+  }
+}

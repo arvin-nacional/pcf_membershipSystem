@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import FollowUpButton from "./FollowUpButton";
+import { formatToMMDDYY } from "@/lib/utils";
 // import { capitalizeText } from "@/lib/utils";
 // import AttendeeButton from "./AttendeeButton";
 // import MemberButton from "./MemberButton";
@@ -12,6 +14,7 @@ interface Props {
   remarks: string;
   id: string;
   responsible: string;
+  updatedDate: string;
 }
 const FollowUpList = ({
   name,
@@ -22,6 +25,7 @@ const FollowUpList = ({
   id,
   address,
   responsible,
+  updatedDate,
 }: Props) => {
   return (
     <div className="background-light900_dark200 body-regular text-dark400_light800  shadow-light300_darknone mb-5 flex w-full flex-row items-center justify-start gap-[20px] rounded-md p-2 text-left max-sm:gap-[0px] ">
@@ -69,7 +73,7 @@ const FollowUpList = ({
             {responsible}
           </div>
         </div>
-        <div className="flex  w-28 flex-col items-start justify-center gap-[5px] max-sm:hidden">
+        <div className="flex  w-[100px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
           <div className="small-medium relative self-stretch leading-[16px]">
             Type
           </div>
@@ -77,7 +81,8 @@ const FollowUpList = ({
             {type}
           </div>
         </div>
-        <div className="flex w-[74px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
+
+        <div className="flex w-[100px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
           <div className="small-medium relative self-stretch leading-[16px]">
             Status
           </div>
@@ -87,11 +92,18 @@ const FollowUpList = ({
             ) : (
               <div className="bg-red relative h-[7px] w-[7px] rounded-[50%]" />
             )} */}
-            <div className="bg-darkgreen relative h-[7px] w-[7px] rounded-[50%]" />
+            {status === "pending" ? (
+              <div className="relative h-[7px] w-[7px] rounded-[50%] bg-yellow-300" />
+            ) : status === "in progress" ? (
+              <div className="relative h-[7px] w-[7px] rounded-[50%] bg-amber-500" />
+            ) : (
+              <div className="relative h-[7px] w-[7px] rounded-[50%] bg-lime-500" />
+            )}
+
             <div className="relative font-medium leading-[16px]">{status}</div>
           </div>
         </div>
-        <div className="flex w-[74px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
+        <div className="flex w-[120px] flex-col items-start justify-center gap-[5px] max-sm:hidden">
           <div className="small-medium relative self-stretch leading-[16px]">
             Remarks
           </div>
@@ -101,17 +113,43 @@ const FollowUpList = ({
             ) : (
               <div className="bg-red relative h-[7px] w-[7px] rounded-[50%]" />
             )} */}
-            <Image
-              alt="resolved"
-              src={"/assets/icons/resolved-remarks.png"}
-              width={15}
-              height={15}
-            />
+
+            {remarks === "resolved" ? (
+              <Image
+                alt="resolved"
+                src={"/assets/icons/resolved-remarks.png"}
+                width={15}
+                height={15}
+              />
+            ) : remarks === "pending" ? (
+              <Image
+                alt="pending"
+                src={"/assets/icons/wall-clock.png"}
+                width={15}
+                height={15}
+              />
+            ) : (
+              <Image
+                alt="failed"
+                src={"/assets/icons/decline.png"}
+                width={15}
+                height={15}
+              />
+            )}
+
             <div className="relative font-medium leading-[16px]">{remarks}</div>
           </div>
         </div>
+        <div className="  flex flex-col items-start justify-center gap-[5px] max-sm:hidden">
+          <div className="small-medium relative self-stretch leading-[16px]">
+            Updated At
+          </div>
+          <div className="text-dark400_light800 relative text-sm font-medium leading-[16px]">
+            {formatToMMDDYY(updatedDate)}
+          </div>
+        </div>
       </div>
-      {/* <AttendeeButton attendeeId={JSON.parse(id)} /> */}
+      <FollowUpButton id={JSON.parse(id)} />
     </div>
   );
 };

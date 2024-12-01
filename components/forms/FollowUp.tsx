@@ -23,7 +23,7 @@ import {
 
 import { Button } from "../ui/button";
 // import { editMinistry } from "@/lib/actions/ministry.action";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 // import { createAttendee, editAttendee } from "@/lib/actions/attendee.action";
 import { cn } from "@/lib/utils";
 import {
@@ -39,28 +39,42 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ChevronsUpDown, Check } from "lucide-react";
-import { MemberNames } from "@/types";
-import { createFollowUp } from "@/lib/actions/followup.action";
+import { AttendeeNames, MemberNames } from "@/types";
+import { createFollowUp, editFollowUp } from "@/lib/actions/followup.action";
 
 interface Props {
   formType?: string;
   memberNames: MemberNames[];
+  attendeeNames: AttendeeNames[];
+  followUpDetails?: string;
+  followUpId?: string;
 }
-const FollowUpForm = ({ formType, memberNames }: Props) => {
+const FollowUpForm = ({
+  formType,
+  memberNames,
+  attendeeNames,
+  followUpDetails,
+  followUpId,
+}: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
+
+  const parsedFollowUpDetails = followUpDetails
+    ? JSON.parse(followUpDetails || "")
+    : null; // Parse the follow-up details if it exists
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof FollowUpSchema>>({
     resolver: zodResolver(FollowUpSchema),
     defaultValues: {
-      distinction: "",
-      name: "none",
-      responsible: "none",
-      type: "",
-      status: "pending",
-      remarks: "pending",
+      distinction: parsedFollowUpDetails?.distinction || "",
+      name: parsedFollowUpDetails?.tofollowUpId || "",
+      responsible: parsedFollowUpDetails?.responsible || "",
+      type: parsedFollowUpDetails?.type || "",
+      status: parsedFollowUpDetails?.status || "pending",
+      remarks: parsedFollowUpDetails?.remarks || "pending",
     },
   });
 
@@ -69,15 +83,14 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
     setIsSubmitting(true);
     try {
       if (formType === "edit") {
-        // await editAttendee({
-        //   fullName: values.name,
-        //   gender: values.gender,
-        //   contactNumber: values.contactNumber,
-        //   address: values.address,
-        //   status: values.status,
-        //   path: pathname,
-        //   attendeeId,
-        // });
+        await editFollowUp({
+          responsible: values.responsible,
+          type: values.type,
+          status: values.status,
+          remarks: values.remarks,
+          path: pathname,
+          followUpId,
+        });
       } else {
         await createFollowUp({
           distinction: values.distinction,
@@ -86,6 +99,7 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
           type: values.type,
           status: values.status,
           remarks: values.remarks,
+          path: pathname,
         });
       }
 
@@ -113,7 +127,11 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Type <span className="text-primary-500">*</span>
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={formType === "edit"}
+              >
                 <FormControl>
                   <SelectTrigger className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border">
                     <SelectValue />
@@ -149,11 +167,18 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
                         "no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border justify-between ",
                         !field.value && "text-muted-foreground"
                       )}
+                      disabled={formType === "edit"}
                     >
                       {field.value !== undefined && field.value !== "none" ? (
-                        memberNames.find(
-                          (memberName) => memberName._id === field.value
-                        )?.value
+                        form.watch("distinction") === "member" ? (
+                          memberNames.find(
+                            (memberName) => memberName._id === field.value
+                          )?.value
+                        ) : (
+                          attendeeNames.find(
+                            (attendeeName) => attendeeName._id === field.value
+                          )?.value
+                        )
                       ) : (
                         <span>Select Name</span>
                       )}
@@ -166,42 +191,45 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
                     <CommandInput placeholder="Search member..." />
                     <CommandEmpty>No member found.</CommandEmpty>
                     <CommandGroup className="max-h-40 overflow-y-auto">
-                      {/* <CommandItem
-                        value="none" // Use a value that represents "No Discipler"
-                        onSelect={() => {
-                          form.setValue("name", "none"); // Set the value to "none" when selected
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            field.value === undefined
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        Select Name
-                      </CommandItem> */}
-                      {memberNames.map((member) => (
-                        <CommandItem
-                          value={member.name}
-                          key={member._id}
-                          onSelect={() => {
-                            form.setValue("name", member._id);
-                            // console.log(member._id);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              member._id === field.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {member.name}
-                        </CommandItem>
-                      ))}
+                      {form.watch("distinction") === "member"
+                        ? memberNames.map((member) => (
+                            <CommandItem
+                              value={member.name}
+                              key={member._id}
+                              onSelect={() => {
+                                form.setValue("name", member._id);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  member._id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {member.name}
+                            </CommandItem>
+                          ))
+                        : attendeeNames.map((attendee) => (
+                            <CommandItem
+                              value={attendee.name}
+                              key={attendee._id}
+                              onSelect={() => {
+                                form.setValue("name", attendee._id);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  attendee._id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {attendee.name}
+                            </CommandItem>
+                          ))}
                     </CommandGroup>
                   </Command>
                 </PopoverContent>
@@ -213,6 +241,7 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="responsible"
@@ -344,7 +373,7 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
                     </FormControl>
                     <SelectContent className="cursor-pointer bg-light-900">
                       <SelectItem value="pending">pending</SelectItem>
-                      <SelectItem value="on going">in progress</SelectItem>
+                      <SelectItem value="in progress">in progress</SelectItem>
                       <SelectItem value="done">done</SelectItem>
                     </SelectContent>
                   </Select>
@@ -373,6 +402,7 @@ const FollowUpForm = ({ formType, memberNames }: Props) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="cursor-pointer bg-light-900">
+                      <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="failed">Failed</SelectItem>
                       <SelectItem value="unresponsive">Unresponsive</SelectItem>
                       <SelectItem value="rejected">Rejected</SelectItem>

@@ -39,6 +39,13 @@ export const AttendeeFilters = [
   { name: "Active", value: "active" },
   { name: "Inactive", value: "inactive" },
 ];
+export const FollowUpFilters = [
+  { name: "Recently Added", value: "descending" },
+  { name: "Chronological", value: "ascending" },
+  { name: "Pending", value: "pending" },
+  { name: "In Progress", value: "in progress" },
+  { name: "Done", value: "done" },
+];
 export const TrainingFilters = [
   { name: "Life Gear 101", value: "lifeGear_101" },
   { name: "Life Gear 201", value: "lifeGear_201" },

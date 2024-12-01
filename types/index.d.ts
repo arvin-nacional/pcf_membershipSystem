@@ -19,6 +19,12 @@ export interface MemberNames {
   value: string;
 }
 
+export interface AttendeeNames {
+  _id: string;
+  name: string;
+  value: string;
+}
+
 export interface Ministries {
   value: string;
   label: string;

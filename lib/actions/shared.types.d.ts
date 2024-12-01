@@ -17,6 +17,16 @@ export interface createFollowUpParams {
   status: string;
   remarks: string;
   type: string;
+  path: string;
+}
+
+export interface editFollowUpParams {
+  followUpId?: string;
+  responsible: string;
+  status: string;
+  remarks: string;
+  type: string;
+  path: string;
 }
 
 export interface CreateMemberParams {
@@ -140,6 +150,13 @@ export interface GetAllAttendeesParams {
   filter?: string;
   searchQuery?: string;
 }
+
+export interface GetAllFollowUpsParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
 export interface GetAllMinistryParams {
   page?: number;
   pageSize?: number;
@@ -166,6 +183,10 @@ export interface GetMemberByIdParams {
 export interface GetAttendeeByIdParams {
   attendeeId: string;
 }
+
+export interface getFollowUpByIdParams {
+  followUpId: string;
+}
 export interface GetMinistryByIdParams {
   ministryId: string;
 }
@@ -176,6 +197,10 @@ export interface DeleteMemberParams {
 }
 export interface DeleteAttendeeParams {
   attendeeId: string;
+  path: string;
+}
+export interface DeleteFollowUpParams {
+  id: string;
   path: string;
 }
 export interface DeleteEventParams {

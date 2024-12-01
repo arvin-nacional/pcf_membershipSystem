@@ -2,8 +2,11 @@ import React from "react";
 import { getAllMemberNames } from "@/lib/actions/member.action";
 import FollowUpForm from "@/components/forms/FollowUp";
 import { getAllAttendeeNamesWithId } from "@/lib/actions/attendee.action";
+import { ParamsProps } from "@/types";
+import { getFollowUpById } from "@/lib/actions/followup.action";
 
-const Page = async () => {
+const Page = async ({ params }: ParamsProps) => {
+  const result = await getFollowUpById({ followUpId: params.id });
   const memberNames = await getAllMemberNames();
   const attendeeNames = (await getAllAttendeeNamesWithId()) || [];
 
@@ -13,8 +16,10 @@ const Page = async () => {
       <div>
         <FollowUpForm
           memberNames={memberNames}
-          formType="create"
+          formType="edit"
           attendeeNames={attendeeNames}
+          followUpDetails={JSON.stringify(result)}
+          followUpId={params.id}
         />
       </div>
     </div>
