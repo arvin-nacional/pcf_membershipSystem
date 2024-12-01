@@ -14,6 +14,18 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
     ? JSON.parse(memberDetails || "")
     : null;
 
+  function formatNamesToNewLine(input: string): React.ReactNode {
+    // Split the input string by commas to separate individuals
+    const individuals = input.split(",").map((person) => person.trim());
+
+    // Map each individual to a <span> with a <br /> for JSX rendering
+    return individuals.map((individual, index) => (
+      <span key={index}>
+        {individual}
+        <br />
+      </span>
+    ));
+  }
   return (
     <div className="flex flex-col gap-10">
       <div className="background-light900_dark200 flex w-full  justify-between rounded-2xl p-5 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]">
@@ -172,11 +184,12 @@ const MemberProfile = ({ memberDetails, memberId }: Props) => {
               </p>
             </div>
           )}
+
           {parsedMemberDetails.childrenNames && (
             <div className="flex min-w-[250px] flex-col gap-1">
               <p className="small-regular text-light400_light500">Children</p>
               <p className="body-medium text-dark400_light700">
-                {parsedMemberDetails.childrenNames}
+                {formatNamesToNewLine(parsedMemberDetails.childrenNames)}
               </p>
             </div>
           )}
