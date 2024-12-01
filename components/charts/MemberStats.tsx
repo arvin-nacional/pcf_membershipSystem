@@ -8,6 +8,10 @@ import {
   getDisciplesCount,
   getLeadersCount,
 } from "@/lib/actions/dashboard.action";
+import {
+  getTotalFollowUps,
+  getTotalFollowUpsDone,
+} from "@/lib/actions/followup.action";
 import React from "react";
 
 const MemberStats = async () => {
@@ -17,6 +21,8 @@ const MemberStats = async () => {
   const disciplesCount = await getDisciplesCount();
   const activeAttendeesCount = await getNumberOfActiveAttendees();
   const attendeesCount = await getTotalNumberOfAttendees();
+  const followUpCount = await getTotalFollowUps();
+  const followUpsDone = await getTotalFollowUpsDone();
 
   return (
     <div
@@ -103,6 +109,27 @@ const MemberStats = async () => {
                     width: `${
                       ((activeAttendeesCount ?? 0) / (attendeesCount ?? 1)) *
                       100
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex w-[300px] flex-col items-start justify-start gap-[10px]">
+              <div className="flex flex-row items-center justify-between  self-stretch">
+                <div className="paragraph-medium relative flex-1">
+                  Follow Ups
+                </div>
+                <div className=" paragraph-medium relative flex-1 text-right">
+                  {followUpsDone} <span> / </span> {followUpCount}
+                </div>
+              </div>
+              <div className="relative h-2 w-[300px]">
+                <div className="bg-grey absolute left-[0px] top-[0px] h-2 w-[300px] rounded" />
+                <div
+                  className="absolute left-[0px] top-[0px] h-2 rounded  bg-blue-500"
+                  style={{
+                    width: `${
+                      ((followUpsDone ?? 0) / (followUpCount ?? 1)) * 100
                     }%`,
                   }}
                 />

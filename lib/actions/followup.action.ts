@@ -164,3 +164,23 @@ export async function editFollowUp(params: editFollowUpParams) {
     console.log(error);
   }
 }
+
+export async function getTotalFollowUpsDone() {
+  try {
+    connectToDatabase();
+    const totalDone = await FollowUp.countDocuments({ status: "done" });
+    return totalDone;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getTotalFollowUps() {
+  try {
+    connectToDatabase();
+    const totalFollowUps = await FollowUp.countDocuments({});
+    return totalFollowUps;
+  } catch (error) {
+    console.log(error);
+  }
+}
